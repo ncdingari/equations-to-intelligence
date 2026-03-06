@@ -399,6 +399,217 @@
             animation: s2LoopCheck 16s infinite;
         }
 
+        /* --- Slide 2B Ancestry Animations --- */
+        .ancestry-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .ancestry-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .a-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .a-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 180px;
+            z-index: 10;
+        }
+
+        .a-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
+            object-position: top center;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s ease;
+            background-color: #1a1a2e;
+        }
+
+        .a-node.highlight .a-avatar {
+            width: 150px;
+            height: 150px;
+            border: 5px solid var(--r-link-color);
+            box-shadow: 0 0 35px rgba(0, 229, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .a-name {
+            font-size: 0.65em;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+            line-height: 1.1;
+        }
+
+        .a-node.highlight .a-name {
+            font-size: 0.85em;
+            color: var(--r-link-color);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .a-org {
+            font-size: 0.45em;
+            color: #aaaaaa;
+        }
+
+        .a-node.highlight .a-org {
+            font-size: 0.55em;
+            color: #dddddd;
+        }
+
+        .a-nobel {
+            font-size: 0.4em;
+            color: #ffd700;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .a-relation-text {
+            font-size: 0.35em;
+            color: var(--r-link-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 3px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .a-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.2em;
+            margin: 0 10px;
+            min-width: 60px;
+        }
+
+        .a-arrow i {
+            margin-bottom: 5px;
+        }
+
+        .a-turn {
+            align-self: flex-end;
+            margin-right: 90px;
+            margin-top: -10px;
+            margin-bottom: -10px;
+        }
+
+        @keyframes fadeInNode {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .present .a-fade-1 {
+            animation: fadeInNode 0.8s ease forwards 0.2s;
+            opacity: 0;
+        }
+
+        .present .a-fade-2 {
+            animation: fadeInNode 0.8s ease forwards 0.6s;
+            opacity: 0;
+        }
+
+        .present .a-fade-3 {
+            animation: fadeInNode 0.8s ease forwards 1.0s;
+            opacity: 0;
+        }
+
+        .present .a-fade-4 {
+            animation: fadeInNode 0.8s ease forwards 1.4s;
+            opacity: 0;
+        }
+
+        .present .a-fade-5 {
+            animation: fadeInNode 0.8s ease forwards 1.8s;
+            opacity: 0;
+        }
+
+        .present .a-fade-6 {
+            animation: fadeInNode 0.8s ease forwards 2.2s;
+            opacity: 0;
+        }
+
+        .present .a-fade-7 {
+            animation: fadeInNode 0.8s ease forwards 2.6s;
+            opacity: 0;
+        }
+
+        .present .a-fade-8 {
+            animation: fadeInNode 0.8s ease forwards 3.0s;
+            opacity: 0;
+        }
+
+        .present .a-fade-9 {
+            animation: fadeInNode 0.8s ease forwards 3.4s;
+            opacity: 0;
+        }
+
+        .present .a-fade-10 {
+            animation: fadeInNode 0.8s ease forwards 3.8s;
+            opacity: 0;
+        }
+
+        .present .a-fade-11 {
+            animation: fadeInNode 0.8s ease forwards 4.2s;
+            opacity: 0;
+        }
+
+        .present .a-fade-12 {
+            animation: fadeInNode 0.8s ease forwards 4.6s;
+            opacity: 0;
+        }
+
+        .present .a-fade-13 {
+            animation: fadeInNode 0.8s ease forwards 5.0s;
+            opacity: 0;
+        }
+
+        .present .a-fade-14 {
+            animation: fadeInNode 0.8s ease forwards 5.4s;
+            opacity: 0;
+        }
+
+        .present .a-fade-15 {
+            animation: fadeInNode 0.8s ease forwards 6.0s;
+            opacity: 0;
+        }
+
         /* --- Slide 3 Equation Animations --- */
         .s3-bg-equations {
             position: absolute;
