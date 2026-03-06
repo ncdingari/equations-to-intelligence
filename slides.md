@@ -56,13 +56,13 @@ Note:
             </div>
             <div class="a-arrow a-fade-14"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">PostDoc</span></div>
             <div class="a-node a-fade-13">
-                <img class="a-avatar" src="http://web.mit.edu/spectroscopy/images/feld-cut-scaled.jpg">
+                <img class="a-avatar" src="images/feld.png">
                 <div class="a-name">Michael Stephen Feld</div>
                 <div class="a-org">MIT</div>
             </div>
             <div class="a-arrow a-fade-12"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Ph.D.</span></div>
             <div class="a-node a-fade-11">
-                <img class="a-avatar" src="https://upload.wikimedia.org/wikipedia/commons/2/26/Javan_ali.jpg">
+                <img class="a-avatar" src="images/javan.png">
                 <div class="a-name">Ali Mortimer Javan</div>
                 <div class="a-org">MIT</div>
             </div>
