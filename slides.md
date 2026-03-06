@@ -127,7 +127,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-14"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Current</span></div>
 <div class="a-node highlight a-fade-13">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://powerlytics.com&size=128">
+<img class="a-avatar bg-white-logo" src="images/powerlytics.png">
 <div class="a-name">Powerlytics</div>
 <div class="a-org">Chief Data & Analytics Officer</div>
 </div>
