@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Intelligence: From Equations to Artificial Intelligence</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Inter:wght@400;700;900&family=Quicksand:wght@400;500;600&display=swap');
+
+        :root {
+            --r-main-font: 'Inter', Helvetica, sans-serif;
+            --r-heading-font: 'Inter', Helvetica, sans-serif;
+            --r-heading-font-weight: 900;
+            --r-main-color: #ffffff;
+            --r-background-color: #050510;
+            /* Deep navy / black */
+            --r-heading-text-transform: none;
+            --r-link-color: #00e5ff;
+            /* Electric blue */
+            --r-link-color-hover: #00b3cc;
+            --r-selection-background-color: #00e5ff;
+            --brand-primary: #0076a3;
+            /* From sciencephalon.com */
+        }
+
+        .sci-logo-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 450px;
+            padding: 10px;
+            text-align: left;
+            z-index: 99999;
+            pointer-events: none;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-origin: top left;
+        }
+
+        .sci-logo-container.small-logo {
+            transform: translate(0, calc(100vh - 120px)) scale(0.75);
+        }
+
+        .sci-logo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .global-slide-title {
+            position: fixed;
+            top: 30px;
+            left: 40px;
+            font-size: 2.6em;
+            font-weight: 800;
+            font-family: var(--r-heading-font);
+            color: var(--r-main-color);
+            z-index: 99999;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+            letter-spacing: -0.02em;
+        }
+
+        .global-slide-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal .accent {
+            color: #00e5ff;
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4 {
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 0.5em;
+        }
+
+        .reveal p {
+            font-size: 1.4em;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .reveal .slide-number {
+            color: #00e5ff;
+            background-color: transparent;
+        }
+
+        /* --- Background Animations --- */
+        @keyframes kenBurnsBackground {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.15);
+            }
+        }
+
+        .ken-burns-bg .reveal-viewport,
+        .ken-burns-bg .slide-background-content {
+            animation: kenBurnsBackground 40s ease-in-out infinite alternate !important;
+        }
+
+        /* --- Slide 2 Elegant Animations --- */
+        .animated-slide-2-container {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .present .animated-slide-2-container {
+            display: flex !important;
+        }
+
+        .s2-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin: 20px 0;
+            z-index: 20;
+            position: relative;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+        }
+
+        .s2-text-top,
+        .s2-text-bottom {
+            opacity: 0;
+        }
+
+        .s2-cross,
+        .s2-check {
+            display: inline-block;
+            margin-left: 15px;
+            opacity: 0;
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+
+        .s2-cross {
+            color: #ff3333;
+        }
+
+        .s2-check {
+            color: #10b981;
+        }
+
+        .s2-bg-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .s2-bg-icons i {
+            font-size: 6em;
+            opacity: 0;
+            position: absolute;
+            transform: scale(0.8);
+        }
+
+        .tools-1 {
+            top: 5%;
+            left: 10%;
+        }
+
+        .tools-2 {
+            top: 65%;
+            left: 20%;
+        }
+
+        .tools-3 {
+            top: 15%;
+            left: 75%;
+        }
+
+        .tools-4 {
+            top: 60%;
+            left: 80%;
+        }
+
+        .tools-5 {
+            top: 40%;
+            left: 45%;
+        }
+
+        .phys-1 {
+            top: 10%;
+            left: 80%;
+        }
+
+        .phys-2 {
+            top: 70%;
+            left: 15%;
+        }
+
+        .phys-3 {
+            top: 20%;
+            left: 15%;
+        }
+
+        .phys-4 {
+            top: 65%;
+            left: 75%;
+        }
+
+        .phys-5 {
+            top: 45%;
+            left: 55%;
+        }
+
+        @keyframes float-subtle {
+            0% {
+                transform: translateY(0px) scale(0.8) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-25px) scale(0.8) rotate(5deg);
+            }
+
+            100% {
+                transform: translateY(0px) scale(0.8) rotate(-5deg);
+            }
+        }
+
+        @keyframes s2LoopTopText {
+
+            0%,
+            2% {
+                opacity: 0;
+            }
+
+            10%,
+            85% {
+                opacity: 1;
+            }
+
+            90%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes s2LoopTools {
+
+            0%,
+            2% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+
+            15%,
+            40% {
+                opacity: 0.15;
+                filter: blur(0px);
+            }
+
+            50%,
+            100% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+        }
+
+        @keyframes s2LoopCross {
+
+            0%,
+            18% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            22% {
+                transform: scale(1.4);
+            }
+
+            25%,
+            85% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            90%,
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        @keyframes s2LoopBottomText {
+
+            0%,
+            40% {
+                opacity: 0;
+            }
+
+            48%,
+            85% {
+                opacity: 1;
+            }
+
+            90%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes s2LoopPhysics {
+
+            0%,
+            45% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+
+            60%,
+            85% {
+                opacity: 0.25;
+                filter: blur(0px);
+            }
+
+            90%,
+            100% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+        }
+
+        @keyframes s2LoopCheck {
+
+            0%,
+            58% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            62% {
+                transform: scale(1.4);
+            }
+
+            65%,
+            85% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            90%,
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        .present .s2-text-top {
+            animation: s2LoopTopText 16s infinite;
+        }
+
+        .present .s2-icons-tools i {
+            animation: s2LoopTools 16s infinite, float-subtle 8s ease-in-out infinite alternate;
+            color: #ffffff;
+        }
+
+        .present .s2-cross {
+            animation: s2LoopCross 16s infinite;
+        }
+
+        .present .s2-text-bottom {
+            animation: s2LoopBottomText 16s infinite;
+        }
+
+        .present .s2-icons-physics i {
+            animation: s2LoopPhysics 16s infinite, float-subtle 9s ease-in-out infinite alternate;
+            color: var(--brand-primary);
+        }
+
+        .present .s2-check {
+            animation: s2LoopCheck 16s infinite;
+        }
+
+        /* --- Slide 3 Equation Animations --- */
+        .s3-bg-equations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .impact-container {
+            display: none !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .present .impact-container {
+            display: flex !important;
+        }
+
+        .impact-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            line-height: 1.2;
+            text-align: center;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+            z-index: 20;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .s3-bg-equations .math-eq {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 2.2em;
+            font-style: italic;
+            opacity: 0;
+            position: absolute;
+            color: #00e5ff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+        }
+
+        .eq-maxwell-1 {
+            top: -10%;
+            left: 15%;
+            font-size: 2.5em;
+        }
+
+        .eq-maxwell-2 {
+            top: 75%;
+            left: 10%;
+            font-size: 2em;
+        }
+
+        .eq-eigen-1 {
+            top: 25%;
+            left: 75%;
+            font-size: 2.8em;
+        }
+
+        .eq-eigen-2 {
+            top: 65%;
+            left: 80%;
+            font-size: 2.2em;
+        }
+
+        .eq-prob {
+            top: -5%;
+            left: 45%;
+            font-size: 3em;
+        }
+
+        .eq-schrodinger {
+            top: 85%;
+            left: 50%;
+            font-size: 2.4em;
+        }
+
+        @keyframes float-eq-vertical {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(0.9) rotate(-2deg);
+                opacity: 0;
+                filter: blur(4px);
+            }
+
+            20%,
+            80% {
+                opacity: 0.15;
+                filter: blur(0px);
+            }
+
+            50% {
+                transform: translateY(40px) scale(1.05) rotate(2deg);
+                opacity: 0.25;
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes float-eq-horizontal {
+
+            0%,
+            100% {
+                transform: translateX(0) scale(0.8) rotate(3deg);
+                opacity: 0;
+                filter: blur(5px);
+            }
+
+            20%,
+            80% {
+                opacity: 0.2;
+                filter: blur(1px);
+            }
+
+            50% {
+                transform: translateX(-40px) scale(1) rotate(-1deg);
+                opacity: 0.3;
+                filter: blur(0px);
+            }
+        }
+
+        .present .s3-bg-equations .math-eq.eq-maxwell-1 {
+            animation: float-eq-vertical 12s infinite alternate 0.5s;
+        }
+
+        .present .s3-bg-equations .math-eq.eq-eigen-1 {
+            animation: float-eq-horizontal 15s infinite alternate 1.5s;
+        }
+
+        .present .s3-bg-equations .math-eq.eq-prob {
+            animation: float-eq-vertical 18s infinite alternate 3.0s;
+        }
+
+        .present .s3-bg-equations .math-eq.eq-maxwell-2 {
+            animation: float-eq-horizontal 14s infinite alternate 2.0s;
+        }
+
+        .present .s3-bg-equations .math-eq.eq-eigen-2 {
+            animation: float-eq-vertical 11s infinite alternate 4.5s;
+        }
+
+        .present .s3-bg-equations .math-eq.eq-schrodinger {
+            animation: float-eq-horizontal 16s infinite alternate 1.0s;
+        }
+
+        /* --- Slide 5 Coder Crowd Animations --- */
+        .s5-bg-crowd {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(40, 1fr);
+            grid-template-rows: repeat(25, 1fr);
+            gap: 2px;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.15;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .s5-bg-crowd i {
+            color: #666666;
+            font-size: 1.0em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .s5-thinker-nodes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 6;
+        }
+
+        .thinker-node {
+            position: absolute;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .thinker-node i {
+            font-size: 1.4em;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+
+        .thinker-node.physicist {
+            color: #00e5ff;
+        }
+
+        .thinker-node.chemist {
+            color: #ff00ff;
+        }
+
+        .thinker-node.mathematician {
+            color: #39ff14;
+        }
+
+        @keyframes thinkerPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0;
+            }
+
+            20%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                filter: drop-shadow(0 0 15px currentColor);
+            }
+        }
+
+        .present .p1 {
+            top: 15%;
+            left: 80%;
+            animation: thinkerPulse 3s infinite alternate 0.2s;
+        }
+
+        .present .p2 {
+            top: 65%;
+            left: 75%;
+            animation: thinkerPulse 3.4s infinite alternate 1.1s;
+        }
+
+        .present .p3 {
+            top: 25%;
+            left: 20%;
+            animation: thinkerPulse 2.9s infinite alternate 0.7s;
+        }
+
+        .present .p4 {
+            top: 85%;
+            left: 10%;
+            animation: thinkerPulse 3.6s infinite alternate 1.9s;
+        }
+
+        .present .p5 {
+            top: 40%;
+            left: 85%;
+            animation: thinkerPulse 3.2s infinite alternate 0.5s;
+        }
+
+        .present .p6 {
+            top: 75%;
+            left: 40%;
+            animation: thinkerPulse 3.5s infinite alternate 1.5s;
+        }
+
+        .present .c1 {
+            top: 50%;
+            left: 25%;
+            animation: thinkerPulse 3.1s infinite alternate 1.4s;
+        }
+
+        .present .m1 {
+            top: 12%;
+            left: 35%;
+            animation: thinkerPulse 3.3s infinite alternate 1.2s;
+        }
+
+        .present .m2 {
+            top: 55%;
+            left: 15%;
+            animation: thinkerPulse 3.1s infinite alternate 1.6s;
+        }
+
+        .present .m3 {
+            top: 38%;
+            left: 62%;
+            animation: thinkerPulse 3.5s infinite alternate 0.3s;
+        }
+
+        .present .m4 {
+            top: 80%;
+            left: 88%;
+            animation: thinkerPulse 3s infinite alternate 1.0s;
+        }
+
+        .s5-legend {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            background: rgba(5, 5, 20, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .legend-physicist {
+            color: #00e5ff;
+        }
+
+        .legend-chemist {
+            color: #ff00ff;
+        }
+
+        .legend-mathematician {
+            color: #39ff14;
+        }
+
+        /* --- Slide 7 Matrix Multiply Demo (index 6) --- */
+        .matrix-multiply-container {
+            display: none;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .present .matrix-multiply-container {
+            display: flex !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            opacity: 0.22;
+            flex-direction: row;
+        }
+
+        .mm-demo-matrix {
+            display: grid;
+            gap: 8px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .mm-demo-cell {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            border-radius: 4px;
+        }
+
+        .mm-demo-operator {
+            font-size: 2.5em;
+            color: #00e5ff;
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+
+        .active-row {
+            background: rgba(0, 229, 255, 0.35) !important;
+            border-color: #00e5ff !important;
+            box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+
+        .active-col {
+            background: rgba(0, 229, 255, 0.35) !important;
+            border-color: #00e5ff !important;
+            box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+
+        .active-cell {
+            background: #00e5ff !important;
+            color: #000 !important;
+            font-weight: 900 !important;
+            box-shadow: 0 0 25px #00e5ff;
+            transform: scale(1.15);
+        }
+
+        /* --- Slide 8 Loss Surface Animation --- */
+        .loss-surface-container {
+            /* Marker element only — actual canvas is injected into body */
+            display: none;
+        }
+
+        #loss-surface-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* --- Slide 9 Bell Curve Animation --- */
+        .bell-curve-container {
+            display: none;
+        }
+
+        #bell-curve-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.40;
+            pointer-events: none;
+        }
+
+
+        /* --- Slide 10 Energy Landscape Animation --- */
+        .energy-landscape-container {
+            display: none;
+        }
+
+        #energy-landscape-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.38;
+            pointer-events: none;
+        }
+
+        /* --- Slide 11 Entropy Tree Animation --- */
+        .entropy-tree-container {
+            display: none;
+        }
+
+        #entropy-tree-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.40;
+            pointer-events: none;
+        }
+
+        /* --- Slide 12 Airflow Pipeline Animation --- */
+        .airflow-pipeline-container {
+            display: none;
+        }
+
+        #airflow-pipeline-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        /* --- Slide 13 Molecular Network Animation --- */
+        .molecular-network-container {
+            display: none;
+        }
+
+        #molecular-network-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        /* --- Slide 14 Chemistry x AI Heatmap --- */
+        .drug-heatmap-container {
+            display: none;
+        }
+
+        #drug-heatmap-canvas {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.50;
+            pointer-events: none;
+        }
+
+        .vector-morph-container {
+            display: none;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .present .vector-morph-container {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .vector-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 20px;
+            opacity: 0.15;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .vector-grid i {
+            color: #ffffff;
+            font-size: 1.4em;
+            transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .present .vector-grid i {
+            animation: vectorToEmbedding 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes vectorToEmbedding {
+            0% {
+                transform: rotate(45deg) scale(1);
+                color: #ffffff;
+                opacity: 0.6;
+            }
+
+            40% {
+                transform: rotate(0deg) scale(0.6) translate(var(--tx), var(--ty));
+                color: #00e5ff;
+                opacity: 1;
+            }
+
+            60% {
+                transform: rotate(0deg) scale(0.4) translate(var(--tx), var(--ty));
+                color: #00e5ff;
+                box-shadow: 0 0 15px #00e5ff;
+            }
+
+            100% {
+                transform: rotate(0deg) scale(0.4) translate(var(--tx), var(--ty));
+                color: #00e5ff;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sci-logo-container">
+        <img src="images/logo_black_bg.png" alt="SciEncephalon AI Logo">
+    </div>
+
+    <div class="global-slide-title">The Dangerous Myth</div>
+
+    <div class="reveal">
+        <div class="slides">
+            <section data-markdown="slides.md?v=35" data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"
+                data-separator-notes="^Note:">
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.js"></script>
+
+    <script>
+        Reveal.initialize({
+            hash: true, center: true, transition: 'fade', backgroundTransition: 'fade',
+            slideNumber: 'c/t', plugins: [RevealMarkdown, RevealNotes]
+        });
+
+        // Background: 3D Loss Surface Simulation
+        function initLossSurface() {
+            if (window._lossSurfaceReady) return;
+            window._lossSurfaceReady = true;
+
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Inject canvas directly into body — outside all Reveal.js transforms
+            const canvas = renderer.domElement;
+            canvas.id = 'loss-surface-canvas';
+            document.body.appendChild(canvas);
+
+            const size = 80, res = 100;
+            const geometry = new THREE.PlaneGeometry(size, size, res, res);
+            const positions = geometry.attributes.position.array;
+
+            const lossFunc = (x, y) => {
+                const r = Math.sqrt(x * x + y * y) * 0.15;
+                return 12 * Math.sin(r) / (r + 0.1) + 2 * Math.cos(x * 0.1) * Math.sin(y * 0.1);
+            };
+
+            for (let i = 0; i < positions.length; i += 3) {
+                positions[i + 2] = lossFunc(positions[i], positions[i + 1]);
+            }
+            geometry.computeVertexNormals();
+
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.22, emissive: 0x003344
+            });
+            const surface = new THREE.Mesh(geometry, material);
+            surface.rotation.x = -Math.PI / 2.5;
+            scene.add(surface);
+
+            const ball = new THREE.Mesh(
+                new THREE.SphereGeometry(1, 32, 32),
+                new THREE.MeshBasicMaterial({ color: 0xff00ff })
+            );
+            scene.add(ball);
+
+            let px = (Math.random() - 0.5) * 30, py = (Math.random() - 0.5) * 30;
+
+            function animateLoss() {
+                requestAnimationFrame(animateLoss);
+                const e = 0.05;
+                const gx = (lossFunc(px + e, py) - lossFunc(px - e, py)) / (2 * e);
+                const gy = (lossFunc(px, py + e) - lossFunc(px, py - e)) / (2 * e);
+                px -= 0.12 * gx;
+                py -= 0.12 * gy;
+                if (Math.abs(px) > 32 || Math.abs(py) > 32 || (Math.abs(gx) < 0.001 && Math.abs(gy) < 0.001)) {
+                    px = (Math.random() - 0.5) * 40;
+                    py = (Math.random() - 0.5) * 40;
+                }
+                ball.position.set(px, py, lossFunc(px, py) + 1.5);
+                ball.position.applyMatrix4(surface.matrixWorld);
+                surface.rotation.z += 0.001;
+                renderer.render(scene, camera);
+            }
+
+            camera.position.set(0, 45, 65);
+            camera.lookAt(0, 0, 0);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const pl = new THREE.PointLight(0xffffff, 1); pl.position.set(0, 100, 50); scene.add(pl);
+            animateLoss();
+
+            window.addEventListener('resize', () => {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+            });
+        }
+
+        // Bell Curve + Prediction Intervals Animation (Slide 9)
+        function initBellCurve() {
+            if (window._bellCurveReady) return;
+            window._bellCurveReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'bell-curve-canvas';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H, t = 0;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function gauss(x, mu, sigma) {
+                return Math.exp(-0.5 * ((x - mu) / sigma) ** 2) / (sigma * Math.sqrt(2 * Math.PI));
+            }
+
+            function drawFrame() {
+                ctx.clearRect(0, 0, W, H);
+
+                // Animate mean and sigma gently over time
+                const mu = W * 0.5 + Math.sin(t * 0.4) * W * 0.05;
+                const sigma = W * (0.10 + 0.015 * Math.sin(t * 0.3));
+                const peak = gauss(mu, mu, sigma);
+                const scaleY = H * 0.55; // Height of the peak in pixels
+
+                // Helper: x-pixel -> gauss value scaled to screen
+                const gy = x => (H * 0.72) - (gauss(x, mu, sigma) / peak) * scaleY;
+
+                // --- Shaded sigma bands (3σ → 1σ, back to front) ---
+                const bands = [
+                    { nSigma: 3, color: 'rgba(0, 180, 180, 0.06)' },
+                    { nSigma: 2, color: 'rgba(0, 210, 210, 0.12)' },
+                    { nSigma: 1, color: 'rgba(0, 229, 255, 0.22)' },
+                ];
+
+                for (const { nSigma, color } of bands) {
+                    const xLeft = mu - nSigma * sigma;
+                    const xRight = mu + nSigma * sigma;
+                    ctx.beginPath();
+                    ctx.moveTo(xLeft, H * 0.72);
+                    for (let px = xLeft; px <= xRight; px += 1) {
+                        ctx.lineTo(px, gy(px));
+                    }
+                    ctx.lineTo(xRight, H * 0.72);
+                    ctx.closePath();
+                    ctx.fillStyle = color;
+                    ctx.fill();
+                }
+
+                // --- Sigma boundary dashed vertical lines ---
+                const sigmaLines = [
+                    { x: mu - 3 * sigma, label: '-3σ' },
+                    { x: mu - 2 * sigma, label: '-2σ' },
+                    { x: mu - sigma, label: '-1σ' },
+                    { x: mu + sigma, label: '+1σ' },
+                    { x: mu + 2 * sigma, label: '+2σ' },
+                    { x: mu + 3 * sigma, label: '+3σ' },
+                ];
+                ctx.setLineDash([6, 8]);
+                ctx.lineWidth = 1;
+                for (const { x, label } of sigmaLines) {
+                    const alpha = 0.3 + 0.15 * Math.sin(t * 0.5);
+                    ctx.strokeStyle = `rgba(0, 229, 255, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.moveTo(x, H * 0.72);
+                    ctx.lineTo(x, gy(x));
+                    ctx.stroke();
+                    ctx.fillStyle = `rgba(0, 229, 255, ${alpha + 0.1})`;
+                    ctx.font = '13px Inter, sans-serif';
+                    ctx.fillText(label, x - 10, H * 0.76);
+                }
+                ctx.setLineDash([]);
+
+                // --- Main bell curve line ---
+                ctx.beginPath();
+                for (let px = 0; px <= W; px += 2) {
+                    px === 0 ? ctx.moveTo(px, gy(px)) : ctx.lineTo(px, gy(px));
+                }
+                ctx.strokeStyle = '#00e5ff';
+                ctx.lineWidth = 2.5;
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = '#00e5ff';
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // --- Sweeping prediction line ---
+                const predX = mu + Math.sin(t * 0.7) * 2.2 * sigma;
+                const predAlpha = 0.7 + 0.3 * Math.sin(t * 1.2);
+                ctx.beginPath();
+                ctx.moveTo(predX, H * 0.72);
+                ctx.lineTo(predX, gy(predX));
+                ctx.strokeStyle = `rgba(255, 80, 255, ${predAlpha})`;
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 16;
+                ctx.shadowColor = 'rgba(255, 80, 255, 0.8)';
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // Dot on curve at prediction line
+                ctx.beginPath();
+                ctx.arc(predX, gy(predX), 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff50ff';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#ff50ff';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // --- Baseline ---
+                ctx.beginPath();
+                ctx.moveTo(W * 0.05, H * 0.72);
+                ctx.lineTo(W * 0.95, H * 0.72);
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                t += 0.016;
+                requestAnimationFrame(drawFrame);
+            }
+
+            drawFrame();
+        }
+
+
+        // Energy Landscape + Particle Physics (Slide 10, h=9)
+        function initEnergyLandscape() {
+            if (window._energyReady) return;
+            window._energyReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'energy-landscape-canvas';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Multi-well potential: U(x,y) — sum of Gaussian wells
+            const wells = [
+                { wx: 0.25, wy: 0.55, depth: 1.2, r: 0.12 },
+                { wx: 0.50, wy: 0.45, depth: 1.0, r: 0.10 },
+                { wx: 0.75, wy: 0.55, depth: 1.4, r: 0.13 },
+                { wx: 0.38, wy: 0.70, depth: 0.8, r: 0.09 },
+                { wx: 0.62, wy: 0.35, depth: 0.9, r: 0.10 },
+            ];
+
+            function potential(nx, ny) {
+                let U = 0;
+                for (const w of wells) {
+                    const dx = nx - w.wx, dy = ny - w.wy;
+                    U -= w.depth * Math.exp(-(dx * dx + dy * dy) / (2 * w.r * w.r));
+                }
+                return U;
+            }
+
+            function gradU(nx, ny) {
+                const e = 0.002;
+                return {
+                    gx: (potential(nx + e, ny) - potential(nx - e, ny)) / (2 * e),
+                    gy: (potential(nx, ny + e) - potential(nx, ny - e)) / (2 * e)
+                };
+            }
+
+            // Initialise particles spread across slide
+            const N = 60;
+            const particles = Array.from({ length: N }, () => ({
+                x: 0.1 + Math.random() * 0.8,
+                y: 0.1 + Math.random() * 0.8,
+                vx: (Math.random() - 0.5) * 0.003,
+                vy: (Math.random() - 0.5) * 0.003,
+            }));
+
+            let t = 0;
+            function drawEnergy() {
+                ctx.clearRect(0, 0, W, H);
+
+                // Draw potential landscape as contour fill bands
+                const steps = 5;
+                for (let s = steps; s >= 1; s--) {
+                    const alpha = 0.04 + 0.025 * s;
+                    ctx.beginPath();
+                    const res = 4;
+                    for (let px = 0; px < W; px += res) {
+                        for (let py = 0; py < H; py += res) {
+                            const u = potential(px / W, py / H);
+                            const threshold = -0.15 * s;
+                            if (u < threshold) {
+                                ctx.rect(px, py, res, res);
+                            }
+                        }
+                    }
+                    ctx.fillStyle = `rgba(0, 229, 255, ${alpha})`;
+                    ctx.fill();
+                }
+
+                // Draw well outlines as glowing rings
+                for (const w of wells) {
+                    const cx = w.wx * W, cy = w.wy * H;
+                    const rx = w.r * W;
+                    const pulse = 1 + 0.08 * Math.sin(t * 1.5 + w.wx * 10);
+                    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx * pulse);
+                    grad.addColorStop(0, 'rgba(0, 229, 255, 0.18)');
+                    grad.addColorStop(0.5, 'rgba(0, 180, 200, 0.08)');
+                    grad.addColorStop(1, 'rgba(0, 229, 255, 0)');
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, rx * pulse, 0, Math.PI * 2);
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+                }
+
+                // Integrate particles
+                const dt = 0.5, damping = 0.985;
+                for (const p of particles) {
+                    const { gx, gy } = gradU(p.x, p.y);
+                    p.vx = (p.vx - gx * dt * 0.0006) * damping;
+                    p.vy = (p.vy - gy * dt * 0.0006) * damping;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    // Wrap at edges
+                    if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
+                    if (p.y < 0) p.y = 1; if (p.y > 1) p.y = 0;
+
+                    // Color: hot (orange) when fast, cool (cyan) when settled
+                    const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                    const heat = Math.min(1, speed / 0.003);
+                    const r = Math.round(255 * heat);
+                    const g = Math.round(100 + 129 * (1 - heat));
+                    const b = Math.round(255 * (1 - heat * 0.5));
+                    const radius = 3 + 2 * heat;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x * W, p.y * H, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgb(${r},${g},${b})`;
+                    ctx.shadowBlur = 8 + 10 * heat;
+                    ctx.shadowColor = `rgb(${r},${g},${b})`;
+                    ctx.fill();
+                }
+                ctx.shadowBlur = 0;
+
+                t += 0.016;
+                requestAnimationFrame(drawEnergy);
+            }
+
+            drawEnergy();
+        }
+
+        // Entropy -> Decision Tree Animation (Slide 11, h=10)
+        function initEntropyTree() {
+            if (window._entropyTreeReady) return;
+            window._entropyTreeReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'entropy-tree-canvas';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const N = 200;
+            const particles = [];
+            for (let i = 0; i < N; i++) {
+                const isCyan = i % 2 === 0;
+                particles.push({
+                    isCyan: isCyan,
+                    x: W / 2 + (Math.random() - 0.5) * 100,
+                    y: H * 0.35 + (Math.random() - 0.5) * 100,
+                    vx: 0,
+                    vy: 0,
+                    ox: 0,
+                    oy: 0
+                });
+            }
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('entropy-tree-canvas')) return;
+                const canvasElement = document.getElementById('entropy-tree-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+
+                let elapsed = (now - startTime) / 1000;
+                let cycle = elapsed % 8; // 8 second cycle
+
+                let rootX = W / 2;
+                let rootY = H * 0.35;
+                let leftX = W / 2 - W * 0.15;
+                let rightX = W / 2 + W * 0.15;
+                let leafY = H * 0.65;
+
+                // Determine phase
+                let splitting = cycle > 3 && cycle < 7.5;
+                let splittedAmt = Math.max(0, Math.min(1, (cycle - 3) * 1.5));
+                if (cycle >= 6.5) {
+                    splittedAmt = Math.max(0, Math.min(1, 1 - (cycle - 6.5) * 1.5));
+                }
+
+                // Draw tree branches
+                if (splittedAmt > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(rootX, rootY + 50);
+                    ctx.lineTo(rootX + (leftX - rootX) * splittedAmt, rootY + 50 + (leafY - rootY - 50) * splittedAmt);
+                    ctx.moveTo(rootX, rootY + 50);
+                    ctx.lineTo(rootX + (rightX - rootX) * splittedAmt, rootY + 50 + (leafY - rootY - 50) * splittedAmt);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${splittedAmt * 0.4})`;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                // Draw entropy graph above root node
+                let gw = 120;
+                let gh = 50;
+                let gx = rootX - gw / 2;
+                let gy = rootY - 140;
+
+                ctx.beginPath();
+                for (let px = 0; px <= gw; px += 2) {
+                    let p = px / gw;
+                    let p_safe = Math.max(0.001, Math.min(0.999, p));
+                    let ent = -p_safe * Math.log2(p_safe) - (1 - p_safe) * Math.log2(1 - p_safe);
+                    let py = gy + gh - ent * gh;
+                    if (px === 0) ctx.moveTo(gx + px, py);
+                    else ctx.lineTo(gx + px, py);
+                }
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                let current_p = 0.5 + 0.5 * splittedAmt;
+                let p_safe = Math.max(0.001, Math.min(0.999, current_p));
+                let curr_ent = -p_safe * Math.log2(p_safe) - (1 - p_safe) * Math.log2(1 - p_safe);
+
+                ctx.beginPath();
+                ctx.arc(gx + current_p * gw, gy + gh - curr_ent * gh, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#00e5ff';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00e5ff';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                ctx.font = '14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Entropy: ${curr_ent.toFixed(2)}`, rootX, gy - 15);
+
+                // Update particles
+                for (let p of particles) {
+                    let tx = rootX;
+                    let ty = rootY;
+                    let radius = 70;
+
+                    if (splitting) {
+                        tx = p.isCyan ? leftX : rightX;
+                        ty = leafY;
+                        radius = 40;
+                    }
+
+                    // Move around to represent entropy/energy
+                    let noise = splitting ? 1.0 : 4.0;
+
+                    if (p.ox === 0 && p.oy === 0) {
+                        let angle = Math.random() * Math.PI * 2;
+                        let r = Math.random() * radius;
+                        p.ox = Math.cos(angle) * r;
+                        p.oy = Math.sin(angle) * r;
+                    }
+
+                    p.ox += (Math.random() - 0.5) * noise;
+                    p.oy += (Math.random() - 0.5) * noise;
+
+                    let dist = Math.sqrt(p.ox * p.ox + p.oy * p.oy);
+                    if (dist > radius) {
+                        p.ox = (p.ox / dist) * radius;
+                        p.oy = (p.oy / dist) * radius;
+                    }
+
+                    let targetX = tx + p.ox;
+                    let targetY = ty + p.oy;
+
+                    let dx = targetX - p.x;
+                    let dy = targetY - p.y;
+
+                    p.vx = (p.vx + dx * 0.02) * 0.85;
+                    p.vy = (p.vy + dy * 0.02) * 0.85;
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = p.isCyan ? '#00e5ff' : '#ff00ff';
+                    ctx.shadowBlur = 6;
+                    ctx.shadowColor = ctx.fillStyle;
+                    ctx.fill();
+                }
+                ctx.shadowBlur = 0;
+
+                requestAnimationFrame(drawFrame);
+            }
+
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Airflow Pipeline Animation (Slide 12, h=11)
+        function initAirflowPipeline() {
+            if (window._airflowReady) return;
+            window._airflowReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'airflow-pipeline-canvas';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const layers = 9;
+            let nodes = [];
+            let edges = [];
+
+            function generateDAG() {
+                nodes = [];
+                edges = [];
+                for (let i = 0; i < layers; i++) {
+                    const numNodes = 4 + Math.floor(Math.random() * 4);
+                    const layerX = W * 0.1 + (W * 0.8 * i / (layers - 1));
+                    for (let j = 0; j < numNodes; j++) {
+                        nodes.push({
+                            id: `${i}-${j}`,
+                            layer: i,
+                            x: layerX,
+                            y: H * 0.2 + (H * 0.6 * (j + 1) / (numNodes + 1)),
+                            state: 'queued',
+                            timer: 0
+                        });
+                    }
+                }
+                for (let i = 0; i < layers - 1; i++) {
+                    const currLayer = nodes.filter(n => n.layer === i);
+                    const nextLayer = nodes.filter(n => n.layer === i + 1);
+
+                    nextLayer.forEach(n => {
+                        const fromNode = currLayer[Math.floor(Math.random() * currLayer.length)];
+                        edges.push({ from: fromNode, to: n, particles: [] });
+                    });
+
+                    currLayer.forEach(n => {
+                        if (Math.random() > 0.4) {
+                            const toNode = nextLayer[Math.floor(Math.random() * nextLayer.length)];
+                            if (!edges.find(e => e.from === n && e.to === toNode)) {
+                                edges.push({ from: n, to: toNode, particles: [] });
+                            }
+                        }
+                    });
+                }
+
+                nodes.filter(n => n.layer === 0).forEach(n => n.state = 'running');
+            }
+
+            generateDAG();
+
+            function drawFrame() {
+                if (!document.getElementById('airflow-pipeline-canvas')) return;
+                const canvasElement = document.getElementById('airflow-pipeline-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+
+                // Update logic
+                nodes.forEach(n => {
+                    if (n.state === 'running') {
+                        n.timer++;
+                        if (n.timer > 40 + Math.random() * 60) {
+                            if (Math.random() < 0.12) { // 12% fail rate
+                                n.state = 'failed';
+                                function propFail(node) {
+                                    edges.filter(e => e.from === node).forEach(e => {
+                                        if (e.to.state !== 'failed') e.to.state = 'upstream_failed';
+                                        propFail(e.to);
+                                    });
+                                }
+                                propFail(n);
+                            } else {
+                                n.state = 'success';
+                                edges.filter(e => e.from === n).forEach(e => {
+                                    const nextNode = e.to;
+                                    if (nextNode.state === 'queued') {
+                                        const upstreamOfNext = edges.filter(outEdge => outEdge.to === nextNode);
+                                        const allSuccess = upstreamOfNext.every(outEdge => outEdge.from.state === 'success');
+                                        const anyFailed = upstreamOfNext.some(outEdge => outEdge.from.state === 'failed' || outEdge.from.state === 'upstream_failed');
+                                        if (anyFailed) {
+                                            nextNode.state = 'upstream_failed';
+                                            function propFailQ(node) {
+                                                edges.filter(ee => ee.from === node).forEach(ee => {
+                                                    if (ee.to.state !== 'failed') ee.to.state = 'upstream_failed';
+                                                    propFailQ(ee.to);
+                                                });
+                                            }
+                                            propFailQ(nextNode);
+                                        } else if (allSuccess) {
+                                            nextNode.state = 'running';
+                                            nextNode.timer = 0;
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
+                let allFinished = nodes.every(n => n.state !== 'queued' && n.state !== 'running');
+                if (allFinished) {
+                    if (!window._dagResetTimer) {
+                        window._dagResetTimer = setTimeout(() => {
+                            generateDAG(); // full regenerate for variety
+                            window._dagResetTimer = null;
+                        }, 2500);
+                    }
+                }
+
+                // Draw edges
+                edges.forEach(e => {
+                    const cp1x = (e.from.x + e.to.x) / 2;
+                    const cp1y = e.from.y;
+                    const cp2x = (e.from.x + e.to.x) / 2;
+                    const cp2y = e.to.y;
+
+                    ctx.beginPath();
+                    ctx.moveTo(e.from.x + 20, e.from.y);
+                    ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, e.to.x - 20, e.to.y);
+
+                    if (e.to.state === 'upstream_failed' || e.from.state === 'failed') {
+                        ctx.strokeStyle = 'rgba(255, 51, 51, 0.25)';
+                        ctx.lineWidth = 1;
+                    } else if (e.from.state === 'success') {
+                        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+                        ctx.lineWidth = 1.5;
+                    } else if (e.from.state === 'running') {
+                        ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
+                        ctx.lineWidth = 1.5;
+                    } else {
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                        ctx.lineWidth = 1;
+                    }
+                    ctx.stroke();
+
+                    // Particles
+                    if (e.from.state === 'running' || e.from.state === 'success') {
+                        if (Math.random() < 0.05) {
+                            e.particles.push({ p: 0, speed: 0.01 + Math.random() * 0.015 });
+                        }
+                    }
+                    if (e.from.state === 'failed') {
+                        e.particles = [];
+                    }
+
+                    e.particles.forEach(part => {
+                        part.p += part.speed;
+                        const t = part.p;
+                        if (t > 1) return;
+                        const u = 1 - t;
+                        const px = u * u * u * (e.from.x + 20) + 3 * u * u * t * cp1x + 3 * u * t * t * cp2x + t * t * t * (e.to.x - 20);
+                        const py = u * u * u * e.from.y + 3 * u * u * t * cp1y + 3 * u * t * t * cp2y + t * t * t * e.to.y;
+
+                        ctx.beginPath();
+                        ctx.arc(px, py, 2, 0, Math.PI * 2);
+                        ctx.fillStyle = '#00e5ff';
+                        ctx.shadowBlur = 4;
+                        ctx.shadowColor = '#00e5ff';
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    });
+                    e.particles = e.particles.filter(part => part.p < 1);
+                });
+
+                // Draw nodes
+                nodes.forEach(n => {
+                    let fillStyle = 'rgba(10, 10, 15, 0.9)';
+                    let strokeStyle = '#444';
+                    let shadowColor = 'transparent';
+
+                    if (n.state === 'running') {
+                        strokeStyle = '#bada55';
+                        const pulse = 0.15 + 0.1 * Math.sin(Date.now() / 150);
+                        fillStyle = `rgba(186, 218, 85, ${pulse})`;
+                        shadowColor = '#bada55';
+                    } else if (n.state === 'success') {
+                        strokeStyle = '#10b981';
+                        fillStyle = 'rgba(16, 185, 129, 0.15)';
+                    } else if (n.state === 'failed') {
+                        strokeStyle = '#ff3333';
+                        fillStyle = 'rgba(255, 51, 51, 0.3)';
+                        shadowColor = '#ff3333';
+                    } else if (n.state === 'upstream_failed') {
+                        strokeStyle = '#f59e0b'; // orange
+                        fillStyle = 'rgba(245, 158, 11, 0.1)';
+                    }
+
+                    const nw = 40;
+                    const nh = 16;
+
+                    ctx.beginPath();
+                    ctx.moveTo(n.x - nw / 2 + 4, n.y - nh / 2);
+                    ctx.lineTo(n.x + nw / 2 - 4, n.y - nh / 2);
+                    ctx.quadraticCurveTo(n.x + nw / 2, n.y - nh / 2, n.x + nw / 2, n.y - nh / 2 + 4);
+                    ctx.lineTo(n.x + nw / 2, n.y + nh / 2 - 4);
+                    ctx.quadraticCurveTo(n.x + nw / 2, n.y + nh / 2, n.x + nw / 2 - 4, n.y + nh / 2);
+                    ctx.lineTo(n.x - nw / 2 + 4, n.y + nh / 2);
+                    ctx.quadraticCurveTo(n.x - nw / 2, n.y + nh / 2, n.x - nw / 2, n.y + nh / 2 - 4);
+                    ctx.lineTo(n.x - nw / 2, n.y - nh / 2 + 4);
+                    ctx.quadraticCurveTo(n.x - nw / 2, n.y - nh / 2, n.x - nw / 2 + 4, n.y - nh / 2);
+                    ctx.closePath();
+
+                    ctx.fillStyle = fillStyle;
+                    if (shadowColor !== 'transparent') {
+                        ctx.shadowBlur = 8;
+                        ctx.shadowColor = shadowColor;
+                    }
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    ctx.strokeStyle = strokeStyle;
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                });
+
+                requestAnimationFrame(drawFrame);
+            }
+
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Molecular Network to Feature Graph Animation (Slide 13, h=12)
+        function initMolecularNetwork() {
+            if (window._molNetReady) return;
+            window._molNetReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'molecular-network-canvas';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const numNodes = 40;
+            const nodes = [];
+            const bonds = [];
+
+            // Layout constants
+            const cols = 8;
+            const rows = 5;
+
+            for (let i = 0; i < numNodes; i++) {
+                const r = i % rows;
+                const c = Math.floor(i / rows);
+
+                // Molecular random start
+                const isCore = i % 5 === 0;
+
+                nodes.push({
+                    id: i,
+                    x: W / 2 + (Math.random() - 0.5) * 400,
+                    y: H / 2 + (Math.random() - 0.5) * 400,
+                    vx: 0,
+                    vy: 0,
+                    radius: isCore ? 8 : 4,
+                    color: isCore ? '#00e5ff' : '#ff00ff', // cyan vs magenta
+                    // Fixed structured layout positions (Graph embedding array)
+                    structX: W / 2 - 250 + c * 70,
+                    structY: H / 2 - 120 + r * 60
+                });
+            }
+
+            // Create some random molecular bonds
+            for (let i = 0; i < numNodes; i++) {
+                // Connect to 1-2 random close nodes
+                for (let k = 0; k < 2; k++) {
+                    const j = Math.floor(Math.random() * numNodes);
+                    if (i !== j) bonds.push({ a: nodes[i], b: nodes[j] });
+                }
+            }
+
+            // Create structured grid / neural net edges
+            const structEdges = [];
+            for (let i = 0; i < numNodes; i++) {
+                const r = i % rows;
+                const c = Math.floor(i / rows);
+                // Connect to adj in grid
+                if (r < rows - 1) structEdges.push({ a: nodes[i], b: nodes[i + 1] });
+                if (c < cols - 1) structEdges.push({ a: nodes[i], b: nodes[i + rows] });
+            }
+
+            let startT = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('molecular-network-canvas')) return;
+                const canvasElement = document.getElementById('molecular-network-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+
+                let elapsed = (now - startT) / 1000;
+                // 10 second cycle: 0-4 mol, 4-5 trans, 5-9 struct, 9-10 trans
+                let cycle = elapsed % 10;
+
+                let tMorph = 0; // 0 = mol, 1 = struct
+                if (cycle < 4) { tMorph = 0; }
+                else if (cycle < 5) { tMorph = (cycle - 4); }
+                else if (cycle < 9) { tMorph = 1; }
+                else { tMorph = 1 - (cycle - 9); }
+
+                // Easing Smoothstep
+                tMorph = tMorph * tMorph * (3 - 2 * tMorph);
+
+                // Simulation for Molecular state
+                // Apply spring forces for bonds, repulsion, and attract to center
+                nodes.forEach(n => {
+                    // Center gravity
+                    n.vx += (W / 2 - n.x) * 0.0001 * (1 - tMorph);
+                    n.vy += (H / 2 - n.y) * 0.0001 * (1 - tMorph);
+
+                    // Repulsion to all others
+                    nodes.forEach(m => {
+                        if (n !== m) {
+                            let dx = n.x - m.x;
+                            let dy = n.y - m.y;
+                            let distSq = dx * dx + dy * dy + 1; // avoid / 0
+                            if (distSq < 10000) {
+                                let f = 5 / distSq;
+                                n.vx += dx * f * (1 - tMorph);
+                                n.vy += dy * f * (1 - tMorph);
+                            }
+                        }
+                    });
+                });
+
+                bonds.forEach(b => {
+                    let dx = b.b.x - b.a.x;
+                    let dy = b.b.y - b.a.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy) + 0.1;
+                    let diff = dist - 60; // desired mol distance 60
+                    let force = diff * 0.005;
+                    b.a.vx += dx / dist * force * (1 - tMorph);
+                    b.a.vy += dy / dist * force * (1 - tMorph);
+                    b.b.vx -= dx / dist * force * (1 - tMorph);
+                    b.b.vy -= dy / dist * force * (1 - tMorph);
+                });
+
+                // Update positions
+                nodes.forEach(n => {
+                    if (tMorph < 1) {
+                        n.vx *= 0.88;
+                        n.vy *= 0.88;
+                        n.x += n.vx;
+                        n.y += n.vy;
+                    }
+
+                    // Mix physical pos with structured pos
+                    n.drawX = n.x * (1 - tMorph) + n.structX * tMorph;
+                    n.drawY = n.y * (1 - tMorph) + n.structY * tMorph;
+                });
+
+                // Draw mol bonds fading out
+                if (tMorph < 1) {
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - tMorph) * 0.3})`;
+                    ctx.beginPath();
+                    bonds.forEach(b => {
+                        ctx.moveTo(b.a.drawX, b.a.drawY);
+                        ctx.lineTo(b.b.drawX, b.b.drawY);
+                    });
+                    ctx.stroke();
+                }
+
+                // Draw struct edges fading in
+                if (tMorph > 0) {
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = `rgba(0, 229, 255, ${tMorph * 0.3})`;
+                    ctx.beginPath();
+                    structEdges.forEach(e => {
+                        ctx.moveTo(e.a.drawX, e.a.drawY);
+                        ctx.lineTo(e.b.drawX, e.b.drawY);
+                    });
+                    ctx.stroke();
+                }
+
+                // Draw Nodes
+                nodes.forEach(n => {
+                    ctx.beginPath();
+                    ctx.arc(n.drawX, n.drawY, n.radius + (tMorph * 2), 0, Math.PI * 2);
+
+                    ctx.fillStyle = n.color;
+                    if (tMorph > 0) {
+                        ctx.shadowBlur = 10 * tMorph;
+                        ctx.shadowColor = ctx.fillStyle;
+                    } else {
+                        ctx.shadowBlur = ((n.color === '#00e5ff') ? 8 : 0);
+                        ctx.shadowColor = ctx.fillStyle;
+                    }
+                    ctx.fill();
+
+                    // Optional numeric text on structured nodes
+                    if (tMorph > 0.5) {
+                        let textOp = (tMorph - 0.5) * 2;
+                        ctx.fillStyle = `rgba(255, 255, 255, ${textOp})`;
+                        ctx.font = '11px Courier';
+                        ctx.textAlign = 'center';
+                        ctx.fillText((n.id * 0.13 - 1.2).toFixed(2), n.drawX, n.drawY - 12);
+                    }
+                });
+
+                // Matrix Brackets drawing
+                if (tMorph > 0.5) {
+                    let bracketsOp = (tMorph - 0.5) * 2;
+                    ctx.strokeStyle = `rgba(255,255,255,${bracketsOp * 0.5})`;
+                    ctx.lineWidth = 3;
+                    let bx = W / 2 - 280;
+                    let bxR = W / 2 - 250 + (cols - 1) * 70 + 30;
+                    let by1 = H / 2 - 140;
+                    let by2 = H / 2 - 120 + (rows - 1) * 60 + 20;
+
+                    ctx.beginPath();
+                    ctx.moveTo(bx + 15, by1);
+                    ctx.lineTo(bx, by1);
+                    ctx.lineTo(bx, by2);
+                    ctx.lineTo(bx + 15, by2);
+
+                    ctx.moveTo(bxR - 15, by1);
+                    ctx.lineTo(bxR, by1);
+                    ctx.lineTo(bxR, by2);
+                    ctx.lineTo(bxR - 15, by2);
+
+                    ctx.stroke();
+                }
+
+                ctx.shadowBlur = 0;
+                requestAnimationFrame(drawFrame);
+            }
+
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Drug Heatmap Animation (Slide 14, h=13)
+        function initDrugHeatmap() {
+            if (window._drugHeatmapReady) return;
+            window._drugHeatmapReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'drug-heatmap-canvas';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Representing a complex drug-like molecule
+            // Coordinates relative to center
+            const molScale = 60;
+            const nodes = [
+                { id: 0, x: -2, y: 0, type: 'C' },
+                { id: 1, x: -1, y: 1.5, type: 'C' },
+                { id: 2, x: 1, y: 1.5, type: 'N' },
+                { id: 3, x: 2, y: 0, type: 'C' },
+                { id: 4, x: 1, y: -1.5, type: 'C' },
+                { id: 5, x: -1, y: -1.5, type: 'O' },
+
+                { id: 6, x: -3.5, y: -0.5, type: 'C' },
+                { id: 7, x: -4.5, y: 1, type: 'C' },
+
+                { id: 8, x: 3.5, y: -0.5, type: 'O' },
+                { id: 9, x: 4.5, y: 1, type: 'C' },
+                { id: 10, x: 6, y: 0.5, type: 'F' },
+            ];
+
+            const edges = [
+                [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], // ring
+                [0, 6], [6, 7],
+                [3, 8], [8, 9], [9, 10]
+            ];
+
+            let startT = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('drug-heatmap-canvas')) return;
+                const canvasElement = document.getElementById('drug-heatmap-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+
+                let t = (now - startT) / 1000;
+
+                let cx = W / 2;
+                let cy = H / 2 - 50;
+
+                // Subtle float
+                let floatY = Math.sin(t) * 15;
+                let floatX = Math.cos(t * 0.8) * 10;
+
+                // Rotations
+                let rot = Math.sin(t * 0.3) * 0.3;
+                let cosR = Math.cos(rot);
+                let sinR = Math.sin(rot);
+
+                // Calculate screen positions
+                let screenNodes = nodes.map(n => {
+                    let rx = n.x * cosR - n.y * sinR;
+                    let ry = n.x * sinR + n.y * cosR;
+                    return {
+                        ...n,
+                        sx: cx + floatX + rx * molScale,
+                        sy: cy + floatY + ry * molScale
+                    };
+                });
+
+                // Generate Heatmap (hotspots that shift over time)
+                // "attention weights" from AI model
+                let heatCenters = [
+                    { x: screenNodes[3].sx, y: screenNodes[3].sy, intensity: (Math.sin(t * 2.5) + 1) / 2 },
+                    { x: screenNodes[0].sx, y: screenNodes[0].sy, intensity: (Math.sin(t * 1.7 + 2) + 1) / 2 },
+                    { x: screenNodes[10].sx, y: screenNodes[10].sy, intensity: (Math.sin(t * 3.2 + 4) + 1) / 2 },
+                ];
+
+                ctx.globalCompositeOperation = 'lighter';
+
+                // Draw blurred heatmap auras
+                for (let hc of heatCenters) {
+                    if (hc.intensity > 0.1) {
+                        let rad = 150 * hc.intensity;
+                        let grad = ctx.createRadialGradient(hc.x, hc.y, 0, hc.x, hc.y, rad);
+                        // Magma/Inferno colors
+                        grad.addColorStop(0, `rgba(255, 50, 50, ${hc.intensity * 0.5})`);
+                        grad.addColorStop(0.4, `rgba(255, 150, 0, ${hc.intensity * 0.25})`);
+                        grad.addColorStop(0.8, `rgba(200, 0, 255, ${hc.intensity * 0.1})`);
+                        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+                        ctx.beginPath();
+                        ctx.arc(hc.x, hc.y, rad, 0, Math.PI * 2);
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                    }
+                }
+
+                ctx.globalCompositeOperation = 'source-over';
+
+                // Draw molecular bonds
+                ctx.lineWidth = 4;
+                edges.forEach(e => {
+                    let n1 = screenNodes[e[0]];
+                    let n2 = screenNodes[e[1]];
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.beginPath();
+                    ctx.moveTo(n1.sx, n1.sy);
+                    ctx.lineTo(n2.sx, n2.sy);
+                    ctx.stroke();
+                });
+
+
+                // Draw atoms
+                screenNodes.forEach(n => {
+                    ctx.beginPath();
+                    ctx.arc(n.sx, n.sy, 16, 0, Math.PI * 2);
+
+                    if (n.type === 'C') ctx.fillStyle = '#333';
+                    else if (n.type === 'N') ctx.fillStyle = '#0a84ff';
+                    else if (n.type === 'O') ctx.fillStyle = '#ff3b30';
+                    else if (n.type === 'F') ctx.fillStyle = '#30d158';
+
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 15px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(n.type, n.sx, n.sy + 1);
+                });
+
+                // Draw attention scores text periodically
+                for (let i = 0; i < heatCenters.length; i++) {
+                    let hc = heatCenters[i];
+                    if (hc.intensity > 0.6) {
+                        ctx.fillStyle = `rgba(0, 229, 255, ${(hc.intensity - 0.6) * 2.5})`;
+                        ctx.font = 'bold 14px Courier';
+                        ctx.fillText(`ATTN-${i}: ${(hc.intensity * 0.99).toFixed(3)}`, hc.x + 40, hc.y - 30);
+
+                        // draw target reticle
+                        ctx.strokeStyle = ctx.fillStyle;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(hc.x - 25, hc.y); ctx.lineTo(hc.x - 35, hc.y);
+                        ctx.moveTo(hc.x + 25, hc.y); ctx.lineTo(hc.x + 35, hc.y);
+                        ctx.moveTo(hc.x, hc.y - 25); ctx.lineTo(hc.x, hc.y - 35);
+                        ctx.moveTo(hc.x, hc.y + 25); ctx.lineTo(hc.x, hc.y + 35);
+                        ctx.stroke();
+                    }
+                }
+
+                ctx.shadowBlur = 0;
+                requestAnimationFrame(drawFrame);
+            }
+
+            requestAnimationFrame(drawFrame);
+        }
+
+        function updateLogoPosition() {
+            const h = Reveal.getIndices().h;
+            const logo = document.querySelector('.sci-logo-container');
+            const title = document.querySelector('.global-slide-title');
+
+            const slideTitles = {
+                1: "The Dangerous Myth", 2: "What Never Changed?", 3: "Why You Are Privileged?",
+                4: "Global Reality", 5: "Mathematics", 6: "Linear Algebra → AI",
+                7: "Calculus → Learning", 8: "Probability → Trust", 9: "Physics",
+                10: "Physics → ML", 11: "Why AI Fails?", 12: "Chemistry",
+                13: "Chemistry → AI", 14: "The Maturity Stack", 15: "Data Science",
+                16: "AI Engineers vs Builders", 17: "AI meets reality", 18: "Physics returns"
+            };
+
+            if (h === 0) {
+                logo.classList.remove('small-logo');
+                if (title) title.classList.remove('visible');
+            } else {
+                logo.classList.add('small-logo');
+                if (title) {
+                    title.classList.add('visible');
+                    if (slideTitles[h]) title.innerText = slideTitles[h];
+                }
+            }
+
+            // Animations population
+            if (h === 4) { // Slide 5
+                const crowdContainer = document.querySelector('.s5-bg-crowd');
+                if (crowdContainer && crowdContainer.children.length === 0) {
+                    let iconsHtml = '';
+                    for (let i = 0; i < 1000; i++) iconsHtml += '<i class="fa-solid fa-code"></i>';
+                    crowdContainer.innerHTML = iconsHtml;
+                }
+            }
+
+            if (h === 5 || h === 6) { // Vector Grids
+                document.querySelectorAll('.vector-grid').forEach(container => {
+                    if (container && container.children.length === 0) {
+                        let gridHtml = '';
+                        for (let i = 0; i < 96; i++) {
+                            const tx = (Math.random() - 0.5) * 400, ty = (Math.random() - 0.5) * 400;
+                            gridHtml += `<i class="fa-solid fa-arrow-up-long" style="--tx: ${tx}px; --ty: ${ty}px;"></i>`;
+                        }
+                        container.innerHTML = gridHtml;
+                    }
+                });
+            }
+
+            if (h === 6) { // Matrix Multiply
+                const mmContainer = document.querySelector('.matrix-multiply-container');
+                if (mmContainer && mmContainer.children.length === 0) {
+                    const rowsA = 4, colsA = 3, rowsB = 3, colsB = 2;
+                    let matA = Array.from({ length: rowsA }, () => Array.from({ length: colsA }, () => Math.floor(Math.random() * 10)));
+                    let matB = Array.from({ length: rowsB }, () => Array.from({ length: colsB }, () => Math.floor(Math.random() * 10)));
+                    window.mmMatC = math.multiply(matA, matB); // Accurate math library calculation
+
+                    let aHtml = `<div class="mm-demo-matrix" style="grid-template-columns: repeat(${colsA}, 1fr)">`;
+                    for (let r = 0; r < rowsA; r++) {
+                        for (let c = 0; c < colsA; c++) {
+                            aHtml += `<div class="mm-demo-cell mm-a-cell mma-r-${r}">${matA[r][c]}</div>`;
+                        }
+                    }
+                    aHtml += '</div><div class="mm-demo-operator">×</div>';
+
+                    let bHtml = `<div class="mm-demo-matrix" style="grid-template-columns: repeat(${colsB}, 1fr)">`;
+                    for (let r = 0; r < rowsB; r++) {
+                        for (let c = 0; c < colsB; c++) {
+                            bHtml += `<div class="mm-demo-cell mm-b-cell mmb-c-${c}">${matB[r][c]}</div>`;
+                        }
+                    }
+                    bHtml += '</div><div class="mm-demo-operator">=</div>';
+
+                    let cHtml = `<div class="mm-demo-matrix" style="grid-template-columns: repeat(${colsB}, 1fr)">`;
+                    for (let r = 0; r < rowsA; r++) {
+                        for (let c = 0; c < colsB; c++) {
+                            cHtml += `<div class="mm-demo-cell mm-c-cell mmc-r-${r}-c-${c}">?</div>`;
+                        }
+                    }
+                    cHtml += '</div>';
+                    mmContainer.innerHTML = aHtml + bHtml + cHtml;
+                }
+            }
+
+            if (h === 7) { // Loss Surface toggle
+                initLossSurface();
+                const lsCanvas = document.getElementById('loss-surface-canvas');
+                if (lsCanvas) lsCanvas.style.display = 'block';
+            } else {
+                const lsCanvas = document.getElementById('loss-surface-canvas');
+                if (lsCanvas) lsCanvas.style.display = 'none';
+            }
+
+            if (h === 8) { // Bell Curve toggle
+                initBellCurve();
+                const bcCanvas = document.getElementById('bell-curve-canvas');
+                if (bcCanvas) bcCanvas.style.display = 'block';
+            } else {
+                const bcCanvas = document.getElementById('bell-curve-canvas');
+                if (bcCanvas) bcCanvas.style.display = 'none';
+            }
+
+            if (h === 9) { // Energy Landscape toggle
+                initEnergyLandscape();
+                const elCanvas = document.getElementById('energy-landscape-canvas');
+                if (elCanvas) elCanvas.style.display = 'block';
+            } else {
+                const elCanvas = document.getElementById('energy-landscape-canvas');
+                if (elCanvas) elCanvas.style.display = 'none';
+            }
+
+            if (h === 10) { // Entropy Tree toggle
+                initEntropyTree();
+                const etCanvas = document.getElementById('entropy-tree-canvas');
+                if (etCanvas) etCanvas.style.display = 'block';
+            } else {
+                const etCanvas = document.getElementById('entropy-tree-canvas');
+                if (etCanvas) etCanvas.style.display = 'none';
+            }
+
+            if (h === 11) { // Airflow Pipeline toggle
+                initAirflowPipeline();
+                const apCanvas = document.getElementById('airflow-pipeline-canvas');
+                if (apCanvas) apCanvas.style.display = 'block';
+            } else {
+                const apCanvas = document.getElementById('airflow-pipeline-canvas');
+                if (apCanvas) apCanvas.style.display = 'none';
+            }
+
+            if (h === 12) { // Molecular Network toggle
+                initMolecularNetwork();
+                const mnCanvas = document.getElementById('molecular-network-canvas');
+                if (mnCanvas) mnCanvas.style.display = 'block';
+            } else {
+                const mnCanvas = document.getElementById('molecular-network-canvas');
+                if (mnCanvas) mnCanvas.style.display = 'none';
+            }
+
+            if (h === 13) { // Drug Heatmap toggle
+                initDrugHeatmap();
+                const dhCanvas = document.getElementById('drug-heatmap-canvas');
+                if (dhCanvas) dhCanvas.style.display = 'block';
+            } else {
+                const dhCanvas = document.getElementById('drug-heatmap-canvas');
+                if (dhCanvas) dhCanvas.style.display = 'none';
+            }
+
+            if (!window.mmInterval) {
+                let currentI = 0, currentJ = 0;
+                window.mmInterval = setInterval(() => {
+                    const slide = Reveal.getIndices().h;
+                    if (slide === 6) {
+                        const rowsA = 4, colsB = 2;
+                        document.querySelectorAll('.mm-demo-cell').forEach(el => el.classList.remove('active-row', 'active-col', 'active-cell'));
+                        document.querySelectorAll(`.mma-r-${currentI}`).forEach(el => el.classList.add('active-row'));
+                        document.querySelectorAll(`.mmb-c-${currentJ}`).forEach(el => el.classList.add('active-col'));
+                        const resCell = document.querySelector(`.mmc-r-${currentI}-c-${currentJ}`);
+                        if (resCell) { resCell.classList.add('active-cell'); resCell.innerText = window.mmMatC ? window.mmMatC[currentI][currentJ] : '?'; }
+                        currentJ++;
+                        if (currentJ >= colsB) { currentJ = 0; currentI++; if (currentI >= rowsA) currentI = 0; }
+                    }
+                }, 2000);
+            }
+        } // end updateLogoPosition
+
+        Reveal.on('ready', updateLogoPosition);
+        Reveal.on('slidechanged', updateLogoPosition);
+    </script>
+</body>
+
+</html>
