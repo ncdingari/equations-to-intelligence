@@ -1,0 +1,8 @@
+from,to,label,length,width,arrows,dashes,title,smooth,shadow
+1,2,PostDoc,300,4,to,F,PostDoc,T,T
+2,3,Grad Student,200,2,to,T,Grad Student,T,T
+3,4,Grad Student,200,2,to,T,Grad Student,T,T
+4,5,PostDoc,300,4,to,F,PostDoc,T,T
+5,6,Grad Student,200,2,to,T,Grad Student,T,T
+6,7,PostDoc,300,4,to,F,PostDoc,T,T
+7,8,PostDoc,300,4,to,F,PostDoc,T,T

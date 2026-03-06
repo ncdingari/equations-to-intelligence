@@ -32,13 +32,13 @@ Note:
             </div>
             <div class="a-arrow a-fade-4"><i class="fa-solid fa-arrow-right"></i><span class="a-relation-text">PostDoc</span></div>
             <div class="a-node a-fade-5">
-                <img class="a-avatar" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/II_Rabi.jpg/220px-II_Rabi.jpg">
+                <img class="a-avatar" src="images/rabi.png">
                 <div class="a-name">Isidor Isaac Rabi</div>
                 <div class="a-org">Columbia University</div><div class="a-nobel">Nobel Laureate</div>
             </div>
             <div class="a-arrow a-fade-6"><i class="fa-solid fa-arrow-right"></i><span class="a-relation-text">Ph.D.</span></div>
             <div class="a-node a-fade-7">
-                <img class="a-avatar" src="https://www.aip.org/system/files/styles/esva_full/private/esva-images/zeiger_herbert_a1.jpg?itok=6QDqlgzk">
+                <img class="a-avatar" src="images/zeiger.png">
                 <div class="a-name">Herbert J. Zeiger</div>
                 <div class="a-org">MIT</div>
             </div>
@@ -68,7 +68,7 @@ Note:
             </div>
             <div class="a-arrow a-fade-10"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Ph.D.</span></div>
             <div class="a-node a-fade-9">
-                <img class="a-avatar" src="https://www.aps.org/publications/apsnews/updates/images/townes.jpg">
+                <img class="a-avatar" src="images/townes.png">
                 <div class="a-name">Charles Hard Townes</div>
                 <div class="a-org">UC Berkeley</div><div class="a-nobel">Nobel Laureate</div>
             </div>
@@ -78,6 +78,104 @@ Note:
 
 Note:
 "My academic lineage traces back to Albert Einstein..."
+
+---
+
+<!-- .slide: data-transition="slide-in slide-out" -->
+
+<h2 style="font-size: 1.3em;">Who am I?</h2>
+
+<div class="ancestry-container" style="margin-top: -20px;">
+<div class="ancestry-flow" style="transform: scale(0.60);">
+<!-- Row 1 -->
+<div class="a-row">
+<div class="a-node a-fade-1">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://harvard.edu&size=128">
+<div class="a-name">Harvard</div>
+<div class="a-org">PostDoc</div>
+</div>
+<div class="a-arrow a-fade-2"><i class="fa-solid fa-arrow-right"></i></div>
+<div class="a-node a-fade-3">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://mit.edu&size=128">
+<div class="a-name">MIT</div>
+<div class="a-org">ML Lead</div>
+</div>
+<div class="a-arrow a-fade-4"><i class="fa-solid fa-arrow-right"></i></div>
+<div class="a-node a-fade-5">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://dell.com&size=128">
+<div class="a-name">Dell EMC</div>
+<div class="a-org">Analytics Lead</div>
+</div>
+<div class="a-arrow a-fade-6"><i class="fa-solid fa-arrow-right"></i></div>
+<div class="a-node a-fade-7">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://prudential.com&size=128">
+<div class="a-name">Prudential</div>
+<div class="a-org">Director</div>
+</div>
+</div>
+
+<div class="a-turn a-fade-8">
+<div class="a-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+</div>
+
+<!-- Row 2 -->
+<div class="a-row">
+<div class="a-node highlight a-fade-15">
+<img class="a-avatar bg-white-logo" src="images/chari.jpg" style="padding: 0; object-fit: cover;">
+<div class="a-name">Narahara Chari Dingari</div>
+<div class="a-org">CDAO & Board Member</div>
+</div>
+<div class="a-arrow a-fade-14"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Current</span></div>
+<div class="a-node highlight a-fade-13">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://powerlytics.com&size=128">
+<div class="a-name">Powerlytics</div>
+<div class="a-org">Chief Data & Analytics Officer</div>
+</div>
+<div class="a-arrow a-fade-12"><i class="fa-solid fa-arrow-left"></i></div>
+<div class="a-node a-fade-11">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://db.com&size=128">
+<div class="a-name">Deutsche Bank</div>
+<div class="a-org">Head of Data Science</div>
+</div>
+<div class="a-arrow a-fade-10"><i class="fa-solid fa-arrow-left"></i></div>
+<div class="a-node a-fade-9">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://dnb.com&size=128">
+<div class="a-name">Dun & Bradstreet</div>
+<div class="a-org">Sr Director</div>
+</div>
+</div>
+
+<div class="a-turn a-fade-16" style="align-self: flex-start; margin-left: 280px; margin-right: 0;">
+<div class="a-arrow"><i class="fa-solid fa-arrow-down"></i><span class="a-relation-text">Advisory</span></div>
+</div>
+
+<!-- Row 3 -->
+<div class="a-row">
+<div class="a-node" style="width: 220px; opacity: 0; visibility: hidden;"></div>
+<div class="a-arrow" style="opacity: 0; visibility: hidden;"><i class="fa-solid fa-arrow-left"></i></div>
+<div class="a-node a-fade-17">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://wpi.edu&size=128">
+<div class="a-name">WPI</div>
+<div class="a-org">Adjunct Professor</div>
+</div>
+<div class="a-arrow a-fade-18"><i class="fa-solid fa-plus"></i></div>
+<div class="a-node a-fade-19">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://datacamp.com&size=128">
+<div class="a-name">DataCamp</div>
+<div class="a-org">Advisory Board</div>
+</div>
+<div class="a-arrow a-fade-20"><i class="fa-solid fa-plus"></i></div>
+<div class="a-node a-fade-21">
+<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fullsail.edu&size=128">
+<div class="a-name">Full Sail Univ</div>
+<div class="a-org">Board Member</div>
+</div>
+</div>
+</div>
+</div>
+
+Note:
+"A journey from academia to data leadership..."
 
 ---
 

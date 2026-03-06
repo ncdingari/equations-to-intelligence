@@ -1,0 +1,9 @@
+id,shape,image,label,value
+1,image,https://www.sciencephalon.com/wp-content/uploads/2022/01/profile-pic-40.png,Narahara Chari Dingari (MIT),10
+2,circularImage,http://web.mit.edu/spectroscopy/images/feld-cut-scaled.jpg,Michael Stephen Feld (MIT),10
+3,circularImage,https://upload.wikimedia.org/wikipedia/commons/2/26/Javan_ali.jpg,Ali Mortimer Javan (MIT),10
+4,circularImage,https://www.aps.org/publications/apsnews/updates/images/townes.jpg,Charles Hard Townes (UC Berkeley) - Nobel Laureate,10
+5,circularImage,https://www.aip.org/system/files/styles/esva_full/private/esva-images/zeiger_herbert_a1.jpg?itok=6QDqlgzk,Herbert J. Zeiger (MIT),10
+6,circularImage,https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/II_Rabi.jpg/220px-II_Rabi.jpg,Isidor Isaac Rabi (Columbia University) - Nobel Laureate,10
+7,circularImage,https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Otto_Stern_1950s.jpg/220px-Otto_Stern_1950s.jpg,Otto Stern (University of Hamburg) - Nobel Laureate,10
+8,circularImage,https://www.nobelprize.org/images/einstein-12923-portrait-medium.jpg,Albert Einstein (Princeton University) - Nobel Laureate,10
