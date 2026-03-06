@@ -43,12 +43,10 @@ Note:
                 <div class="a-org">MIT</div>
             </div>
         </div>
-        
         <!-- Turn around connector -->
         <div class="a-turn a-fade-8">
              <div class="a-arrow"><i class="fa-solid fa-arrow-down"></i><span class="a-relation-text">PostDoc</span></div>
         </div>
-
         <!-- Row 2 -->
         <div class="a-row">
             <div class="a-node highlight a-fade-15">
