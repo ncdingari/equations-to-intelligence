@@ -20,13 +20,13 @@ Note:
         <!-- Row 1 -->
         <div class="a-row">
             <div class="a-node highlight a-fade-1">
-                <img class="a-avatar" src="https://www.nobelprize.org/images/einstein-12923-portrait-medium.jpg">
+                <img class="a-avatar" src="images/einstein.png">
                 <div class="a-name">Albert Einstein</div>
                 <div class="a-org">Princeton University</div><div class="a-nobel">Nobel Laureate</div>
             </div>
             <div class="a-arrow a-fade-2"><i class="fa-solid fa-arrow-right"></i><span class="a-relation-text">PostDoc</span></div>
             <div class="a-node a-fade-3">
-                <img class="a-avatar" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Otto_Stern_1950s.jpg/220px-Otto_Stern_1950s.jpg">
+                <img class="a-avatar" src="images/stern.png">
                 <div class="a-name">Otto Stern</div>
                 <div class="a-org">University of Hamburg</div><div class="a-nobel">Nobel Laureate</div>
             </div>
@@ -36,7 +36,7 @@ Note:
                 <div class="a-name">Isidor Isaac Rabi</div>
                 <div class="a-org">Columbia University</div><div class="a-nobel">Nobel Laureate</div>
             </div>
-            <div class="a-arrow a-fade-6"><i class="fa-solid fa-arrow-right"></i><span class="a-relation-text">Grad Student</span></div>
+            <div class="a-arrow a-fade-6"><i class="fa-solid fa-arrow-right"></i><span class="a-relation-text">Ph.D.</span></div>
             <div class="a-node a-fade-7">
                 <img class="a-avatar" src="https://www.aip.org/system/files/styles/esva_full/private/esva-images/zeiger_herbert_a1.jpg?itok=6QDqlgzk">
                 <div class="a-name">Herbert J. Zeiger</div>
@@ -50,7 +50,7 @@ Note:
         <!-- Row 2 -->
         <div class="a-row">
             <div class="a-node highlight a-fade-15">
-                <img class="a-avatar" src="https://www.sciencephalon.com/wp-content/uploads/2022/01/profile-pic-40.png" style="object-position: center;">
+                <img class="a-avatar" src="images/chari.jpg" style="object-position: center;">
                 <div class="a-name">Narahara Chari Dingari</div>
                 <div class="a-org">MIT</div>
             </div>
@@ -60,13 +60,13 @@ Note:
                 <div class="a-name">Michael Stephen Feld</div>
                 <div class="a-org">MIT</div>
             </div>
-            <div class="a-arrow a-fade-12"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Grad Student</span></div>
+            <div class="a-arrow a-fade-12"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Ph.D.</span></div>
             <div class="a-node a-fade-11">
                 <img class="a-avatar" src="https://upload.wikimedia.org/wikipedia/commons/2/26/Javan_ali.jpg">
                 <div class="a-name">Ali Mortimer Javan</div>
                 <div class="a-org">MIT</div>
             </div>
-            <div class="a-arrow a-fade-10"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Grad Student</span></div>
+            <div class="a-arrow a-fade-10"><i class="fa-solid fa-arrow-left"></i><span class="a-relation-text">Ph.D.</span></div>
             <div class="a-node a-fade-9">
                 <img class="a-avatar" src="https://www.aps.org/publications/apsnews/updates/images/townes.jpg">
                 <div class="a-name">Charles Hard Townes</div>
