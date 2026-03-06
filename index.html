@@ -413,7 +413,9 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 40px;
+            transform: scale(1.25);
+            transform-origin: top center;
         }
 
         .a-row {
@@ -2378,27 +2380,34 @@
             const title = document.querySelector('.global-slide-title');
 
             const slideTitles = {
-                1: "The Dangerous Myth", 2: "What Never Changed?", 3: "Why You Are Privileged?",
-                4: "Global Reality", 5: "Mathematics", 6: "Linear Algebra → AI",
-                7: "Calculus → Learning", 8: "Probability → Trust", 9: "Physics",
-                10: "Physics → ML", 11: "Why AI Fails?", 12: "Chemistry",
-                13: "Chemistry → AI", 14: "The Maturity Stack", 15: "Data Science",
-                16: "AI Engineers vs Builders", 17: "AI meets reality", 18: "Physics returns"
+                0: "", 1: "", 2: "The Dangerous Myth", 3: "What Never Changed?", 4: "Why You Are Privileged?",
+                5: "Global Reality", 6: "Mathematics", 7: "Linear Algebra → AI",
+                8: "Calculus → Learning", 9: "Probability → Trust", 10: "Physics",
+                11: "Physics → ML", 12: "Why AI Fails?", 13: "Chemistry",
+                14: "Chemistry → AI", 15: "The Maturity Stack", 16: "Data Science",
+                17: "AI Engineers vs Builders", 18: "AI meets reality", 19: "Physics returns"
             };
 
             if (h === 0) {
                 logo.classList.remove('small-logo');
-                if (title) title.classList.remove('visible');
+                if (title) {
+                    title.classList.remove('visible');
+                    title.innerText = "";
+                }
             } else {
                 logo.classList.add('small-logo');
                 if (title) {
-                    title.classList.add('visible');
-                    if (slideTitles[h]) title.innerText = slideTitles[h];
+                    if (h === 1) {
+                        title.classList.remove('visible');
+                    } else {
+                        title.classList.add('visible');
+                        if (slideTitles[h]) title.innerText = slideTitles[h];
+                    }
                 }
             }
 
             // Animations population
-            if (h === 4) { // Slide 5
+            if (h === 5) { // Slide 5
                 const crowdContainer = document.querySelector('.s5-bg-crowd');
                 if (crowdContainer && crowdContainer.children.length === 0) {
                     let iconsHtml = '';
@@ -2407,7 +2416,7 @@
                 }
             }
 
-            if (h === 5 || h === 6) { // Vector Grids
+            if (h === 6 || h === 7) { // Vector Grids
                 document.querySelectorAll('.vector-grid').forEach(container => {
                     if (container && container.children.length === 0) {
                         let gridHtml = '';
@@ -2420,7 +2429,7 @@
                 });
             }
 
-            if (h === 6) { // Matrix Multiply
+            if (h === 7) { // Matrix Multiply
                 const mmContainer = document.querySelector('.matrix-multiply-container');
                 if (mmContainer && mmContainer.children.length === 0) {
                     const rowsA = 4, colsA = 3, rowsB = 3, colsB = 2;
@@ -2455,7 +2464,7 @@
                 }
             }
 
-            if (h === 7) { // Loss Surface toggle
+            if (h === 8) { // Loss Surface toggle
                 initLossSurface();
                 const lsCanvas = document.getElementById('loss-surface-canvas');
                 if (lsCanvas) lsCanvas.style.display = 'block';
@@ -2464,7 +2473,7 @@
                 if (lsCanvas) lsCanvas.style.display = 'none';
             }
 
-            if (h === 8) { // Bell Curve toggle
+            if (h === 9) { // Bell Curve toggle
                 initBellCurve();
                 const bcCanvas = document.getElementById('bell-curve-canvas');
                 if (bcCanvas) bcCanvas.style.display = 'block';
@@ -2473,7 +2482,7 @@
                 if (bcCanvas) bcCanvas.style.display = 'none';
             }
 
-            if (h === 9) { // Energy Landscape toggle
+            if (h === 10) { // Energy Landscape toggle
                 initEnergyLandscape();
                 const elCanvas = document.getElementById('energy-landscape-canvas');
                 if (elCanvas) elCanvas.style.display = 'block';
@@ -2482,7 +2491,7 @@
                 if (elCanvas) elCanvas.style.display = 'none';
             }
 
-            if (h === 10) { // Entropy Tree toggle
+            if (h === 11) { // Entropy Tree toggle
                 initEntropyTree();
                 const etCanvas = document.getElementById('entropy-tree-canvas');
                 if (etCanvas) etCanvas.style.display = 'block';
@@ -2491,7 +2500,7 @@
                 if (etCanvas) etCanvas.style.display = 'none';
             }
 
-            if (h === 11) { // Airflow Pipeline toggle
+            if (h === 12) { // Airflow Pipeline toggle
                 initAirflowPipeline();
                 const apCanvas = document.getElementById('airflow-pipeline-canvas');
                 if (apCanvas) apCanvas.style.display = 'block';
@@ -2500,7 +2509,7 @@
                 if (apCanvas) apCanvas.style.display = 'none';
             }
 
-            if (h === 12) { // Molecular Network toggle
+            if (h === 13) { // Molecular Network toggle
                 initMolecularNetwork();
                 const mnCanvas = document.getElementById('molecular-network-canvas');
                 if (mnCanvas) mnCanvas.style.display = 'block';
@@ -2509,7 +2518,7 @@
                 if (mnCanvas) mnCanvas.style.display = 'none';
             }
 
-            if (h === 13) { // Drug Heatmap toggle
+            if (h === 14) { // Drug Heatmap toggle
                 initDrugHeatmap();
                 const dhCanvas = document.getElementById('drug-heatmap-canvas');
                 if (dhCanvas) dhCanvas.style.display = 'block';
@@ -2522,7 +2531,7 @@
                 let currentI = 0, currentJ = 0;
                 window.mmInterval = setInterval(() => {
                     const slide = Reveal.getIndices().h;
-                    if (slide === 6) {
+                    if (slide === 7) {
                         const rowsA = 4, colsB = 2;
                         document.querySelectorAll('.mm-demo-cell').forEach(el => el.classList.remove('active-row', 'active-col', 'active-cell'));
                         document.querySelectorAll(`.mma-r-${currentI}`).forEach(el => el.classList.add('active-row'));
