@@ -413,8 +413,8 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            margin-top: 40px;
-            transform: scale(1.25);
+            margin-top: 0px;
+            transform: scale(0.65);
             transform-origin: top center;
         }
 
@@ -431,13 +431,17 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            width: 180px;
+            width: 130px;
             z-index: 10;
         }
 
+        .a-node.highlight {
+            width: 220px;
+        }
+
         .a-avatar {
-            width: 100px;
-            height: 100px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             border: 3px solid rgba(255, 255, 255, 0.2);
             object-fit: cover;
@@ -449,8 +453,8 @@
         }
 
         .a-node.highlight .a-avatar {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border: 5px solid var(--r-link-color);
             box-shadow: 0 0 35px rgba(0, 229, 255, 0.6);
             transform: scale(1.05);

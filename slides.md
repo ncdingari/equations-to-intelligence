@@ -13,7 +13,7 @@ Note:
 
 <!-- .slide: data-transition="slide-in slide-out" -->
 
-## Einstein is my <span class="accent">Academic</span> Ancestor
+<h2 style="font-size: 1.3em;">Einstein is my <span class="accent">Academic</span> Ancestor</h2>
 
 <div class="ancestry-container">
     <div class="ancestry-flow">
