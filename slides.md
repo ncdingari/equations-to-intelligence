@@ -90,7 +90,7 @@ Note:
 .wide-mode .a-row { gap: 15px; }
 .wide-mode .a-arrow { margin: 0 35px; }
 </style>
-<div class="ancestry-flow wide-mode" style="zoom: 0.55; padding-bottom: 20px;">
+<div class="ancestry-flow wide-mode" style="zoom: 0.75; padding-bottom: 20px;">
 <!-- Row 0: Education -->
 <div class="a-row">
 <div class="a-node a-fade-1">
