@@ -4,7 +4,7 @@
 ## Quantum <span class="accent">Intelligence</span>:
 #### From Equations to Artificial Intelligence
 
-<p style="font-size: 1em; opacity: 0.8; margin-top: 1em;">How Mathematics, Physics, and Chemistry Build the Future of AI?</p>
+<p style="font-size: 1em; opacity: 0.8; margin-top: 1em;">How Fundamental Sciences Are Building the Future Workforce for AI and Quantum Technologies</p>
 
 Note:
 “Everything you are excited about today, AI, ML, Quantum, started as equations on a blackboard. This talk is about why that still matters more than ever.”
