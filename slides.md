@@ -85,8 +85,12 @@ Note:
 
 <h2 style="font-size: 1.3em;">Who am I?</h2>
 <br>
-<div class="ancestry-container" style="margin-top: 50px;">
-<div class="ancestry-flow" style="transform: scale(0.95);">
+<div class="ancestry-container" style="margin-top: -10px;">
+<style>
+.wide-mode .a-row { gap: 15px; }
+.wide-mode .a-arrow { margin: 0 35px; }
+</style>
+<div class="ancestry-flow wide-mode" style="transform: scale(0.85); transform-origin: top center; padding-bottom: 20px;">
 <!-- Row 0: Education -->
 <div class="a-row">
 <div class="a-node a-fade-1">
@@ -115,7 +119,7 @@ Note:
 <!-- Row 1: Early Career -->
 <div class="a-row">
 <div class="a-node a-fade-13">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://prudential.com&size=128">
+<img class="a-avatar bg-white-logo" src="images/prudential.png">
 <div class="a-name">Prudential</div>
 <div class="a-org">Director</div>
 </div>
@@ -127,7 +131,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-10"><i class="fa-solid fa-arrow-left"></i></div>
 <div class="a-node a-fade-9">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://mit.edu&size=128">
+<img class="a-avatar bg-white-logo" src="images/mit.png">
 <div class="a-name">MIT</div>
 <div class="a-org">PostDoc</div>
 </div>
@@ -170,12 +174,12 @@ Note:
 </div>
 </div>
 
-<div class="a-turn a-fade-22" style="align-self: flex-end; margin-right: 140px; margin-top: -10px; margin-bottom: -10px;">
+<div class="a-turn a-fade-22" style="align-self: flex-end; margin-right: 140px; margin-top: -30px; margin-bottom: -30px;">
 <div class="a-arrow"><i class="fa-solid fa-arrow-down"></i><span class="a-relation-text" style="left: auto; right: 25px;">Advisory</span></div>
 </div>
 
 <!-- Row 3: Advisory -->
-<div class="a-row" style="transform: translateX(190px);">
+<div class="a-row" style="transform: translateX(190px); margin-top: -10px;">
 <div class="a-node a-fade-27">
 <img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fullsail.edu&size=128">
 <div class="a-name">Full Sail Univ</div>

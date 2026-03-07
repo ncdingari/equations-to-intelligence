@@ -471,7 +471,7 @@
         }
 
         .a-name {
-            font-size: 0.65em;
+            font-size: 0.55em;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 4px;
@@ -479,13 +479,13 @@
         }
 
         .a-node.highlight .a-name {
-            font-size: 0.85em;
+            font-size: 0.75em;
             color: var(--r-link-color);
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
         }
 
         .a-org {
-            font-size: 0.45em;
+            font-size: 0.4em;
             color: #aaaaaa;
         }
 
@@ -1316,7 +1316,7 @@
 
     <div class="reveal">
         <div class="slides">
-            <section data-markdown="slides.md?v=43" data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"
+            <section data-markdown="slides.md?v=47" data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"
                 data-separator-notes="^Note:">
             </section>
         </div>
@@ -1328,9 +1328,164 @@
 
     <script>
         Reveal.initialize({
+            width: 1280, height: 850, margin: 0.1, minScale: 0.2, maxScale: 2.0,
             hash: true, center: true, transition: 'fade', backgroundTransition: 'fade',
             slideNumber: 'c/t', plugins: [RevealMarkdown, RevealNotes]
         });
+
+        // Journey Map Animation (Slide 2, h=2)
+        function initJourneyMap() {
+            if (window._journeyMapReady) return;
+            window._journeyMapReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'journey-map-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.zIndex = '-2';
+            canvas.style.pointerEvents = 'none';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let width, height;
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const locations = [
+                { name: 'Nizamabad', x: 0.75, y: 0.40 },
+                { name: 'Hyderabad', x: 0.76, y: 0.48 },
+                { name: 'Rhode Island', x: 0.28, y: 0.35 },
+                { name: 'Massachusetts', x: 0.27, y: 0.31 },
+                { name: 'New Jersey', x: 0.26, y: 0.39 },
+                { name: 'Pennsylvania', x: 0.23, y: 0.40 },
+                { name: 'Florida', x: 0.25, y: 0.60 }
+            ];
+
+            let progress = 0; // 0 to locations.length - 1
+            let particles = [];
+
+            // Add stars background
+            const stars = Array.from({ length: 200 }, () => ({
+                x: Math.random(),
+                y: Math.random(),
+                size: Math.random() * 1.5,
+                alpha: Math.random()
+            }));
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                // Subtle dark background
+                ctx.fillStyle = 'rgba(0, 5, 20, 0.4)';
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw starry nodes
+                stars.forEach(s => {
+                    ctx.fillStyle = `rgba(150, 200, 255, ${s.alpha * 0.5})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x * width, s.y * height, s.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    s.alpha += (Math.random() - 0.5) * 0.05;
+                    if (s.alpha > 1) s.alpha = 1; else if (s.alpha < 0) s.alpha = 0;
+                });
+
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([5, 5]);
+
+                // Draw path history
+                const pIndex = Math.floor(progress);
+                const pFract = progress - pIndex;
+
+                for (let i = 0; i < locations.length - 1; i++) {
+                    const start = locations[i];
+                    const end = locations[i + 1];
+                    const sx = start.x * width, sy = start.y * height;
+                    const ex = end.x * width, ey = end.y * height;
+
+                    const dist = Math.sqrt((ex - sx) ** 2 + (ey - sy) ** 2);
+                    const cp1x = sx + (ex - sx) * 0.3;
+                    const cp1y = Math.min(sy, ey) - dist * 0.2; // Arc upwards
+                    const cp2x = sx + (ex - sx) * 0.7;
+                    const cp2y = Math.min(sy, ey) - dist * 0.2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(sx, sy);
+
+                    if (i < pIndex) {
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, ex, ey);
+                        ctx.stroke();
+                    } else if (i === pIndex) {
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, ex, ey);
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${pFract})`;
+                        ctx.stroke();
+                        ctx.restore();
+
+                        const t = pFract;
+                        const px = Math.pow(1 - t, 3) * sx + 3 * Math.pow(1 - t, 2) * t * cp1x + 3 * (1 - t) * t * t * cp2x + Math.pow(t, 3) * ex;
+                        const py = Math.pow(1 - t, 3) * sy + 3 * Math.pow(1 - t, 2) * t * cp1y + 3 * (1 - t) * t * t * cp2y + Math.pow(t, 3) * ey;
+
+                        particles.push({ x: px, y: py, life: 1, color: '#00e5ff' });
+                    }
+                }
+                ctx.setLineDash([]);
+
+                // Draw locations
+                locations.forEach((loc, i) => {
+                    const lx = loc.x * width;
+                    const ly = loc.y * height;
+
+                    if (i <= pIndex + (pFract > 0.05 ? 1 : 0)) {
+                        ctx.beginPath();
+                        ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+                        ctx.fillStyle = '#ff0055';
+                        ctx.fill();
+
+                        // Radar ping
+                        const ping = (Date.now() % 2000) / 2000;
+                        ctx.beginPath();
+                        ctx.arc(lx, ly, 4 + ping * 20, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(255, 0, 85, ${1 - ping})`;
+                        ctx.stroke();
+
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 12px Arial';
+                        ctx.fillText(loc.name, lx + 10, ly + 20);
+                    }
+                });
+
+                // Update and draw path particles
+                particles = particles.filter(p => p.life > 0);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 229, 255, ${p.life})`;
+                    ctx.fill();
+                    p.life -= 0.03;
+                    p.x += (Math.random() - 0.5) * 3;
+                    p.y += (Math.random() - 0.5) * 3;
+                });
+
+                progress += 0.003;
+                if (progress >= locations.length - 1) {
+                    progress = 0; // loop
+                }
+
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
 
         // Background: 3D Loss Surface Simulation
         function initLossSurface() {
@@ -2556,6 +2711,15 @@
                     cHtml += '</div>';
                     mmContainer.innerHTML = aHtml + bHtml + cHtml;
                 }
+            }
+
+            if (h === 2) { // Who am I toggle
+                initJourneyMap();
+                const jmCanvas = document.getElementById('journey-map-canvas');
+                if (jmCanvas) jmCanvas.style.display = 'block';
+            } else {
+                const jmCanvas = document.getElementById('journey-map-canvas');
+                if (jmCanvas) jmCanvas.style.display = 'none';
             }
 
             if (h === 9) { // Loss Surface toggle
