@@ -90,7 +90,7 @@ Note:
 .wide-mode .a-row { gap: 15px; }
 .wide-mode .a-arrow { margin: 0 35px; }
 </style>
-<div class="ancestry-flow wide-mode" style="transform: scale(0.85); transform-origin: top center; padding-bottom: 20px;">
+<div class="ancestry-flow wide-mode" style="zoom: 0.55; padding-bottom: 20px;">
 <!-- Row 0: Education -->
 <div class="a-row">
 <div class="a-node a-fade-1">
@@ -169,7 +169,7 @@ Note:
 <div class="a-arrow a-fade-20"><i class="fa-solid fa-arrow-right"></i><span class="a-relation-text" style="top: -20px;">Current</span></div>
 <div class="a-node highlight a-fade-21" style="width: 280px; margin-left: 20px;">
 <img class="a-avatar bg-white-logo" src="images/chari.jpg" style="padding: 0; object-fit: cover;">
-<div class="a-name" style="white-space: nowrap; font-size: 0.7em;">Narahara Chari Dingari, Ph.D.</div>
+<div class="a-name" style="white-space: nowrap; font-size: 0.55em;">Narahara Chari Dingari, Ph.D.</div>
 <div class="a-org">CDAO & Board Member</div>
 </div>
 </div>
