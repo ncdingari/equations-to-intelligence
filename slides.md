@@ -84,29 +84,27 @@ Note:
 <!-- .slide: data-transition="slide-in slide-out" -->
 
 <h2 style="font-size: 1.3em;">Who am I?</h2>
-
-<div class="ancestry-container" style="margin-top: -20px;">
-<div class="ancestry-flow" style="transform: scale(0.60);">
-<div class="ancestry-container" style="margin-top: -30px;">
-<div class="ancestry-flow" style="transform: scale(0.53);">
+<br>
+<div class="ancestry-container" style="margin-top: 50px;">
+<div class="ancestry-flow" style="transform: scale(0.95);">
 <!-- Row 0: Education -->
 <div class="a-row">
 <div class="a-node a-fade-1">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://osmania.ac.in&size=128">
+<img class="a-avatar bg-white-logo" src="images/osmania.png" style="padding: 0; object-fit: contain;">
 <div class="a-name">Osmania University</div>
-<div class="a-org">Education</div>
+<div class="a-org">B.Sc. Math, Physics, Chemistry</div>
 </div>
 <div class="a-arrow a-fade-2"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-3">
 <img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://uohyd.ac.in&size=128">
 <div class="a-name">University of Hyderabad</div>
-<div class="a-org">Education</div>
+<div class="a-org">M.Sc. Quantum Physics</div>
 </div>
 <div class="a-arrow a-fade-4"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-5">
 <img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://uri.edu&size=128">
 <div class="a-name">University of Rhode Island</div>
-<div class="a-org">Education</div>
+<div class="a-org">Ph.D. Physics</div>
 </div>
 </div>
 
