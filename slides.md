@@ -85,12 +85,12 @@ Note:
 
 <h2 style="font-size: 1.3em;">Who am I?</h2>
 <br>
-<div class="ancestry-container" style="margin-top: -10px;">
+<div class="ancestry-container" style="margin-top: -30px;">
 <style>
 .wide-mode .a-row { gap: 15px; }
 .wide-mode .a-arrow { margin: 0 35px; }
 </style>
-<div class="ancestry-flow wide-mode" style="zoom: 0.75; padding-bottom: 20px;">
+<div class="ancestry-flow wide-mode" style="zoom: 0.90; padding-bottom: 20px;">
 <!-- Row 0: Education -->
 <div class="a-row">
 <div class="a-node a-fade-1">
