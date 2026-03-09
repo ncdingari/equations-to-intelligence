@@ -112,7 +112,7 @@ Note:
 </div>
 </div>
 
-<div class="a-turn a-fade-6" style="align-self: flex-end; margin-right: 35px;">
+<div class="a-turn a-fade-6" style="align-self: flex-end; margin-right: 190px; margin-top: 45px; transform: rotate(32deg);">
 <div class="a-arrow"><i class="fa-solid fa-arrow-down"></i></div>
 </div>
 
@@ -143,7 +143,7 @@ Note:
 </div>
 </div>
 
-<div class="a-turn a-fade-14" style="align-self: flex-start; margin-left: 35px;">
+<div class="a-turn a-fade-14" style="align-self: flex-start; margin-left: 65px; margin-top: 90px; transform: rotate(-25deg);">
 <div class="a-arrow"><i class="fa-solid fa-arrow-down"></i></div>
 </div>
 
@@ -314,7 +314,13 @@ Note:
 
 <canvas class="entropy-tree-container"></canvas>
 <div class="impact-container">
-  <div class="impact-text">Entropy → <span class="accent">Decision trees</span> <br> Energy → <span class="accent">Optimization</span></div>
+  <div class="impact-text">
+    <div style="height: 1.2em;">
+      <span class="entropy-tree-text">Entropy → <span class="accent">Decision trees</span></span>
+      <span class="entropy-llm-text" style="display:none; color: #ff00ff;">Entropy → <span class="accent" style="color:#ffb3ff">LLMs (Tokens)</span></span>
+    </div>
+    <div>Energy → <span class="accent">Optimization</span></div>
+  </div>
 </div>
 
 Note:
@@ -346,9 +352,76 @@ Note:
 
 ---
 
+<canvas class="biology-ai-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">Brain → <span class="accent">Neural Networks</span></div><br>
+  <div class="impact-text" style="font-size: 0.6em">Synapses → <span class="accent">Weights</span></div>
+</div>
+
+---
+
+<canvas class="the-maturity-stack-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">Foundations → <span class="accent">Frontiers</span></div>
+</div>
+
+---
+
+<canvas class="noise-signal-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text" style="font-size: 0.7em;">Data Science = <span class="accent">Math + Stats + Computers + Business Context</span></div><br><br>
+    <div class="impact-text"> Not Dashboards <span class="accent">Decisions</span></div>
+</div>
+
+---
+
+<canvas class="AI-meets-reality-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">AI meets <span class="accent">reality</span></div>
+</div>
+
+---
+
+<canvas class="physics-returns-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">Physics <span class="accent">returns.</span></div>
+</div>
+
+---
+
+<canvas class="india-map-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">From services to <span class="accent">sovereignty.</span></div>
+</div>
+
+---
+
+
+
+---
+
+
+---
+
+
+---
+
+
+
+---
+
+
+---
+
+
+---
+
+
+---
+
+<!---> Thank You -->
 <!-- .slide: data-background-color="#050510" -->
 
-# Thank You.
+# Thank <span class="accent">You</span>.
 
-<h4 class="accent">SciEncephalon AI</h4>
-<p style="font-size: 0.8em; opacity: 0.6;">We bring clarity to your ambiguity.</p>
+

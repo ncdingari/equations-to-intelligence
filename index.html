@@ -1239,6 +1239,16 @@
             pointer-events: none;
         }
 
+        /* Hide the marker elements for all the dynamic backgrounds to prevent them taking layout space */
+        .biology-ai-container,
+        .the-maturity-stack-container,
+        .noise-signal-container,
+        .AI-meets-reality-container,
+        .physics-returns-container,
+        .india-map-container {
+            display: none !important;
+        }
+
         .vector-morph-container {
             display: none;
             pointer-events: none;
@@ -1316,7 +1326,7 @@
 
     <div class="reveal">
         <div class="slides">
-            <section data-markdown="slides.md?v=55" data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"
+            <section data-markdown="slides.md" data-separator="^\n---\n$" data-separator-vertical="^\n--\n$"
                 data-separator-notes="^Note:">
             </section>
         </div>
@@ -1327,6 +1337,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.js"></script>
 
     <script>
+        // Force clear cache for markdown on every reload
+        const markdownSection = document.querySelector('[data-markdown]');
+        if (markdownSection && markdownSection.getAttribute('data-markdown') === 'slides.md') {
+            markdownSection.setAttribute('data-markdown', `slides.md?v=${Date.now()}`);
+        }
+
         Reveal.initialize({
             width: 1280, height: 850, margin: 0.1, minScale: 0.2, maxScale: 2.0,
             hash: true, center: true, transition: 'fade', backgroundTransition: 'fade',
@@ -1383,6 +1399,11 @@
             }));
 
             function draw() {
+                if (window.getComputedStyle(canvas).display === 'none') {
+                    requestAnimationFrame(draw);
+                    return;
+                }
+
                 ctx.clearRect(0, 0, width, height);
                 // Subtle dark background
                 ctx.fillStyle = 'rgba(0, 5, 20, 0.4)';
@@ -1499,7 +1520,7 @@
             const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(width, height);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
             // Inject canvas directly into body — outside all Reveal.js transforms
             const canvas = renderer.domElement;
@@ -1537,6 +1558,11 @@
 
             function animateLoss() {
                 requestAnimationFrame(animateLoss);
+
+                if (!document.body.contains(canvas) || window.getComputedStyle(canvas).display === 'none') {
+                    return;
+                }
+
                 const e = 0.05;
                 const gx = (lossFunc(px + e, py) - lossFunc(px - e, py)) / (2 * e);
                 const gy = (lossFunc(px, py + e) - lossFunc(px, py - e)) / (2 * e);
@@ -1589,6 +1615,11 @@
             }
 
             function drawFrame() {
+                if (window.getComputedStyle(canvas).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
                 ctx.clearRect(0, 0, W, H);
 
                 // Animate mean and sigma gently over time
@@ -1751,6 +1782,11 @@
 
             let t = 0;
             function drawEnergy() {
+                if (window.getComputedStyle(canvas).display === 'none') {
+                    requestAnimationFrame(drawEnergy);
+                    return;
+                }
+
                 ctx.clearRect(0, 0, W, H);
 
                 // Draw potential landscape as contour fill bands
@@ -1870,120 +1906,222 @@
                 ctx.clearRect(0, 0, W, H);
 
                 let elapsed = (now - startTime) / 1000;
-                let cycle = elapsed % 8; // 8 second cycle
+                let cycle = elapsed % 16; // 16 second cycle
+                let isLLM = cycle >= 8;
+                let subCycle = cycle % 8;
 
-                let rootX = W / 2;
-                let rootY = H * 0.35;
-                let leftX = W / 2 - W * 0.15;
-                let rightX = W / 2 + W * 0.15;
-                let leafY = H * 0.65;
+                const treeTexts = document.querySelectorAll('.entropy-tree-text');
+                const llmTexts = document.querySelectorAll('.entropy-llm-text');
 
-                // Determine phase
-                let splitting = cycle > 3 && cycle < 7.5;
-                let splittedAmt = Math.max(0, Math.min(1, (cycle - 3) * 1.5));
-                if (cycle >= 6.5) {
-                    splittedAmt = Math.max(0, Math.min(1, 1 - (cycle - 6.5) * 1.5));
-                }
+                treeTexts.forEach(treeText => {
+                    treeText.style.display = isLLM ? 'none' : 'inline-block';
+                });
+                llmTexts.forEach(llmText => {
+                    llmText.style.display = isLLM ? 'inline-block' : 'none';
+                });
 
-                // Draw tree branches
-                if (splittedAmt > 0) {
+                if (!isLLM) {
+                    let rootX = W / 2;
+                    let rootY = H * 0.35;
+                    let leftX = W / 2 - W * 0.15;
+                    let rightX = W / 2 + W * 0.15;
+                    let leafY = H * 0.65;
+
+                    let splitting = subCycle > 3 && subCycle < 7.5;
+                    let splittedAmt = Math.max(0, Math.min(1, (subCycle - 3) * 1.5));
+                    if (subCycle >= 6.5) {
+                        splittedAmt = Math.max(0, Math.min(1, 1 - (subCycle - 6.5) * 1.5));
+                    }
+
+                    if (splittedAmt > 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(rootX, rootY + 50);
+                        ctx.lineTo(rootX + (leftX - rootX) * splittedAmt, rootY + 50 + (leafY - rootY - 50) * splittedAmt);
+                        ctx.moveTo(rootX, rootY + 50);
+                        ctx.lineTo(rootX + (rightX - rootX) * splittedAmt, rootY + 50 + (leafY - rootY - 50) * splittedAmt);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${splittedAmt * 0.4})`;
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }
+
+                    let gw = 120;
+                    let gh = 50;
+                    let gx = rootX - gw / 2;
+                    let gy = rootY - 140;
+
                     ctx.beginPath();
-                    ctx.moveTo(rootX, rootY + 50);
-                    ctx.lineTo(rootX + (leftX - rootX) * splittedAmt, rootY + 50 + (leafY - rootY - 50) * splittedAmt);
-                    ctx.moveTo(rootX, rootY + 50);
-                    ctx.lineTo(rootX + (rightX - rootX) * splittedAmt, rootY + 50 + (leafY - rootY - 50) * splittedAmt);
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${splittedAmt * 0.4})`;
+                    for (let px = 0; px <= gw; px += 2) {
+                        let p = px / gw;
+                        let p_safe = Math.max(0.001, Math.min(0.999, p));
+                        let ent = -p_safe * Math.log2(p_safe) - (1 - p_safe) * Math.log2(1 - p_safe);
+                        let py = gy + gh - ent * gh;
+                        if (px === 0) ctx.moveTo(gx + px, py);
+                        else ctx.lineTo(gx + px, py);
+                    }
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
                     ctx.lineWidth = 2;
                     ctx.stroke();
-                }
 
-                // Draw entropy graph above root node
-                let gw = 120;
-                let gh = 50;
-                let gx = rootX - gw / 2;
-                let gy = rootY - 140;
-
-                ctx.beginPath();
-                for (let px = 0; px <= gw; px += 2) {
-                    let p = px / gw;
-                    let p_safe = Math.max(0.001, Math.min(0.999, p));
-                    let ent = -p_safe * Math.log2(p_safe) - (1 - p_safe) * Math.log2(1 - p_safe);
-                    let py = gy + gh - ent * gh;
-                    if (px === 0) ctx.moveTo(gx + px, py);
-                    else ctx.lineTo(gx + px, py);
-                }
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                let current_p = 0.5 + 0.5 * splittedAmt;
-                let p_safe = Math.max(0.001, Math.min(0.999, current_p));
-                let curr_ent = -p_safe * Math.log2(p_safe) - (1 - p_safe) * Math.log2(1 - p_safe);
-
-                ctx.beginPath();
-                ctx.arc(gx + current_p * gw, gy + gh - curr_ent * gh, 5, 0, Math.PI * 2);
-                ctx.fillStyle = '#00e5ff';
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#00e5ff';
-                ctx.fill();
-                ctx.shadowBlur = 0;
-
-                ctx.fillStyle = 'rgba(255,255,255,0.7)';
-                ctx.font = '14px Inter';
-                ctx.textAlign = 'center';
-                ctx.fillText(`Entropy: ${curr_ent.toFixed(2)}`, rootX, gy - 15);
-
-                // Update particles
-                for (let p of particles) {
-                    let tx = rootX;
-                    let ty = rootY;
-                    let radius = 70;
-
-                    if (splitting) {
-                        tx = p.isCyan ? leftX : rightX;
-                        ty = leafY;
-                        radius = 40;
-                    }
-
-                    // Move around to represent entropy/energy
-                    let noise = splitting ? 1.0 : 4.0;
-
-                    if (p.ox === 0 && p.oy === 0) {
-                        let angle = Math.random() * Math.PI * 2;
-                        let r = Math.random() * radius;
-                        p.ox = Math.cos(angle) * r;
-                        p.oy = Math.sin(angle) * r;
-                    }
-
-                    p.ox += (Math.random() - 0.5) * noise;
-                    p.oy += (Math.random() - 0.5) * noise;
-
-                    let dist = Math.sqrt(p.ox * p.ox + p.oy * p.oy);
-                    if (dist > radius) {
-                        p.ox = (p.ox / dist) * radius;
-                        p.oy = (p.oy / dist) * radius;
-                    }
-
-                    let targetX = tx + p.ox;
-                    let targetY = ty + p.oy;
-
-                    let dx = targetX - p.x;
-                    let dy = targetY - p.y;
-
-                    p.vx = (p.vx + dx * 0.02) * 0.85;
-                    p.vy = (p.vy + dy * 0.02) * 0.85;
-
-                    p.x += p.vx;
-                    p.y += p.vy;
+                    let current_p = 0.5 + 0.5 * splittedAmt;
+                    let p_safe = Math.max(0.001, Math.min(0.999, current_p));
+                    let curr_ent = -p_safe * Math.log2(p_safe) - (1 - p_safe) * Math.log2(1 - p_safe);
 
                     ctx.beginPath();
-                    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-                    ctx.fillStyle = p.isCyan ? '#00e5ff' : '#ff00ff';
-                    ctx.shadowBlur = 6;
-                    ctx.shadowColor = ctx.fillStyle;
+                    ctx.arc(gx + current_p * gw, gy + gh - curr_ent * gh, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#00e5ff';
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#00e5ff';
                     ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                    ctx.font = '14px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Entropy: ${curr_ent.toFixed(2)}`, rootX, gy - 15);
+
+                    for (let p of particles) {
+                        let tx = rootX;
+                        let ty = rootY;
+                        let radius = 70;
+
+                        if (splitting) {
+                            tx = p.isCyan ? leftX : rightX;
+                            ty = leafY;
+                            radius = 40;
+                        }
+
+                        let noise = splitting ? 1.0 : 4.0;
+
+                        if (p.ox === 0 && p.oy === 0) {
+                            let angle = Math.random() * Math.PI * 2;
+                            let r = Math.random() * radius;
+                            p.ox = Math.cos(angle) * r;
+                            p.oy = Math.sin(angle) * r;
+                        }
+
+                        p.ox += (Math.random() - 0.5) * noise;
+                        p.oy += (Math.random() - 0.5) * noise;
+
+                        let dist = Math.sqrt(p.ox * p.ox + p.oy * p.oy);
+                        if (dist > radius) {
+                            p.ox = (p.ox / dist) * radius;
+                            p.oy = (p.oy / dist) * radius;
+                        }
+
+                        let targetX = tx + p.ox;
+                        let targetY = ty + p.oy;
+
+                        let dx = targetX - p.x;
+                        let dy = targetY - p.y;
+
+                        p.vx = (p.vx + dx * 0.02) * 0.85;
+                        p.vy = (p.vy + dy * 0.02) * 0.85;
+
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                        ctx.fillStyle = p.isCyan ? '#00e5ff' : '#ff00ff';
+                        ctx.shadowBlur = 6;
+                        ctx.shadowColor = ctx.fillStyle;
+                        ctx.fill();
+                    }
+                    ctx.shadowBlur = 0;
+                } else {
+                    let peakedAmt = 0;
+                    if (subCycle > 2 && subCycle < 6.5) {
+                        peakedAmt = Math.max(0, Math.min(1, (subCycle - 2) * 1.0));
+                        if (subCycle >= 5.5) {
+                            peakedAmt = Math.max(0, Math.min(1, 1 - (subCycle - 5.5) * 1.0));
+                        }
+                    }
+
+                    let numBins = 10;
+                    let targetProb = 0.1 + 0.8 * peakedAmt;
+                    let otherProb = (1 - targetProb) / (numBins - 1);
+
+                    let binProbs = [];
+                    let llm_ent = 0;
+                    for (let i = 0; i < numBins; i++) {
+                        let prob = (i === 4) ? targetProb : otherProb;
+                        binProbs.push(prob);
+                        let safeP = Math.max(0.0001, prob);
+                        llm_ent -= safeP * Math.log2(safeP);
+                    }
+
+                    let graphY = H * 0.70;
+                    let graphW = W * 0.6;
+                    let graphX = W / 2 - graphW / 2;
+                    let maxH = 250;
+
+                    let barWidth = graphW / numBins - 10;
+                    for (let i = 0; i < numBins; i++) {
+                        let bx = graphX + i * (graphW / numBins) + 5;
+                        let bh = binProbs[i] * maxH;
+
+                        // Draw glowing bar background
+                        ctx.fillStyle = (i === 4) ? `rgba(255, 179, 255, ${0.1 + 0.3 * peakedAmt})` : 'rgba(0, 229, 255, 0.1)';
+                        ctx.fillRect(bx, graphY - bh, barWidth, bh);
+
+                        ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                        ctx.font = '10px Inter';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`tok_${i}`, bx + barWidth / 2, graphY + 15);
+                    }
+
+                    let targetBinAssigns = [];
+                    let cum = 0;
+                    for (let i = 0; i < N; i++) {
+                        let r = i / N;
+                        let b = 0;
+                        let c = 0;
+                        for (let j = 0; j < numBins; j++) {
+                            c += binProbs[j];
+                            if (r <= c || j === numBins - 1) {
+                                b = j;
+                                break;
+                            }
+                        }
+                        targetBinAssigns.push(b);
+                    }
+
+                    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                    ctx.font = '16px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Next Token Entropy: ${llm_ent.toFixed(2)} bits`, W / 2, H * 0.25);
+
+                    for (let i = 0; i < N; i++) {
+                        let p = particles[i];
+                        let b = targetBinAssigns[i];
+
+                        let bx = graphX + b * (graphW / numBins) + 5;
+                        let bh = binProbs[b] * maxH;
+
+                        let seedX = Math.abs(Math.sin((i + 1) * 123.45));
+                        let seedY = Math.abs(Math.cos((i + 1) * 678.90));
+
+                        let tx = bx + seedX * barWidth;
+                        let ty = graphY - seedY * bh;
+
+                        let dx = tx - p.x;
+                        let dy = ty - p.y;
+
+                        p.vx = (p.vx + dx * 0.05) * 0.8;
+                        p.vy = (p.vy + dy * 0.05) * 0.8;
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                        ctx.fillStyle = p.isCyan ? '#00e5ff' : '#ff00ff';
+                        if (b === 4 && peakedAmt > 0.5) ctx.fillStyle = '#ffb3ff';
+                        ctx.shadowBlur = 6;
+                        ctx.shadowColor = ctx.fillStyle;
+                        ctx.fill();
+                    }
+                    ctx.shadowBlur = 0;
                 }
-                ctx.shadowBlur = 0;
 
                 requestAnimationFrame(drawFrame);
             }
@@ -2623,6 +2761,1146 @@
             requestAnimationFrame(drawFrame);
         }
 
+        // Biology to AI Animation (Slide 17, h=16)
+        function initBiologyAI() {
+            if (window._biologyAiReady) return;
+            window._biologyAiReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'biology-ai-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            let dendrites = [];
+            let terminals = [];
+            let aiInputs = [];
+            let aiOutputs = [];
+
+            function buildScene() {
+                dendrites = [];
+                terminals = [];
+                aiInputs = [];
+                aiOutputs = [];
+
+                let somaX = W * 0.25;
+                let somaY = H * 0.5;
+                let axonLen = W * 0.25;
+                let axonEndX = somaX + axonLen;
+
+                function buildTree(x, y, angle, len, depth, isTerm) {
+                    if (depth === 0) {
+                        if (isTerm) terminals.push({ x: x, y: y });
+                        return;
+                    }
+                    let nx = x + Math.cos(angle) * len;
+                    let ny = y + Math.sin(angle) * len;
+                    let cx = (x + nx) / 2 + (Math.random() - 0.5) * len * 0.3;
+                    let cy = (y + ny) / 2 + (Math.random() - 0.5) * len * 0.3;
+                    dendrites.push({ x1: x, y1: y, cx: cx, cy: cy, x2: nx, y2: ny, depth: depth, isTerm: isTerm });
+
+                    let branches = isTerm ? 2 : (Math.random() > 0.2 ? 2 : 1);
+                    for (let i = 0; i < branches; i++) {
+                        let spread = isTerm ? 0.9 : 1.2;
+                        let nAngle = angle + (Math.random() - 0.5) * spread;
+                        if (isTerm && i === 0) nAngle = angle + 0.5;
+                        if (isTerm && i === 1) nAngle = angle - 0.5;
+                        buildTree(nx, ny, nAngle, len * 0.65, depth - 1, isTerm);
+                    }
+                }
+
+                let dLen = Math.min(W, H) * 0.12;
+                for (let i = 0; i < 7; i++) {
+                    let angle = (i / 7) * Math.PI * 2;
+                    // Direct away from the axon
+                    if (angle < Math.PI / 2 * 0.6 || angle > Math.PI * 2 - Math.PI / 2 * 0.6) angle += Math.PI;
+                    buildTree(somaX, somaY, angle, dLen, 4, false);
+                }
+
+                // Axon branches
+                buildTree(axonEndX, somaY, 0, dLen * 0.5, 3, true);
+
+                let aiX = W * 0.75;
+                let aiY = H * 0.5;
+
+                // AI Synaptic inputs
+                terminals.forEach(t => {
+                    aiInputs.push({ x1: t.x + 30, y1: t.y, x2: aiX, y2: aiY });
+                });
+
+                // AI Outputs
+                for (let i = 0; i < 4; i++) {
+                    aiOutputs.push({
+                        x1: aiX, y1: aiY,
+                        x2: aiX + W * 0.2, // Shoot offscreen 
+                        y2: aiY + (i - 1.5) * H * 0.15
+                    });
+                }
+            }
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                buildScene();
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('biology-ai-canvas')) return;
+                const canvasElement = document.getElementById('biology-ai-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+
+                // Apply global transparency to send it further 'back' visually
+                ctx.globalAlpha = 0.12;
+
+                let elapsed = (now - startTime) / 1000;
+                let cycle = elapsed % 6; // 6 seconds cycle
+
+                let somaX = W * 0.25;
+                let somaY = H * 0.5;
+                let aiX = W * 0.75;
+                let aiY = H * 0.5;
+
+                // --- BIOLOGY SIDE (Magenta) ---
+                ctx.lineCap = 'round';
+                dendrites.forEach((d, i) => {
+                    ctx.beginPath();
+                    ctx.moveTo(d.x1, d.y1);
+                    ctx.quadraticCurveTo(d.cx, d.cy, d.x2, d.y2);
+
+                    let isDendriteActive = !d.isTerm && cycle < 1.5;
+                    let isTerminalActive = d.isTerm && cycle > 2.5 && cycle < 3.5;
+
+                    if (isDendriteActive) {
+                        let t = cycle / 1.5;
+                        let glowP = 1 - (d.depth / 4);
+                        if (Math.abs(t - glowP) < 0.2) {
+                            ctx.strokeStyle = '#ffb3ff';
+                            ctx.lineWidth = d.depth * 1.5 + 2;
+                            ctx.shadowBlur = 15;
+                            ctx.shadowColor = '#ff00ff';
+                        } else {
+                            ctx.strokeStyle = '#ff00ff';
+                            ctx.lineWidth = d.depth * 1.5;
+                            ctx.shadowBlur = 0;
+                        }
+                    } else if (isTerminalActive) {
+                        ctx.strokeStyle = '#ffb3ff';
+                        ctx.lineWidth = d.depth * 1.5 + 1;
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = '#ff00ff';
+                    } else {
+                        ctx.strokeStyle = '#ff00ff';
+                        ctx.lineWidth = d.depth * 1.5;
+                        ctx.shadowBlur = 2;
+                        ctx.shadowColor = '#ff00ff';
+                    }
+                    ctx.stroke();
+                });
+
+                // Axon
+                ctx.beginPath();
+                ctx.moveTo(somaX, somaY);
+                ctx.lineTo(somaX + W * 0.25, somaY);
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = '#ff00ff';
+                if (cycle >= 1.5 && cycle < 3.0) {
+                    let t = (cycle - 1.5) / 1.5;
+                    let grad = ctx.createLinearGradient(somaX, somaY, somaX + W * 0.25, somaY);
+                    grad.addColorStop(Math.max(0, t - 0.15), '#ff00ff');
+                    grad.addColorStop(t, '#ffffff');
+                    grad.addColorStop(Math.min(1, t + 0.15), '#ff00ff');
+                    ctx.strokeStyle = grad;
+                    ctx.shadowBlur = 25;
+                    ctx.shadowColor = '#ffb3ff';
+                } else {
+                    ctx.shadowBlur = 5;
+                    ctx.shadowColor = '#ff00ff';
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // Myelin Sheaths
+                let numSheaths = 5;
+                let axonLen = W * 0.25;
+                for (let i = 0; i < numSheaths; i++) {
+                    let sx = somaX + 25 + i * (axonLen / numSheaths);
+                    let sw = (axonLen / numSheaths) * 0.5;
+                    ctx.fillStyle = 'rgba(255, 0, 255, 0.4)';
+                    ctx.beginPath();
+                    // Draw a pill shape
+                    ctx.roundRect(sx, somaY - 9, sw, 18, 9);
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                // Soma (Cell Body) wobbling
+                ctx.beginPath();
+                let wobble = Math.sin(now * 0.003) * 6 + Math.cos(now * 0.002) * 4;
+                let somaRadius = H * 0.08 + wobble;
+
+                let somaPulse = (cycle >= 1.0 && cycle <= 2.0) ? Math.sin((cycle - 1.0) * Math.PI) * 15 : 0;
+
+                for (let i = 0; i <= Math.PI * 2; i += 0.1) {
+                    let r = somaRadius + Math.sin(i * 5 + now * 0.002) * 5 + Math.cos(i * 3 - now * 0.001) * 4;
+                    let px = somaX + Math.cos(i) * r;
+                    let py = somaY + Math.sin(i) * r;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+
+                if (somaPulse > 0) {
+                    ctx.fillStyle = '#ff66ff';
+                    ctx.shadowBlur = 40 + somaPulse;
+                    ctx.shadowColor = '#ff00ff';
+                } else {
+                    ctx.fillStyle = '#cc00cc';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#ff00ff';
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Nucleus
+                ctx.beginPath();
+                ctx.arc(somaX, somaY, Math.max(10, somaRadius * 0.35 + Math.sin(now * 0.005) * 3), 0, Math.PI * 2);
+                ctx.fillStyle = '#330033';
+                ctx.fill();
+
+                // --- SYNAPSE GAP (Particles) ---
+                if (cycle >= 3.0 && cycle <= 4.2) {
+                    let ptProgress = (cycle - 3.0) / 1.2;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = '#fff';
+                    terminals.forEach((term, i) => {
+                        let tOffset = (Math.sin(i * 88) + 1) / 2 * 0.3; // 0 to 0.3 offset
+                        let p1 = ptProgress - tOffset;
+                        let p2 = ptProgress - tOffset - 0.1; // trailing particle
+
+                        [p1, p2].forEach(p => {
+                            if (p > 0 && p < 1) {
+                                let targetX = aiInputs[i].x1;
+                                let targetY = aiInputs[i].y1;
+                                let px = term.x + (targetX - term.x) * p;
+                                let py = term.y + (targetY - term.y) * p;
+
+                                px += Math.sin(p * 20 + i) * 8; // Float erratically
+                                py += Math.cos(p * 20 + i) * 8;
+
+                                ctx.beginPath();
+                                ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+                                ctx.fill();
+                            }
+                        });
+                    });
+                    ctx.shadowBlur = 0;
+                }
+
+                // --- AI SIDE (Cyan) ---
+                // Artificial Weights (Inputs)
+                aiInputs.forEach((inp, i) => {
+                    ctx.beginPath();
+                    ctx.moveTo(inp.x1, inp.y1);
+                    ctx.lineTo(inp.x2, inp.y2);
+
+                    let weightThickness = 1 + ((Math.sin(i * 456) + 1) / 2) * 3; // 1 to 4
+                    let isActive = cycle >= 3.8 && cycle <= 5.0;
+
+                    if (isActive) {
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${0.4 + (Math.sin(now * 0.01 + i) * 0.5)})`;
+                        ctx.lineWidth = weightThickness * 1.5;
+                        ctx.shadowBlur = 15;
+                        ctx.shadowColor = '#00e5ff';
+                    } else {
+                        ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
+                        ctx.lineWidth = weightThickness;
+                        ctx.shadowBlur = 0;
+                    }
+                    ctx.stroke();
+                });
+                ctx.shadowBlur = 0;
+
+                // Artificial Node (Geometric & Perfect)
+                let aiRadius = H * 0.12;
+                ctx.beginPath();
+                ctx.arc(aiX, aiY, aiRadius, 0, Math.PI * 2);
+
+                if (cycle >= 4.0 && cycle <= 5.2) {
+                    ctx.fillStyle = 'rgba(0, 229, 255, 0.3)';
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 4;
+                    ctx.shadowBlur = 40;
+                    ctx.shadowColor = '#00e5ff';
+                } else {
+                    ctx.fillStyle = 'rgba(0, 229, 255, 0.05)';
+                    ctx.strokeStyle = 'rgba(0, 229, 255, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#00e5ff';
+                }
+                ctx.fill();
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // Sigmoid Math Curve inside AI Node
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(aiX, aiY - aiRadius * 0.7);
+                ctx.lineTo(aiX, aiY + aiRadius * 0.7); // Y axis
+                ctx.moveTo(aiX - aiRadius * 0.7, aiY);
+                ctx.lineTo(aiX + aiRadius * 0.7, aiY); // X axis
+                ctx.stroke();
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let x = -aiRadius * 0.6; x <= aiRadius * 0.6; x += 2) {
+                    let nx = x / (aiRadius * 0.25);
+                    let sy = 1 / (1 + Math.exp(-nx));
+                    let y = (sy - 0.5) * aiRadius;
+                    if (x === -aiRadius * 0.6) ctx.moveTo(aiX + x, aiY - y);
+                    else ctx.lineTo(aiX + x, aiY - y);
+                }
+                if (cycle >= 4.0 && cycle <= 5.2) {
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#ffffff';
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                // Artificial Outputs
+                aiOutputs.forEach((out, i) => {
+                    ctx.beginPath();
+                    ctx.moveTo(out.x1, out.y1);
+                    ctx.lineTo(out.x2, out.y2);
+
+                    if (cycle >= 4.5 && cycle <= 5.8) {
+                        let t = (cycle - 4.5) / 1.3;
+                        let grad = ctx.createLinearGradient(out.x1, out.y1, out.x2, out.y2);
+                        grad.addColorStop(Math.max(0, t - 0.2), 'rgba(0, 229, 255, 0.2)');
+                        grad.addColorStop(t, '#ffffff');
+                        grad.addColorStop(Math.min(1, t + 0.2), 'rgba(0, 229, 255, 0.2)');
+                        ctx.strokeStyle = grad;
+                        ctx.lineWidth = 4;
+                        ctx.shadowBlur = 20;
+                        ctx.shadowColor = '#00e5ff';
+                    } else {
+                        ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
+                        ctx.lineWidth = 2;
+                        ctx.shadowBlur = 0;
+                    }
+                    ctx.stroke();
+                });
+
+                // Text Labels embedded in canvas
+                ctx.globalAlpha = 0.6;
+                ctx.fillStyle = '#ffb3ff';
+                ctx.font = 'bold 22px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('BIOLOGICAL NEURON', somaX, H * 0.3);
+
+                ctx.fillStyle = '#00e5ff';
+                ctx.fillText('ARTIFICIAL NODE', aiX, H * 0.3);
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.font = 'italic 16px Inter';
+                if (terminals[0] && aiInputs[0]) {
+                    ctx.fillText('SYNAPTIC GAP ->', (terminals[0].x + aiInputs[0].x1) / 2, H * 0.48);
+                }
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // The Maturity Stack Animation (Slide 18, h=17)
+        function initMaturityStack() {
+            if (window._maturityStackReady) return;
+            window._maturityStackReady = true;
+            const canvas = document.createElement('canvas');
+            canvas.id = 'the-maturity-stack-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const layers = [
+                { name: "Math", color: "#00e5ff" },
+                { name: "Physics", color: "#ff00ff" },
+                { name: "Chemistry", color: "#30d158" },
+                { name: "Biology", color: "#ffd700" },
+                { name: "Quantum", color: "#ff3b30" }
+            ];
+
+            let startTime = performance.now();
+
+            function drawIsoPlane(cx, cy, radius, color, alpha) {
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - radius * 0.45);
+                ctx.lineTo(cx + radius, cy);
+                ctx.lineTo(cx, cy + radius * 0.45);
+                ctx.lineTo(cx - radius, cy);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.globalAlpha = alpha;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.globalAlpha = 1.0;
+            }
+
+            function drawFrame(now) {
+                if (!document.getElementById('the-maturity-stack-canvas')) return;
+                const canvasElement = document.getElementById('the-maturity-stack-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+
+                let elapsed = (now - startTime) / 1000;
+                let cycle = elapsed % 8; // Reset every 8 seconds
+
+                let cx = W / 2;
+                let cy = H * 0.65;
+                let radius = W * 0.15;
+                let gapY = 55;
+
+                for (let i = 0; i < layers.length; i++) {
+                    let buildTime = i * 0.5;
+                    let appearProgress = 0;
+
+                    if (cycle > buildTime) {
+                        appearProgress = Math.min(1, (cycle - buildTime) * 2.0);
+                    }
+                    if (cycle > 7) {
+                        appearProgress = Math.max(0, 1 - (cycle - 7) * 4.0);
+                    }
+
+                    if (appearProgress <= 0) continue;
+
+                    let floatY = Math.sin(cycle * 2 + i) * 6;
+                    let y = cy + 50 - (50 + i * gapY) * appearProgress + floatY;
+                    let alpha = appearProgress * 0.2;
+                    let gridAlpha = appearProgress * 0.5;
+
+                    drawIsoPlane(cx, y, radius, layers[i].color, alpha);
+
+                    ctx.fillStyle = `rgba(255, 255, 255, ${gridAlpha})`;
+                    let gridSize = 3;
+                    for (let r = -gridSize; r <= gridSize; r++) {
+                        for (let c = -gridSize; c <= gridSize; c++) {
+                            let px = cx + (r - c) * (radius / 4);
+                            let py = y + (r + c) * ((radius * 0.45) / 4);
+                            ctx.beginPath();
+                            ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+
+                    if (appearProgress > 0.5) {
+                        ctx.fillStyle = `rgba(255, 255, 255, ${(appearProgress - 0.5) * 2})`;
+                        ctx.font = 'bold 18px Inter';
+                        ctx.textAlign = 'right';
+                        ctx.textBaseline = 'middle';
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = layers[i].color;
+                        ctx.fillText(layers[i].name, cx - radius - 30, y);
+                        ctx.shadowBlur = 0;
+
+                        // Vertical connection lines going down
+                        if (i > 0) {
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${(appearProgress - 0.5)})`;
+                            ctx.beginPath();
+                            ctx.moveTo(cx - radius - 20, y);
+                            ctx.lineTo(cx - radius - 20, y + gapY);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Noise to Signal Animation (Slide 18, h=17)
+        function initNoiseSignal() {
+            if (window._noiseSignalReady) return;
+            window._noiseSignalReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'noise-signal-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const N = 400;
+            const particles = [];
+            for (let i = 0; i < N; i++) {
+                particles.push({
+                    id: i,
+                    rx: Math.random() * 2 - 1, // random normalized x
+                    ry: Math.random() * 2 - 1, // random normalized y
+                    x: 0,
+                    y: 0,
+                    vx: 0,
+                    vy: 0
+                });
+            }
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('noise-signal-canvas')) return;
+                const canvasElement = document.getElementById('noise-signal-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalAlpha = 0.25; // Reduce overall opacity for background visual
+
+                let elapsed = (now - startTime) / 1000;
+                let cycle = elapsed % 12; // 12 second cycle
+
+                // 0-4s: Noise
+                // 4-6s: Transition to Signal
+                // 6-10s: Signal
+                // 10-12s: Transition to Noise
+                let clarity = 0;
+                if (cycle > 4 && cycle <= 6) clarity = (cycle - 4) / 2;
+                else if (cycle > 6 && cycle <= 10) clarity = 1;
+                else if (cycle > 10 && cycle <= 12) clarity = 1 - (cycle - 10) / 2;
+
+                // Ease In Out formula
+                clarity = clarity < 0.5 ? 2 * clarity * clarity : 1 - Math.pow(-2 * clarity + 2, 2) / 2;
+
+                ctx.fillStyle = `rgba(0, 229, 255, ${0.1 + clarity * 0.4})`;
+                ctx.font = 'bold 24px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(clarity > 0.5 ? "SIGNAL" : "NOISE", W / 2, H * 0.3);
+
+                ctx.beginPath();
+                // Draw connecting line for signal
+                if (clarity > 0.8) {
+                    ctx.moveTo(0, H / 2);
+                    for (let x = 0; x < W; x += 10) {
+                        let y = H / 2 + Math.sin(x * 0.01 + elapsed * 2) * (H * 0.2);
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                for (let i = 0; i < N; i++) {
+                    let p = particles[i];
+
+                    // Noise Target
+                    let noiseX = W / 2 + p.rx * (W * 0.8) + Math.sin(elapsed * 2 + p.id) * 50;
+                    let noiseY = H / 2 + p.ry * (H * 0.8) + Math.cos(elapsed * 3 + p.id * 2) * 50;
+
+                    // Signal Target (Sine Wave)
+                    let t = p.id / N; // 0 to 1
+                    let signalX = W * 0.1 + t * (W * 0.8);
+                    let signalY = H / 2 + Math.sin(signalX * 0.01 + elapsed * 2) * (H * 0.2);
+
+                    let targetX = noiseX * (1 - clarity) + signalX * clarity;
+                    let targetY = noiseY * (1 - clarity) + signalY * clarity;
+
+                    let dx = targetX - p.x;
+                    let dy = targetY - p.y;
+
+                    // Initialization jump
+                    if (p.x === 0 && p.y === 0) {
+                        p.x = targetX;
+                        p.y = targetY;
+                        dx = dy = 0;
+                    }
+
+                    p.vx = (p.vx + dx * 0.02) * 0.8;
+                    p.vy = (p.vy + dy * 0.02) * 0.8;
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, clarity > 0.5 ? 2.5 : 4, 0, Math.PI * 2);
+
+                    // Colors shift from chaotic magenta to ordered cyan
+                    let r = 255 * (1 - clarity);
+                    let g = 229 * clarity;
+                    let b = 255;
+                    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+
+                    ctx.shadowBlur = 5;
+                    ctx.shadowColor = ctx.fillStyle;
+                    ctx.fill();
+                }
+                ctx.shadowBlur = 0;
+
+                requestAnimationFrame(drawFrame);
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // AI Meets Reality / Business Verticals Network (Slide 19, h=18)
+        function initAIMeetsReality() {
+            if (window._aiRealityReady) return;
+            window._aiRealityReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'ai-meets-reality-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const labels = [
+                "Healthcare", "Finance", "Banking", "Social Network",
+                "Entertainment", "Climate", "Governance", "Agriculture",
+                "Logistics", "Energy", "Education", "Manufacturing"
+            ];
+
+            const nodes = [{ label: "AI", type: "core", x: W / 2, y: H / 2, vx: 0, vy: 0 }];
+
+            labels.forEach((label, i) => {
+                let angle = (i / labels.length) * Math.PI * 2 + Math.random();
+                let dist = 200 + Math.random() * 200;
+                nodes.push({
+                    label: label,
+                    type: "node",
+                    x: W / 2 + Math.cos(angle) * dist,
+                    y: H / 2 + Math.sin(angle) * dist,
+                    vx: (Math.random() - 0.5) * 1.0,
+                    vy: (Math.random() - 0.5) * 1.0,
+                    angle: angle,
+                    speed: 0.0005 + Math.random() * 0.001
+                });
+            });
+
+            function drawFrame(now) {
+                if (!document.getElementById('ai-meets-reality-canvas')) return;
+                const canvasElement = document.getElementById('ai-meets-reality-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalAlpha = 0.6; // Soften the entire visual slightly
+
+                // Update nodes
+                nodes.forEach(n => {
+                    if (n.type === 'core') {
+                        // AI slowly floats around center
+                        n.x = W / 2 + Math.sin(now * 0.0005) * 100;
+                        n.y = H / 2 + Math.cos(now * 0.0002) * 50;
+                    } else {
+                        // Nodes orbit AI but also drift
+                        n.angle += n.speed;
+                        let targetX = nodes[0].x + Math.cos(n.angle) * 350;
+                        let targetY = nodes[0].y + Math.sin(n.angle) * 200;
+
+                        // Drift towards target orbital position
+                        n.vx += (targetX - n.x) * 0.0002;
+                        n.vy += (targetY - n.y) * 0.0002;
+
+                        // Friction
+                        n.vx *= 0.98;
+                        n.vy *= 0.98;
+
+                        n.x += n.vx;
+                        n.y += n.vy;
+                    }
+                });
+
+                // Connections
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        let dx = nodes[i].x - nodes[j].x;
+                        let dy = nodes[i].y - nodes[j].y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+
+                        let maxDist = nodes[i].type === 'core' || nodes[j].type === 'core' ? W : 350;
+
+                        if (dist < maxDist) {
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i].x, nodes[i].y);
+                            ctx.lineTo(nodes[j].x, nodes[j].y);
+
+                            let alpha = 1 - (dist / maxDist);
+                            if (nodes[i].type === 'core' || nodes[j].type === 'core') {
+                                ctx.strokeStyle = `rgba(0, 229, 255, ${alpha * 0.5})`;
+                                ctx.lineWidth = 1.5;
+                            } else {
+                                ctx.strokeStyle = `rgba(255, 0, 255, ${alpha * 0.3})`;
+                                ctx.lineWidth = 0.5;
+                            }
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw nodes
+                nodes.forEach(n => {
+                    ctx.beginPath();
+                    if (n.type === 'core') {
+                        let pulse = 5 + Math.sin(now * 0.003) * 5;
+                        ctx.arc(n.x, n.y, 40 + pulse, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(0, 229, 255, 0.15)';
+                        ctx.fill();
+
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, 40, 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(0, 229, 255, 0.8)';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+
+                        ctx.shadowBlur = 15;
+                        ctx.shadowColor = '#00e5ff';
+
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 22px Inter';
+                    } else {
+                        ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
+                        ctx.fillStyle = '#ffb3ff';
+                        ctx.shadowBlur = 8;
+                        ctx.shadowColor = '#ff00ff';
+                        ctx.fill();
+
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.font = '16px Inter';
+                        ctx.shadowBlur = 0;
+                    }
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(n.label, n.x, n.y + (n.type === 'core' ? 0 : -20));
+                    ctx.shadowBlur = 0;
+                });
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Physics Returns / Bloch Sphere (Slide 21, h=20)
+        function initPhysicsReturns() {
+            if (window._physicsReturnsReady) return;
+            window._physicsReturnsReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'physics-returns-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            let startTime = performance.now();
+            let collapseTarget = 0; // State to collapse to
+
+            function drawFrame(now) {
+                if (!document.getElementById('physics-returns-canvas')) return;
+                const canvasElement = document.getElementById('physics-returns-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalAlpha = 0.5; // Soft transparent look
+
+                let elapsed = (now - startTime) / 1000;
+                let cx = W / 2;
+                let cy = H * 0.55;
+                let radius = Math.min(W, H) * 0.25;
+
+                // 3D rotation parameters
+                let rotY = elapsed * 0.4;
+                let rotX = Math.sin(elapsed * 0.3) * 0.2 + 0.2;
+
+                function project(x, y, z) {
+                    // rotate around X
+                    let y1 = y * Math.cos(rotX) - z * Math.sin(rotX);
+                    let z1 = y * Math.sin(rotX) + z * Math.cos(rotX);
+                    // rotate around Y
+                    let x2 = x * Math.cos(rotY) + z1 * Math.sin(rotY);
+                    let z2 = -x * Math.sin(rotY) + z1 * Math.cos(rotY);
+
+                    // perspective
+                    let scale = 1.0;
+                    return { px: cx + x2 * radius * scale, py: cy - y1 * radius * scale, pz: z2 };
+                }
+
+                // Draw Latitude/Longitude lines for the sphere
+                ctx.lineWidth = 1;
+                for (let lat = -Math.PI / 2 + 0.3; lat < Math.PI / 2; lat += 0.3) {
+                    ctx.beginPath();
+                    for (let lon = 0; lon <= Math.PI * 2; lon += 0.1) {
+                        let x = Math.cos(lat) * Math.cos(lon);
+                        let y = Math.sin(lat);
+                        let z = Math.cos(lat) * Math.sin(lon);
+                        let p = project(x, y, z);
+                        if (lon === 0) ctx.moveTo(p.px, p.py);
+                        else ctx.lineTo(p.px, p.py);
+                    }
+                    ctx.strokeStyle = `rgba(0, 229, 255, 0.1)`;
+                    ctx.stroke();
+                }
+
+                for (let lon = 0; lon < Math.PI; lon += 0.3) {
+                    ctx.beginPath();
+                    for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += 0.1) {
+                        let x = Math.cos(lat) * Math.cos(lon);
+                        let y = Math.sin(lat);
+                        let z = Math.cos(lat) * Math.sin(lon);
+                        let p = project(x, y, z);
+                        if (lat === -Math.PI / 2) ctx.moveTo(p.px, p.py);
+                        else ctx.lineTo(p.px, p.py);
+                    }
+                    ctx.strokeStyle = `rgba(0, 229, 255, 0.1)`;
+                    ctx.stroke();
+                }
+
+                // Draw Equator boldly
+                ctx.beginPath();
+                for (let lon = 0; lon <= Math.PI * 2; lon += 0.05) {
+                    let p = project(Math.cos(lon), 0, Math.sin(lon));
+                    if (lon === 0) ctx.moveTo(p.px, p.py);
+                    else ctx.lineTo(p.px, p.py);
+                }
+                ctx.strokeStyle = 'rgba(255, 0, 255, 0.4)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Z-Axis (|0> and |1>)
+                let topP = project(0, 1.25, 0);
+                let botP = project(0, -1.25, 0);
+
+                ctx.beginPath();
+                ctx.moveTo(botP.px, botP.py);
+                ctx.lineTo(topP.px, topP.py);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                ctx.font = '24px Inter';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.textAlign = 'center';
+                ctx.fillText('|0⟩', topP.px, topP.py - 15);
+                ctx.fillText('|1⟩', botP.px, botP.py + 25);
+
+                // Add state |+>
+                let plusP = project(1.25, 0, 0);
+                ctx.font = '18px Inter';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillText('|+⟩', plusP.px, plusP.py + 8);
+
+                // State Vector animation (superposition and collapse logic)
+                let cycle = elapsed % 8; // 8 seconds cycle
+                let psiTheta = 0; // vertical angle
+                let psiPhi = 0;   // horizontal angle
+                let color = '#00e5ff';
+
+                if (cycle < 0.1) {
+                    // Decide new collapse target at start of cycle
+                    collapseTarget = Math.random() > 0.5 ? 0 : Math.PI;
+                }
+
+                if (cycle < 5) {
+                    // Wandering Superposition
+                    // Vector smoothly explores the sphere surface (probabilities constantly shifting)
+                    psiTheta = Math.PI / 2 + Math.sin(cycle * 1.5) * 1.0;
+                    psiPhi = cycle * 3.0;
+                    ctx.globalAlpha = 0.8;
+                } else if (cycle < 5.5) {
+                    // Wave Function Collapse! (Snaps rapidly to |0> or |1>)
+                    let t = (cycle - 5) / 0.5; // 0 to 1
+                    t = t * t * (3 - 2 * t); // smooth transition
+
+                    let prevTheta = Math.PI / 2 + Math.sin(5 * 1.5) * 1.0;
+                    psiTheta = prevTheta * (1 - t) + collapseTarget * t;
+                    psiPhi = 5 * 3.0; // Frozen rotation during collapse snap
+                    color = '#ff00ff'; // Turns magenta during collapse
+                    ctx.globalAlpha = 1.0;
+                } else {
+                    // Stationary collapsed state in measurement
+                    psiTheta = collapseTarget;
+                    psiPhi = 5 * 3.0;
+                    color = '#ff00ff';
+                    ctx.globalAlpha = 0.8 - ((cycle - 5.5) * 0.2); // Fades slightly over time
+                }
+
+                let psiX = Math.sin(psiTheta) * Math.cos(psiPhi);
+                let psiY = Math.cos(psiTheta); // Note: standard spherical coords mapped to 3D here
+                let psiZ = Math.sin(psiTheta) * Math.sin(psiPhi);
+
+                let psiP = project(psiX, psiY, psiZ);
+                let centerP = project(0, 0, 0);
+
+                ctx.beginPath();
+                ctx.moveTo(centerP.px, centerP.py);
+                ctx.lineTo(psiP.px, psiP.py);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 4;
+                ctx.shadowColor = color;
+                ctx.shadowBlur = cycle >= 5 ? 25 : 15; // Extrag glow on collapse
+                ctx.stroke();
+
+                // Vector Head (Dot tracing the surface)
+                ctx.beginPath();
+                ctx.arc(psiP.px, psiP.py, 6, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Sphere Outline / Halo
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.5)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                let grad = ctx.createRadialGradient(cx, cy, radius * 0.8, cx, cy, radius * 1.05);
+                grad.addColorStop(0, 'rgba(0, 229, 255, 0)');
+                grad.addColorStop(1, 'rgba(0, 229, 255, 0.15)');
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // India's Moment (Slide 22, h=21)
+        function initIndiaMap() {
+            if (window._indiaMapReady) return;
+            window._indiaMapReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'india-map-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.opacity = '1.0';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            let W, H;
+
+            const indiaPoints = [[77.837451, 35.49401], [78.912269, 34.321936], [78.811086, 33.506198], [79.208892, 32.994395], [79.176129, 32.48378], [78.458446, 32.618164], [78.738894, 31.515906], [79.721367, 30.882715], [81.111256, 30.183481], [80.476721, 29.729865], [80.088425, 28.79447], [81.057203, 28.416095], [81.999987, 27.925479], [83.304249, 27.364506], [84.675018, 27.234901], [85.251779, 26.726198], [86.024393, 26.630985], [87.227472, 26.397898], [88.060238, 26.414615], [88.174804, 26.810405], [88.043133, 27.445819], [88.120441, 27.876542], [88.730326, 28.086865], [88.814248, 27.299316], [88.835643, 27.098966], [89.744528, 26.719403], [90.373275, 26.875724], [91.217513, 26.808648], [92.033484, 26.83831], [92.103712, 27.452614], [91.696657, 27.771742], [92.503119, 27.896876], [93.413348, 28.640629], [94.56599, 29.277438], [95.404802, 29.031717], [96.117679, 29.452802], [96.586591, 28.83098], [96.248833, 28.411031], [97.327114, 28.261583], [97.402561, 27.882536], [97.051989, 27.699059], [97.133999, 27.083774], [96.419366, 27.264589], [95.124768, 26.573572], [95.155153, 26.001307], [94.603249, 25.162495], [94.552658, 24.675238], [94.106742, 23.850741], [93.325188, 24.078556], [93.286327, 23.043658], [93.060294, 22.703111], [93.166128, 22.27846], [92.672721, 22.041239], [92.146035, 23.627499], [91.869928, 23.624346], [91.706475, 22.985264], [91.158963, 23.503527], [91.46773, 24.072639], [91.915093, 24.130414], [92.376202, 24.976693], [91.799596, 25.147432], [90.872211, 25.132601], [89.920693, 25.26975], [89.832481, 25.965082], [89.355094, 26.014407], [88.563049, 26.446526], [88.209789, 25.768066], [88.931554, 25.238692], [88.306373, 24.866079], [88.084422, 24.501657], [88.69994, 24.233715], [88.52977, 23.631142], [88.876312, 22.879146], [89.031961, 22.055708], [88.888766, 21.690588], [88.208497, 21.703172], [86.975704, 21.495562], [87.033169, 20.743308], [86.499351, 20.151638], [85.060266, 19.478579], [83.941006, 18.30201], [83.189217, 17.671221], [82.192792, 17.016636], [82.191242, 16.556664], [81.692719, 16.310219], [80.791999, 15.951972], [80.324896, 15.899185], [80.025069, 15.136415], [80.233274, 13.835771], [80.286294, 13.006261], [79.862547, 12.056215], [79.857999, 10.357275], [79.340512, 10.308854], [78.885345, 9.546136], [79.18972, 9.216544], [78.277941, 8.933047], [77.941165, 8.252959], [77.539898, 7.965535], [76.592979, 8.899276], [76.130061, 10.29963], [75.746467, 11.308251], [75.396101, 11.781245], [74.864816, 12.741936], [74.616717, 13.992583], [74.443859, 14.617222], [73.534199, 15.990652], [73.119909, 17.92857], [72.820909, 19.208234], [72.824475, 20.419503], [72.630533, 21.356009], [71.175273, 20.757441], [70.470459, 20.877331], [69.16413, 22.089298], [69.644928, 22.450775], [69.349597, 22.84318], [68.176645, 23.691965], [68.842599, 24.359134], [71.04324, 24.356524], [70.844699, 25.215102], [70.282873, 25.722229], [70.168927, 26.491872], [69.514393, 26.940966], [70.616496, 27.989196], [71.777666, 27.91318], [72.823752, 28.961592], [73.450638, 29.976413], [74.42138, 30.979815], [74.405929, 31.692639], [75.258642, 32.271105], [74.451559, 32.7649], [74.104294, 33.441473], [73.749948, 34.317699], [74.240203, 34.748887], [75.757061, 34.504923], [76.871722, 34.653544], [77.837451, 35.49401]];
+
+            const eqs = ['E=mc²', 'F=ma', '∇·E=ρ/ε₀', 'iℏ∂ψ/∂t=Hψ', 'S=k_B lnW', 'E=hν', 'λ=h/p', 'ΔxΔp≥ℏ/2', 'R_μν=0', 'ds²=...'];
+
+            let particles = [];
+            let indiaPath = new Path2D();
+
+            function buildScene() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+
+                const minLon = 68.1; const maxLon = 97.5;
+                const minLat = 7.9; const maxLat = 35.6;
+
+                let S = Math.min(W * 0.45 / (maxLon - minLon), H * 0.85 / (maxLat - minLat));
+                let pW = (maxLon - minLon) * S;
+                let pH = (maxLat - minLat) * S;
+
+                let offsetX = (W - pW) / 2;
+                let offsetY = (H - pH) / 2;
+
+                indiaPath = new Path2D();
+                indiaPoints.forEach((pt, i) => {
+                    let rx = (pt[0] - minLon) * S + offsetX;
+                    let ry = (maxLat - pt[1]) * S + offsetY;
+                    if (i === 0) indiaPath.moveTo(rx, ry);
+                    else indiaPath.lineTo(rx, ry);
+                });
+                indiaPath.closePath();
+
+                particles = [];
+                for (let i = 0; i < 300; i++) {
+                    let px = Math.random() * W;
+                    let py = Math.random() * H;
+
+                    let tx = 0, ty = 0;
+                    let attempts = 0;
+                    while (attempts < 100) {
+                        tx = offsetX + Math.random() * pW;
+                        ty = offsetY + Math.random() * pH;
+                        if (ctx.isPointInPath(indiaPath, tx, ty)) break;
+                        attempts++;
+                    }
+
+                    let yFraction = (ty - offsetY) / pH;
+                    let color = 'rgba(255, 255, 255, 0.4)';
+                    let glow = '#ffffff';
+
+                    if (yFraction < 0.33) {
+                        color = 'rgba(255, 153, 51, 0.55)'; // Saffron
+                        glow = '#FF9933';
+                    } else if (yFraction > 0.66) {
+                        color = 'rgba(19, 136, 8, 0.55)'; // Green
+                        glow = '#138808';
+                    } else {
+                        let dx = tx - (offsetX + pW * 0.5);
+                        let dy = ty - (offsetY + pH * 0.5);
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < pH * 0.1) {
+                            color = 'rgba(0, 0, 128, 0.8)'; // Navy Blue Chakra
+                            glow = '#000080';
+                        }
+                    }
+
+                    particles.push({
+                        x: px, y: py,
+                        targetX: tx, targetY: ty,
+                        text: eqs[Math.floor(Math.random() * eqs.length)],
+                        size: Math.random() * 8 + 10,
+                        speed: Math.random() * 0.05 + 0.01,
+                        color: color,
+                        glow: glow,
+                        angle: Math.random() * Math.PI * 2,
+                        yFraction: yFraction
+                    });
+                }
+            }
+
+            // We must call buildScene after DOM updates/listeners
+            window.addEventListener('resize', buildScene);
+            buildScene();
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('india-map-canvas')) return;
+                const canvasElement = document.getElementById('india-map-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalAlpha = 0.6; // Manage transparency softly
+
+                let elapsed = (now - startTime) / 1000;
+
+                ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, 0.03 * Math.sin(elapsed))})`;
+                ctx.lineWidth = 1;
+                ctx.stroke(indiaPath);
+
+                particles.forEach(p => {
+                    let cycleVal = (Math.sin(elapsed * p.speed * 5 + p.angle) + 1) / 2;
+                    let attractX = p.targetX - p.x;
+                    let attractY = p.targetY - p.y;
+
+                    let noiseX = Math.sin(elapsed + p.targetY) * 3;
+                    let noiseY = Math.cos(elapsed * 0.8 + p.targetX) * 3;
+
+                    p.x += attractX * 0.05 + noiseX * 0.1;
+                    p.y += attractY * 0.05 + noiseY * 0.1;
+
+                    let dist = Math.sqrt(attractX ** 2 + attractY ** 2);
+
+                    ctx.font = `bold ${p.size}px "Times New Roman"`;
+                    ctx.textAlign = 'center';
+
+                    if (dist < 30) {
+                        ctx.fillStyle = p.color;
+                        ctx.shadowBlur = cycleVal * 15 + 5;
+                        ctx.shadowColor = p.glow;
+                    } else {
+                        ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + cycleVal * 0.2})`;
+                        ctx.shadowBlur = 0;
+                    }
+
+                    ctx.fillText(p.text, p.x, p.y);
+                });
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
         function updateLogoPosition() {
             const h = Reveal.getIndices().h;
             const logo = document.querySelector('.sci-logo-container');
@@ -2633,8 +3911,9 @@
                 6: "Global Reality", 7: "Mathematics", 8: "Linear Algebra → AI",
                 9: "Calculus → Learning", 10: "Probability → Trust", 11: "Physics",
                 12: "Physics → ML", 13: "Why AI Fails?", 14: "Chemistry",
-                15: "Chemistry → AI", 16: "The Maturity Stack", 17: "Data Science",
-                18: "AI Engineers vs Builders", 19: "AI meets reality", 20: "Physics returns"
+                15: "Chemistry → AI", 16: "Biology → AI", 17: "The Maturity Stack", 18: "Data Science",
+                19: "Real-world AI", 20: "Quantum", 21: "India's Moment", 22: "Career Advice", 23: "What I'd Do Again?",
+                24: "Undergrad vs. Masters", 25: "The Future Belongs to", 26: "Final Truth", 27: "", 28: "", 29: "", 30: ""
             };
 
             if (h === 0) {
@@ -2650,7 +3929,7 @@
                         title.classList.remove('visible');
                     } else {
                         title.classList.add('visible');
-                        if (slideTitles[h]) title.innerText = slideTitles[h];
+                        title.innerText = slideTitles[h] || "";
                     }
                 }
             }
@@ -2783,6 +4062,60 @@
             } else {
                 const dhCanvas = document.getElementById('drug-heatmap-canvas');
                 if (dhCanvas) dhCanvas.style.display = 'none';
+            }
+
+            if (h === 16) { // Biology to AI toggle
+                initBiologyAI();
+                const baCanvas = document.getElementById('biology-ai-canvas');
+                if (baCanvas) baCanvas.style.display = 'block';
+            } else {
+                const baCanvas = document.getElementById('biology-ai-canvas');
+                if (baCanvas) baCanvas.style.display = 'none';
+            }
+
+            if (h === 17) { // Maturity Stack toggle
+                initMaturityStack();
+                const msCanvas = document.getElementById('the-maturity-stack-canvas');
+                if (msCanvas) msCanvas.style.display = 'block';
+            } else {
+                const msCanvas = document.getElementById('the-maturity-stack-canvas');
+                if (msCanvas) msCanvas.style.display = 'none';
+            }
+
+            if (h === 18) { // Noise to Signal toggle
+                initNoiseSignal();
+                const nsCanvas = document.getElementById('noise-signal-canvas');
+                if (nsCanvas) nsCanvas.style.display = 'block';
+            } else {
+                const nsCanvas = document.getElementById('noise-signal-canvas');
+                if (nsCanvas) nsCanvas.style.display = 'none';
+            }
+
+            if (h === 19) { // AI meets Reality toggle
+                initAIMeetsReality();
+                const aiCanvas = document.getElementById('ai-meets-reality-canvas');
+                if (aiCanvas) aiCanvas.style.display = 'block';
+            } else {
+                const aiCanvas = document.getElementById('ai-meets-reality-canvas');
+                if (aiCanvas) aiCanvas.style.display = 'none';
+            }
+
+            if (h === 20) { // Physics Returns toggle
+                initPhysicsReturns();
+                const prCanvas = document.getElementById('physics-returns-canvas');
+                if (prCanvas) prCanvas.style.display = 'block';
+            } else {
+                const prCanvas = document.getElementById('physics-returns-canvas');
+                if (prCanvas) prCanvas.style.display = 'none';
+            }
+
+            if (h === 21) { // India's Moment toggle
+                initIndiaMap();
+                const imCanvas = document.getElementById('india-map-canvas');
+                if (imCanvas) imCanvas.style.display = 'block';
+            } else {
+                const imCanvas = document.getElementById('india-map-canvas');
+                if (imCanvas) imCanvas.style.display = 'none';
             }
 
             if (!window.mmInterval) {
