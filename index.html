@@ -1151,14 +1151,13 @@
         }
 
         #loss-surface-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: 0;
-            opacity: 0.4;
             pointer-events: none;
         }
 
@@ -1168,14 +1167,13 @@
         }
 
         #bell-curve-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.40;
             pointer-events: none;
         }
 
@@ -1186,14 +1184,13 @@
         }
 
         #energy-landscape-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.38;
             pointer-events: none;
         }
 
@@ -1203,14 +1200,13 @@
         }
 
         #entropy-tree-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.40;
             pointer-events: none;
         }
 
@@ -1220,14 +1216,13 @@
         }
 
         #airflow-pipeline-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.35;
             pointer-events: none;
         }
 
@@ -1237,14 +1232,13 @@
         }
 
         #molecular-network-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.45;
             pointer-events: none;
         }
 
@@ -1254,14 +1248,13 @@
         }
 
         #drug-heatmap-canvas {
-            display: none;
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.50;
             pointer-events: none;
         }
 
@@ -1279,6 +1272,13 @@
         .thank-you-container {
             display: none !important;
         }
+
+        /* Smooth canvas show/hide via opacity only — never use display:none on these */
+        canvas[id$="-canvas"] {
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
 
         /* Thank You slide layout — uses same in-flow pattern as impact-container */
         .thankyou-slide-content {
@@ -1440,10 +1440,19 @@
             markdownSection.setAttribute('data-markdown', `slides.md?v=${Date.now()}`);
         }
 
+        function shouldAnimate(canvas) {
+            if (document.visibilityState !== 'visible') return false;
+            const op = canvas.style.opacity;
+            if (op === '0') return false;
+            if (op === '1') return true;
+            return parseFloat(getComputedStyle(canvas).opacity) > 0.01;
+        }
+
         Reveal.initialize({
             width: 1280, height: 850, margin: 0.1, minScale: 0.2, maxScale: 2.0,
             hash: true, center: true, transition: 'fade', backgroundTransition: 'fade',
-            slideNumber: 'c/t', plugins: [RevealMarkdown, RevealNotes]
+            transitionSpeed: 'fast', // smoother slide changes
+            plugins: [RevealMarkdown, RevealNotes]
         });
 
         // Journey Map Animation (Slide 2, h=2)
@@ -1496,7 +1505,7 @@
             }));
 
             function draw() {
-                if (window.getComputedStyle(canvas).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(draw);
                     return;
                 }
@@ -1656,7 +1665,7 @@
             function animateLoss() {
                 requestAnimationFrame(animateLoss);
 
-                if (!document.body.contains(canvas) || window.getComputedStyle(canvas).display === 'none') {
+                if (!document.body.contains(canvas) || !shouldAnimate(canvas)) {
                     return;
                 }
 
@@ -1712,10 +1721,6 @@
             }
 
             function drawFrame() {
-                if (window.getComputedStyle(canvas).display === 'none') {
-                    requestAnimationFrame(drawFrame);
-                    return;
-                }
 
                 ctx.clearRect(0, 0, W, H);
 
@@ -1816,6 +1821,10 @@
                 ctx.stroke();
 
                 t += 0.016;
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
 
@@ -1879,7 +1888,7 @@
 
             let t = 0;
             function drawEnergy() {
-                if (window.getComputedStyle(canvas).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawEnergy);
                     return;
                 }
@@ -1993,9 +2002,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('entropy-tree-canvas')) return;
-                const canvasElement = document.getElementById('entropy-tree-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -2220,6 +2227,10 @@
                     ctx.shadowBlur = 0;
                 }
 
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
 
@@ -2291,9 +2302,7 @@
             generateDAG();
 
             function drawFrame() {
-                if (!document.getElementById('airflow-pipeline-canvas')) return;
-                const canvasElement = document.getElementById('airflow-pipeline-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -2534,9 +2543,7 @@
             let startT = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('molecular-network-canvas')) return;
-                const canvasElement = document.getElementById('molecular-network-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -2731,9 +2738,7 @@
             let startT = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('drug-heatmap-canvas')) return;
-                const canvasElement = document.getElementById('drug-heatmap-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -2953,9 +2958,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('biology-ai-canvas')) return;
-                const canvasElement = document.getElementById('biology-ai-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -3280,9 +3283,7 @@
             }
 
             function drawFrame(now) {
-                if (!document.getElementById('the-maturity-stack-canvas')) return;
-                const canvasElement = document.getElementById('the-maturity-stack-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -3397,9 +3398,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('noise-signal-canvas')) return;
-                const canvasElement = document.getElementById('noise-signal-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -3540,9 +3539,7 @@
             });
 
             function drawFrame(now) {
-                if (!document.getElementById('ai-meets-reality-canvas')) return;
-                const canvasElement = document.getElementById('ai-meets-reality-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -3639,6 +3636,10 @@
                     ctx.shadowBlur = 0;
                 });
 
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
             requestAnimationFrame(drawFrame);
@@ -3673,9 +3674,7 @@
             let collapseTarget = 0; // State to collapse to
 
             function drawFrame(now) {
-                if (!document.getElementById('physics-returns-canvas')) return;
-                const canvasElement = document.getElementById('physics-returns-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -3840,6 +3839,10 @@
                 ctx.fillStyle = grad;
                 ctx.fill();
 
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
             requestAnimationFrame(drawFrame);
@@ -3949,9 +3952,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('india-map-canvas')) return;
-                const canvasElement = document.getElementById('india-map-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -3993,6 +3994,10 @@
                     ctx.fillText(p.text, p.x, p.y);
                 });
 
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
             requestAnimationFrame(drawFrame);
@@ -4049,9 +4054,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('career-advantage-canvas')) return;
-                const canvasElement = document.getElementById('career-advantage-canvas');
-                if (window.getComputedStyle(canvasElement).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -4118,6 +4121,10 @@
 
                 ctx.restore();
 
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
             requestAnimationFrame(drawFrame);
@@ -4202,9 +4209,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('future-belongs-canvas')) return;
-                const canvasEl = document.getElementById('future-belongs-canvas');
-                if (window.getComputedStyle(canvasEl).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -4294,6 +4299,10 @@
                     }
                 });
 
+                if (!shouldAnimate(canvas)) {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
                 requestAnimationFrame(drawFrame);
             }
             requestAnimationFrame(drawFrame);
@@ -4400,9 +4409,7 @@
             }
 
             function drawFrame(now) {
-                if (!document.getElementById('scientist-rises-canvas')) return;
-                const canvasEl = document.getElementById('scientist-rises-canvas');
-                if (window.getComputedStyle(canvasEl).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -4574,9 +4581,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('final-thought-canvas')) return;
-                const canEl = document.getElementById('final-thought-canvas');
-                if (window.getComputedStyle(canEl).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -4740,9 +4745,7 @@
             let startTime = performance.now();
 
             function drawFrame(now) {
-                if (!document.getElementById('thank-you-canvas')) return;
-                const canEl = document.getElementById('thank-you-canvas');
-                if (window.getComputedStyle(canEl).display === 'none') {
+                if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawFrame);
                     return;
                 }
@@ -4931,172 +4934,172 @@
             if (h === 2) { // Who am I toggle
                 initJourneyMap();
                 const jmCanvas = document.getElementById('journey-map-canvas');
-                if (jmCanvas) jmCanvas.style.display = 'block';
+                if (jmCanvas) jmCanvas.style.opacity = '1';
             } else {
                 const jmCanvas = document.getElementById('journey-map-canvas');
-                if (jmCanvas) jmCanvas.style.display = 'none';
+                if (jmCanvas) jmCanvas.style.opacity = '0';
             }
 
             if (h === 9) { // Loss Surface toggle
                 initLossSurface();
                 const lsCanvas = document.getElementById('loss-surface-canvas');
-                if (lsCanvas) lsCanvas.style.display = 'block';
+                if (lsCanvas) lsCanvas.style.opacity = '1';
             } else {
                 const lsCanvas = document.getElementById('loss-surface-canvas');
-                if (lsCanvas) lsCanvas.style.display = 'none';
+                if (lsCanvas) lsCanvas.style.opacity = '0';
             }
 
             if (h === 10) { // Bell Curve toggle
                 initBellCurve();
                 const bcCanvas = document.getElementById('bell-curve-canvas');
-                if (bcCanvas) bcCanvas.style.display = 'block';
+                if (bcCanvas) bcCanvas.style.opacity = '1';
             } else {
                 const bcCanvas = document.getElementById('bell-curve-canvas');
-                if (bcCanvas) bcCanvas.style.display = 'none';
+                if (bcCanvas) bcCanvas.style.opacity = '0';
             }
 
             if (h === 11) { // Energy Landscape toggle
                 initEnergyLandscape();
                 const elCanvas = document.getElementById('energy-landscape-canvas');
-                if (elCanvas) elCanvas.style.display = 'block';
+                if (elCanvas) elCanvas.style.opacity = '1';
             } else {
                 const elCanvas = document.getElementById('energy-landscape-canvas');
-                if (elCanvas) elCanvas.style.display = 'none';
+                if (elCanvas) elCanvas.style.opacity = '0';
             }
 
             if (h === 12) { // Entropy Tree toggle
                 initEntropyTree();
                 const etCanvas = document.getElementById('entropy-tree-canvas');
-                if (etCanvas) etCanvas.style.display = 'block';
+                if (etCanvas) etCanvas.style.opacity = '1';
             } else {
                 const etCanvas = document.getElementById('entropy-tree-canvas');
-                if (etCanvas) etCanvas.style.display = 'none';
+                if (etCanvas) etCanvas.style.opacity = '0';
             }
 
             if (h === 13) { // Airflow Pipeline toggle
                 initAirflowPipeline();
                 const apCanvas = document.getElementById('airflow-pipeline-canvas');
-                if (apCanvas) apCanvas.style.display = 'block';
+                if (apCanvas) apCanvas.style.opacity = '1';
             } else {
                 const apCanvas = document.getElementById('airflow-pipeline-canvas');
-                if (apCanvas) apCanvas.style.display = 'none';
+                if (apCanvas) apCanvas.style.opacity = '0';
             }
 
             if (h === 14) { // Molecular Network toggle
                 initMolecularNetwork();
                 const mnCanvas = document.getElementById('molecular-network-canvas');
-                if (mnCanvas) mnCanvas.style.display = 'block';
+                if (mnCanvas) mnCanvas.style.opacity = '1';
             } else {
                 const mnCanvas = document.getElementById('molecular-network-canvas');
-                if (mnCanvas) mnCanvas.style.display = 'none';
+                if (mnCanvas) mnCanvas.style.opacity = '0';
             }
 
             if (h === 15) { // Drug Heatmap toggle
                 initDrugHeatmap();
                 const dhCanvas = document.getElementById('drug-heatmap-canvas');
-                if (dhCanvas) dhCanvas.style.display = 'block';
+                if (dhCanvas) dhCanvas.style.opacity = '1';
             } else {
                 const dhCanvas = document.getElementById('drug-heatmap-canvas');
-                if (dhCanvas) dhCanvas.style.display = 'none';
+                if (dhCanvas) dhCanvas.style.opacity = '0';
             }
 
             if (h === 16) { // Biology to AI toggle
                 initBiologyAI();
                 const baCanvas = document.getElementById('biology-ai-canvas');
-                if (baCanvas) baCanvas.style.display = 'block';
+                if (baCanvas) baCanvas.style.opacity = '1';
             } else {
                 const baCanvas = document.getElementById('biology-ai-canvas');
-                if (baCanvas) baCanvas.style.display = 'none';
+                if (baCanvas) baCanvas.style.opacity = '0';
             }
 
             if (h === 17) { // Maturity Stack toggle
                 initMaturityStack();
                 const msCanvas = document.getElementById('the-maturity-stack-canvas');
-                if (msCanvas) msCanvas.style.display = 'block';
+                if (msCanvas) msCanvas.style.opacity = '1';
             } else {
                 const msCanvas = document.getElementById('the-maturity-stack-canvas');
-                if (msCanvas) msCanvas.style.display = 'none';
+                if (msCanvas) msCanvas.style.opacity = '0';
             }
 
             if (h === 18) { // Noise to Signal toggle
                 initNoiseSignal();
                 const nsCanvas = document.getElementById('noise-signal-canvas');
-                if (nsCanvas) nsCanvas.style.display = 'block';
+                if (nsCanvas) nsCanvas.style.opacity = '1';
             } else {
                 const nsCanvas = document.getElementById('noise-signal-canvas');
-                if (nsCanvas) nsCanvas.style.display = 'none';
+                if (nsCanvas) nsCanvas.style.opacity = '0';
             }
 
             if (h === 19) { // AI meets Reality toggle
                 initAIMeetsReality();
                 const aiCanvas = document.getElementById('ai-meets-reality-canvas');
-                if (aiCanvas) aiCanvas.style.display = 'block';
+                if (aiCanvas) aiCanvas.style.opacity = '1';
             } else {
                 const aiCanvas = document.getElementById('ai-meets-reality-canvas');
-                if (aiCanvas) aiCanvas.style.display = 'none';
+                if (aiCanvas) aiCanvas.style.opacity = '0';
             }
 
             if (h === 20) { // Physics Returns toggle
                 initPhysicsReturns();
                 const prCanvas = document.getElementById('physics-returns-canvas');
-                if (prCanvas) prCanvas.style.display = 'block';
+                if (prCanvas) prCanvas.style.opacity = '1';
             } else {
                 const prCanvas = document.getElementById('physics-returns-canvas');
-                if (prCanvas) prCanvas.style.display = 'none';
+                if (prCanvas) prCanvas.style.opacity = '0';
             }
 
             if (h === 21) { // India's Moment toggle
                 initIndiaMap();
                 const imCanvas = document.getElementById('india-map-canvas');
-                if (imCanvas) imCanvas.style.display = 'block';
+                if (imCanvas) imCanvas.style.opacity = '1';
             } else {
                 const imCanvas = document.getElementById('india-map-canvas');
-                if (imCanvas) imCanvas.style.display = 'none';
+                if (imCanvas) imCanvas.style.opacity = '0';
             }
 
             if (h === 22) { // Career Advantage
                 initCareerAdvantage();
                 const caCanvas = document.getElementById('career-advantage-canvas');
-                if (caCanvas) caCanvas.style.display = 'block';
+                if (caCanvas) caCanvas.style.opacity = '1';
             } else {
                 const caCanvas = document.getElementById('career-advantage-canvas');
-                if (caCanvas) caCanvas.style.display = 'none';
+                if (caCanvas) caCanvas.style.opacity = '0';
             }
 
             if (h === 23) { // The Future Belongs To
                 initFutureBelongs();
                 const fbCanvas = document.getElementById('future-belongs-canvas');
-                if (fbCanvas) fbCanvas.style.display = 'block';
+                if (fbCanvas) fbCanvas.style.opacity = '1';
             } else {
                 const fbCanvas = document.getElementById('future-belongs-canvas');
-                if (fbCanvas) fbCanvas.style.display = 'none';
+                if (fbCanvas) fbCanvas.style.opacity = '0';
             }
 
             if (h === 24) { // AI will replace — Scientist Rises
                 initScientistRises();
                 const srCanvas = document.getElementById('scientist-rises-canvas');
-                if (srCanvas) srCanvas.style.display = 'block';
+                if (srCanvas) srCanvas.style.opacity = '1';
             } else {
                 const srCanvas = document.getElementById('scientist-rises-canvas');
-                if (srCanvas) srCanvas.style.display = 'none';
+                if (srCanvas) srCanvas.style.opacity = '0';
             }
 
             if (h === 26) { // Final Thought — Maxwell to Skyline
                 initFinalThought();
                 const ftCanvas = document.getElementById('final-thought-canvas');
-                if (ftCanvas) ftCanvas.style.display = 'block';
+                if (ftCanvas) ftCanvas.style.opacity = '1';
             } else {
                 const ftCanvas = document.getElementById('final-thought-canvas');
-                if (ftCanvas) ftCanvas.style.display = 'none';
+                if (ftCanvas) ftCanvas.style.opacity = '0';
             }
 
             if (h === 27) { // Thank You — Big Bang of Ideas
                 initThankYou();
                 const tyCanvas = document.getElementById('thank-you-canvas');
-                if (tyCanvas) tyCanvas.style.display = 'block';
+                if (tyCanvas) tyCanvas.style.opacity = '1';
             } else {
                 const tyCanvas = document.getElementById('thank-you-canvas');
-                if (tyCanvas) tyCanvas.style.display = 'none';
+                if (tyCanvas) tyCanvas.style.opacity = '0';
             }
 
             if (!window.mmInterval) {
