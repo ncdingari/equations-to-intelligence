@@ -36,22 +36,48 @@
             position: fixed;
             top: 20px;
             left: 20px;
-            width: 450px;
             padding: 10px;
             text-align: left;
             z-index: 99999;
             pointer-events: none;
             transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             transform-origin: top left;
+            transform: scale(3);
+            /* 300% on first slide */
         }
 
         .sci-logo-container.small-logo {
-            transform: translate(0, calc(100vh - 120px)) scale(0.75);
+            transform: translate(0, calc(100vh - 160px)) scale(2);
+            /* 200% on other slides */
         }
 
-        .sci-logo-container img {
+        .sci-logo-name {
+            font-family: 'Audiowide', sans-serif;
+            font-size: 1.1em;
+            line-height: 1;
+            color: #ffffff;
+            display: block;
+        }
+
+        .sci-logo-name .logo-ai {
+            color: #00e5ff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .sci-logo-divider {
+            display: block;
             width: 100%;
-            height: auto;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.45);
+            margin: 5px 0 4px;
+        }
+
+        .sci-logo-tagline {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.6em;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 0.04em;
             display: block;
         }
 
@@ -1245,8 +1271,77 @@
         .noise-signal-container,
         .AI-meets-reality-container,
         .physics-returns-container,
-        .india-map-container {
+        .india-map-container,
+        .career-advantage-container,
+        .future-belongs-container,
+        .AI-will-replace-container,
+        .final-thought-container,
+        .thank-you-container {
             display: none !important;
+        }
+
+        /* Thank You slide layout — uses same in-flow pattern as impact-container */
+        .thankyou-slide-content {
+            display: none !important;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 80vh;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+
+        .present .thankyou-slide-content {
+            display: flex !important;
+        }
+
+        .thankyou-main {
+            font-size: 4em;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            text-shadow: 0 0 40px rgba(0, 229, 255, 0.5);
+        }
+
+        .thankyou-sub {
+            margin-top: 1.2rem;
+            font-size: 1.05em;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+        }
+
+        .thankyou-credit {
+            margin-top: 2.2rem;
+            font-family: 'Audiowide', sans-serif;
+            font-size: 1.0em;
+            letter-spacing: 0.05em;
+        }
+
+        .thankyou-credit .credit-name {
+            color: #ffffff;
+        }
+
+        .thankyou-credit .credit-ai {
+            color: #00e5ff;
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+        }
+
+        .credit-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 0.5rem 0 0.4rem;
+        }
+
+        .credit-tagline {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.6em;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.04em;
         }
 
         .vector-morph-container {
@@ -1319,7 +1414,9 @@
 
 <body>
     <div class="sci-logo-container">
-        <img src="images/logo_black_bg.png" alt="SciEncephalon AI Logo">
+        <span class="sci-logo-name">SciEncephalon <span class="logo-ai">AI</span></span>
+        <span class="sci-logo-divider"></span>
+        <span class="sci-logo-tagline">We bring clarity to your ambiguity</span>
     </div>
 
     <div class="global-slide-title"></div>
@@ -3901,6 +3998,845 @@
             requestAnimationFrame(drawFrame);
         }
 
+        // Career Advantage (Slide 23, h=22)
+        function initCareerAdvantage() {
+            if (window._careerAdvReady) return;
+            window._careerAdvReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'career-advantage-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            const tools = [
+                'PyTorch', 'TensorFlow', 'import pandas', 'Docker', 'AWS', 'K8s',
+                'React', 'Vue', 'Copilot', 'C++', 'Java', 'Next.js', 'SQL',
+                'E=mc²', 'O(n log n)', '∫e^x', '∇·E=ρ', 'curl', 'git merge', 'HTML',
+                'Prompt Engineering', 'LangChain', 'Kubernetes', 'ChatGPT'
+            ];
+
+            let particles = [];
+
+            function buildScene() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+
+                particles = [];
+                for (let i = 0; i < 150; i++) {
+                    particles.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        vx: (Math.random() - 0.5) * 1.5,
+                        vy: (Math.random() - 0.5) * 1.5,
+                        text: tools[Math.floor(Math.random() * tools.length)],
+                        size: Math.random() * 12 + 10,
+                        alphaOffset: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            window.addEventListener('resize', buildScene);
+            buildScene();
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('career-advantage-canvas')) return;
+                const canvasElement = document.getElementById('career-advantage-canvas');
+                if (window.getComputedStyle(canvasElement).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalAlpha = 0.8;
+
+                let elapsed = (now - startTime) / 1000;
+
+                // Draw floating ephemeral tools
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < -100) p.x = W + 100;
+                    if (p.x > W + 100) p.x = -100;
+                    if (p.y < -100) p.y = H + 100;
+                    if (p.y > H + 100) p.y = -100;
+
+                    let a = (Math.sin(elapsed * 1.2 + p.alphaOffset) + 1) / 2;
+                    ctx.font = `bold ${p.size}px "Inter", monospace`;
+                    ctx.fillStyle = `rgba(180, 180, 180, ${a * 0.15})`; // Low opacity, fading in and out representing transient tools
+                    ctx.textAlign = 'center';
+                    ctx.fillText(p.text, p.x, p.y);
+                });
+
+                // Frame the Question Mark - the enduring structure
+                let qx = W / 2;
+                let qy = H * 0.5;
+                let scale = Math.min(W, H) * 0.22;
+
+                ctx.save();
+                ctx.translate(qx, qy);
+
+                let qPath = new Path2D();
+                qPath.arc(0, -scale * 0.55, scale * 0.45, Math.PI * 0.9, Math.PI * 2.2);
+                qPath.quadraticCurveTo(scale * 0.4, -scale * 0.1, 0, scale * 0.15);
+                qPath.lineTo(0, scale * 0.4);
+
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                let glowCycle = (Math.sin(elapsed * 2.5) + 1) / 2;
+
+                ctx.shadowBlur = 40;
+                ctx.shadowColor = '#00e5ff';
+                ctx.lineWidth = 18;
+                ctx.strokeStyle = `rgba(0, 229, 255, ${0.3 + glowCycle * 0.15})`;
+                ctx.stroke(qPath);
+
+                ctx.shadowBlur = 20;
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.stroke(qPath);
+
+                // Dot of the ?
+                let dotY = scale * 0.75;
+                ctx.beginPath();
+                ctx.arc(0, dotY, Math.max(8, 12 + Math.sin(elapsed * 5) * 2), 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.shadowBlur = 30;
+                ctx.shadowColor = '#00e5ff';
+                ctx.fill();
+
+                ctx.restore();
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Future Belongs To (Slide 24, h=23)
+        function initFutureBelongs() {
+            if (window._futureBelongsReady) return;
+            window._futureBelongsReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'future-belongs-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+            let nodes = [];
+            let edges = [];
+
+            function buildScene() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+
+                nodes = [];
+                edges = [];
+
+                // Central anchor node
+                nodes.push({ x: W / 2, y: H / 2, r: 18, anchor: true, angle: 0, orbitR: 0, orbitSpeed: 0 });
+
+                // Ring 1: close influential nodes
+                const ring1Count = 6;
+                const ring1R = Math.min(W, H) * 0.18;
+                for (let i = 0; i < ring1Count; i++) {
+                    let a = (i / ring1Count) * Math.PI * 2;
+                    nodes.push({
+                        x: W / 2 + Math.cos(a) * ring1R,
+                        y: H / 2 + Math.sin(a) * ring1R,
+                        r: 7, anchor: false,
+                        angle: a, orbitR: ring1R, orbitSpeed: 0.25 + Math.random() * 0.1,
+                        orbitDir: Math.random() > 0.5 ? 1 : -1
+                    });
+                    edges.push({ from: 0, to: nodes.length - 1, ring: 1 });
+                }
+
+                // Ring 2: outer network nodes
+                const ring2Count = 14;
+                const ring2R = Math.min(W, H) * 0.38;
+                for (let i = 0; i < ring2Count; i++) {
+                    let a = (i / ring2Count) * Math.PI * 2;
+                    nodes.push({
+                        x: W / 2 + Math.cos(a) * ring2R,
+                        y: H / 2 + Math.sin(a) * ring2R,
+                        r: 4, anchor: false,
+                        angle: a, orbitR: ring2R, orbitSpeed: 0.10 + Math.random() * 0.05,
+                        orbitDir: Math.random() > 0.5 ? 1 : -1
+                    });
+                    // Connect to nearest ring1 node
+                    let nearestRing1 = 1 + Math.round((i / ring2Count) * ring1Count) % ring1Count;
+                    edges.push({ from: nearestRing1, to: nodes.length - 1, ring: 2 });
+                }
+
+                // Sparse cross-connections between ring2 nodes
+                const ring2Start = 1 + ring1Count;
+                const ring2End = nodes.length - 1;
+                for (let i = ring2Start; i <= ring2End; i++) {
+                    if (Math.random() > 0.6) {
+                        let j = ring2Start + Math.floor(Math.random() * (ring2Count - 1));
+                        if (i !== j) edges.push({ from: i, to: j, ring: 2 });
+                    }
+                }
+            }
+
+            window.addEventListener('resize', buildScene);
+            buildScene();
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('future-belongs-canvas')) return;
+                const canvasEl = document.getElementById('future-belongs-canvas');
+                if (window.getComputedStyle(canvasEl).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                let elapsed = (now - startTime) / 1000;
+
+                // Update node positions (orbiting)
+                for (let i = 1; i < nodes.length; i++) {
+                    let n = nodes[i];
+                    n.angle += n.orbitSpeed * 0.01 * n.orbitDir;
+                    n.x = W / 2 + Math.cos(n.angle) * n.orbitR;
+                    n.y = H / 2 + Math.sin(n.angle) * n.orbitR;
+                }
+
+                // Draw edges
+                edges.forEach(e => {
+                    let a = nodes[e.from], b = nodes[e.to];
+                    let pulse = (Math.sin(elapsed * 2.5 + e.from * 0.7) + 1) / 2;
+
+                    let opacity = e.ring === 1 ? 0.25 + pulse * 0.2 : 0.08 + pulse * 0.08;
+                    let col = e.ring === 1 ? `rgba(0,229,255,${opacity})` : `rgba(150,180,255,${opacity})`;
+
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.strokeStyle = col;
+                    ctx.lineWidth = e.ring === 1 ? 1.5 : 0.8;
+                    ctx.stroke();
+
+                    // Traveling pulse dot along ring-1 edges only
+                    if (e.ring === 1) {
+                        let t = ((elapsed * 0.6) % 1);
+                        let px = a.x + (b.x - a.x) * t;
+                        let py = a.y + (b.y - a.y) * t;
+                        ctx.beginPath();
+                        ctx.arc(px, py, 3, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(0,229,255,0.7)';
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = '#00e5ff';
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+                });
+
+                // Draw nodes
+                nodes.forEach((n, idx) => {
+                    let pulse = (Math.sin(elapsed * 2 + idx * 0.5) + 1) / 2;
+
+                    if (n.anchor) {
+                        // Ripple rings emanating from anchor
+                        for (let r = 0; r < 3; r++) {
+                            let rippleR = n.r + ((elapsed * 60 + r * 40) % 120);
+                            let rippleAlpha = Math.max(0, 0.4 - rippleR / 120);
+                            ctx.beginPath();
+                            ctx.arc(n.x, n.y, rippleR, 0, Math.PI * 2);
+                            ctx.strokeStyle = `rgba(0, 229, 255, ${rippleAlpha})`;
+                            ctx.lineWidth = 1.5;
+                            ctx.stroke();
+                        }
+
+                        // Core anchor node - vivid glowing
+                        let grad = ctx.createRadialGradient(n.x, n.y, 2, n.x, n.y, n.r + 8);
+                        grad.addColorStop(0, 'rgba(255,255,255,1)');
+                        grad.addColorStop(0.4, 'rgba(0,229,255,0.9)');
+                        grad.addColorStop(1, 'rgba(0,229,255,0)');
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, n.r + 8 + pulse * 4, 0, Math.PI * 2);
+                        ctx.fillStyle = grad;
+                        ctx.shadowBlur = 40;
+                        ctx.shadowColor = '#00e5ff';
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    } else {
+                        let isRing1 = idx <= 6;
+                        let alpha = isRing1 ? 0.5 + pulse * 0.4 : 0.2 + pulse * 0.2;
+                        let color = isRing1 ? `rgba(0,229,255,${alpha})` : `rgba(140,170,255,${alpha})`;
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, n.r + (isRing1 ? pulse * 2 : 0), 0, Math.PI * 2);
+                        ctx.fillStyle = color;
+                        if (isRing1) {
+                            ctx.shadowBlur = 15;
+                            ctx.shadowColor = '#00e5ff';
+                        }
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+                });
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // AI Will Replace — Scientist Rises (Slide 25, h=24)
+        function initScientistRises() {
+            if (window._scientistRisesReady) return;
+            window._scientistRisesReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'scientist-rises-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            const genericTasks = ['📧 Email', '📋 Report', '📊 Pivot', '🗓 Schedule', '📞 Call', '💼 Deck', '🖱 Click', '🔁 Repeat'];
+            const scienceSymbols = ['🧬', '⚗️', '🔭', '🧪', '⚡', '🌊', '🧲', '💡', '🔬', '⭐', '🌡️', '💊'];
+
+            let taskParticles = [];
+            let sciParticles = [];
+
+            function buildScene() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+
+                taskParticles = [];
+                sciParticles = [];
+
+                // Generic task icons spiraling in from outer ring
+                for (let i = 0; i < 24; i++) {
+                    let angle = (i / 24) * Math.PI * 2;
+                    let r = Math.min(W, H) * (0.32 + Math.random() * 0.18);
+                    taskParticles.push({
+                        angle: angle,
+                        r: r,
+                        baseR: r,
+                        text: genericTasks[i % genericTasks.length],
+                        size: 13 + Math.random() * 4,
+                        speed: 0.003 + Math.random() * 0.003,
+                        phaseOffset: Math.random() * Math.PI * 2
+                    });
+                }
+
+                // Science symbols anchored closer to center
+                for (let i = 0; i < 12; i++) {
+                    let angle = (i / 12) * Math.PI * 2 + 0.3;
+                    let r = Math.min(W, H) * (0.14 + Math.random() * 0.08);
+                    sciParticles.push({
+                        angle: angle,
+                        r: r,
+                        text: scienceSymbols[i % scienceSymbols.length],
+                        size: 16 + Math.random() * 6,
+                        speed: 0.006 + Math.random() * 0.004,
+                        orbitDir: Math.random() > 0.5 ? 1 : -1,
+                        phaseOffset: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            window.addEventListener('resize', buildScene);
+            buildScene();
+
+            let startTime = performance.now();
+
+            function drawScientist(cx, cy, scale, glow) {
+                ctx.save();
+
+                // Glow halo behind the emoji — very soft
+                let haloGrad = ctx.createRadialGradient(cx, cy, scale * 0.3, cx, cy, scale * 1.6);
+                haloGrad.addColorStop(0, `rgba(0, 229, 255, ${0.06 + glow * 0.05})`);
+                haloGrad.addColorStop(1, 'rgba(0, 229, 255, 0)');
+                ctx.beginPath();
+                ctx.arc(cx, cy, scale * 1.6, 0, Math.PI * 2);
+                ctx.fillStyle = haloGrad;
+                ctx.fill();
+
+                // Subtle pulsing outer ring
+                ctx.beginPath();
+                ctx.arc(cx, cy, scale * 1.0 + glow * 6, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(0, 229, 255, ${0.08 + glow * 0.08})`;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Render scientist emoji — transparent, works as a watermark
+                let fontSize = Math.round(scale * 2.0);
+                ctx.font = `${fontSize}px serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00e5ff';
+                ctx.globalAlpha = 0.22 + glow * 0.06; // Very translucent — text stays readable
+                ctx.fillText('👨‍🔬', cx, cy);
+                ctx.shadowBlur = 0;
+
+                ctx.restore();
+            }
+
+            function drawFrame(now) {
+                if (!document.getElementById('scientist-rises-canvas')) return;
+                const canvasEl = document.getElementById('scientist-rises-canvas');
+                if (window.getComputedStyle(canvasEl).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                let elapsed = (now - startTime) / 1000;
+
+                let cx = W / 2, cy = H / 2;
+                let scaleBody = Math.min(W, H) * 0.1;
+
+                // --- Generic task icons spiraling inward slowly over time (being absorbed)
+                taskParticles.forEach((p, i) => {
+                    p.angle += p.speed;
+                    // Spiral inward very slowly, then respawn
+                    p.r = Math.max(0, p.r - 0.08);
+                    if (p.r < 30) {
+                        p.r = p.baseR;
+                        p.angle = Math.random() * Math.PI * 2;
+                    }
+
+                    let x = cx + Math.cos(p.angle) * p.r;
+                    let y = cy + Math.sin(p.angle) * p.r;
+
+                    let fadeFraction = p.r / p.baseR;
+                    let alpha = fadeFraction * 0.35; // Fades to invisible as it's absorbed
+
+                    ctx.font = `${p.size}px Inter`;
+                    ctx.fillStyle = `rgba(180, 180, 180, ${alpha})`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(p.text, x, y);
+                });
+
+                // --- Science symbols orbiting the scientist, glowing
+                sciParticles.forEach(p => {
+                    p.angle += p.speed * p.orbitDir;
+                    let x = cx + Math.cos(p.angle) * p.r;
+                    let y = cy + Math.sin(p.angle) * p.r;
+
+                    let pulse = (Math.sin(elapsed * 2 + p.phaseOffset) + 1) / 2;
+
+                    // Connector line to center
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = `rgba(0, 229, 255, ${0.06 + pulse * 0.08})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    ctx.font = `bold ${p.size}px "Times New Roman"`;
+                    ctx.fillStyle = `rgba(0, 229, 255, ${0.5 + pulse * 0.45})`;
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 12 + pulse * 12;
+                    ctx.shadowColor = '#00e5ff';
+                    ctx.fillText(p.text, x, y);
+                    ctx.shadowBlur = 0;
+                });
+
+                // --- Scientist silhouette at center
+                let glow = (Math.sin(elapsed * 2.2) + 1) / 2;
+                drawScientist(cx, cy - scaleBody * 0.3, scaleBody, glow);
+
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Final Thought — Maxwell to Skyline (Slide 27, h=26)
+        function initFinalThought() {
+            if (window._finalThoughtReady) return;
+            window._finalThoughtReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'final-thought-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            const maxwellEqs = [
+                '\u2207\u00b7E = \u03c1/\u03b5\u2080',
+                '\u2207\u00b7B = 0',
+                '\u2207\u00d7E = -\u2202B/\u2202t',
+                '\u2207\u00d7B = \u03bc\u2080J + \u03bc\u2080\u03b5\u2080 \u2202E/\u2202t'
+            ];
+
+            // Skyline building profiles (normalized 0..1)
+            // Each building: [x_left, width, height] all as fractions of canvas
+            const buildings = [
+                [0.03, 0.07, 0.35], [0.11, 0.05, 0.55], [0.17, 0.09, 0.70],
+                [0.27, 0.06, 0.50], [0.34, 0.04, 0.42], [0.39, 0.10, 0.80],
+                [0.50, 0.05, 0.62], [0.56, 0.08, 0.75], [0.65, 0.05, 0.48],
+                [0.71, 0.09, 0.65], [0.81, 0.06, 0.55], [0.88, 0.05, 0.40],
+                [0.94, 0.06, 0.30]
+            ];
+
+            let particles = [];
+            let eqParticles = [];
+
+            function buildScene() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+
+                // Generate target points along the skyline
+                let skylinePoints = [];
+                buildings.forEach(b => {
+                    let bx = b[0] * W, bw = b[1] * W, bh = b[2] * H * 0.6;
+                    // Top edge points
+                    for (let i = 0; i < 8; i++) {
+                        skylinePoints.push({ tx: bx + (i / 7) * bw, ty: H * 0.72 - bh });
+                    }
+                    // Vertical edges
+                    for (let i = 0; i < 6; i++) {
+                        let t = i / 5;
+                        skylinePoints.push({ tx: bx, ty: H * 0.72 - bh * t });
+                        skylinePoints.push({ tx: bx + bw, ty: H * 0.72 - bh * t });
+                    }
+                    // Windows
+                    for (let wy = 0; wy < 4; wy++) {
+                        for (let wx = 0; wx < 2; wx++) {
+                            skylinePoints.push({
+                                tx: bx + bw * 0.2 + wx * bw * 0.45,
+                                ty: H * 0.72 - bh * 0.2 - wy * bh * 0.2,
+                                isWindow: true
+                            });
+                        }
+                    }
+                });
+
+                particles = [];
+                const PARTICLE_COUNT = 600;
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    let target = skylinePoints[i % skylinePoints.length];
+                    particles.push({
+                        // Start scattered across the canvas
+                        x: Math.random() * W,
+                        y: Math.random() * H * 0.6,
+                        tx: target.tx + (Math.random() - 0.5) * 4,
+                        ty: target.ty + (Math.random() - 0.5) * 4,
+                        isWindow: target.isWindow || false,
+                        speed: 0.015 + Math.random() * 0.02,
+                        phase: Math.random() * Math.PI * 2,
+                        arrived: false
+                    });
+                }
+
+                // Equation text particles — float up from bottom
+                eqParticles = [];
+                maxwellEqs.forEach((eq, i) => {
+                    eqParticles.push({
+                        text: eq,
+                        x: W * (0.15 + i * 0.2),
+                        y: H * 0.78,
+                        vy: -(0.4 + i * 0.15),
+                        alpha: 1.0,
+                        size: 18 + i * 2
+                    });
+                });
+            }
+
+            window.addEventListener('resize', buildScene);
+            buildScene();
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('final-thought-canvas')) return;
+                const canEl = document.getElementById('final-thought-canvas');
+                if (window.getComputedStyle(canEl).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, W, H);
+                let elapsed = (now - startTime) / 1000;
+
+                // Phase 0-3s: Maxwell equations float up and dissolve into particles
+                // Phase 3-8s: particles assemble into skyline
+                let assembleT = Math.min(1, Math.max(0, (elapsed - 2) / 5)); // 0 to 1 during seconds 2–7
+
+                // Floating Maxwell equations
+                eqParticles.forEach((ep, i) => {
+                    let eqAlpha = Math.max(0, 1.0 - elapsed * 0.5); // fade over first 2s
+                    if (eqAlpha <= 0) return;
+                    ctx.globalAlpha = eqAlpha * 0.5;
+                    ctx.font = `bold ${ep.size}px 'Times New Roman'`;
+                    ctx.fillStyle = '#00e5ff';
+                    ctx.textAlign = 'center';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00e5ff';
+                    ctx.fillText(ep.text, ep.x, ep.y - elapsed * 30 * (i * 0.3 + 1));
+                    ctx.shadowBlur = 0;
+                });
+
+                // Particles moving toward skyline
+                particles.forEach(p => {
+                    let dx = p.tx - p.x;
+                    let dy = p.ty - p.y;
+                    p.x += dx * p.speed * (1 + assembleT * 3);
+                    p.y += dy * p.speed * (1 + assembleT * 3);
+
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    p.arrived = dist < 3;
+
+                    let pulse = (Math.sin(elapsed * 3 + p.phase) + 1) / 2;
+
+                    // Color by position: lower = green (ground), higher = magenta (sky infrastructure)
+                    let yFrac = p.ty / H;
+                    let r, g, b;
+                    if (p.isWindow) {
+                        // Window: warm amber glow
+                        r = 255; g = 200 + pulse * 55; b = 50;
+                        ctx.globalAlpha = (0.3 + pulse * 0.3) * (0.3 + assembleT * 0.5);
+                    } else if (yFrac > 0.7) {
+                        r = 19; g = 200; b = 80; // Green base
+                        ctx.globalAlpha = 0.25 + assembleT * 0.25;
+                    } else {
+                        r = 0; g = 180 + pulse * 49; b = 255; // Cyan upper
+                        ctx.globalAlpha = 0.2 + assembleT * 0.3;
+                    }
+
+                    ctx.shadowBlur = p.arrived ? 8 + pulse * 6 : 0;
+                    ctx.shadowColor = `rgb(${r},${g},${b})`;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.arrived ? 1.5 + pulse : 1, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgb(${r},${g},${b})`;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
+
+                // Ground line
+                ctx.globalAlpha = 0.2 + assembleT * 0.2;
+                ctx.beginPath();
+                ctx.moveTo(0, H * 0.72);
+                ctx.lineTo(W, H * 0.72);
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
+        // Thank You — Big Bang of Ideas (Slide 28, h=27)
+        function initThankYou() {
+            if (window._thankYouReady) return;
+            window._thankYouReady = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'thank-you-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            let W, H;
+
+            const allEqs = [
+                'E=mc²', 'F=ma', '∇·E=ρ/ε₀', '∇·B=0', '∇×E=-∂B/∂t',
+                'iℏ∂ψ/∂t=Hψ', 'S=k_B lnW', 'E=hν', 'λ=h/p', 'ΔxΔp≥ℏ/2',
+                'Gμν=8πTμν', 'PV=nRT', 'Σw_i x_i', '∂L/∂θ', 'y=Wx+b',
+                'DNA', 'ATP', 'NaCl', '∇²ψ=0', 'e^{iπ}+1=0'
+            ];
+
+            let eqDrifters = [];
+            let stars = [];
+            let exploded = false;
+            let explodeTime = 0;
+
+            function buildScene() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+
+                eqDrifters = [];
+                stars = [];
+                exploded = false;
+
+                // Equations drift from all edges toward center
+                for (let i = 0; i < allEqs.length; i++) {
+                    let side = Math.floor(Math.random() * 4);
+                    let sx, sy;
+                    if (side === 0) { sx = Math.random() * W; sy = -60; }
+                    else if (side === 1) { sx = W + 60; sy = Math.random() * H; }
+                    else if (side === 2) { sx = Math.random() * W; sy = H + 60; }
+                    else { sx = -60; sy = Math.random() * H; }
+
+                    eqDrifters.push({
+                        x: sx, y: sy,
+                        text: allEqs[i],
+                        size: 14 + Math.random() * 10,
+                        speed: 0.012 + Math.random() * 0.01,
+                        alpha: 0.8,
+                        angle: Math.random() * Math.PI * 2 * 0.1 - 0.05
+                    });
+                }
+
+                // 600 stars for galaxy
+                for (let i = 0; i < 700; i++) {
+                    let angle = Math.random() * Math.PI * 2;
+                    // Spiral galaxy density distribution
+                    let arm = Math.floor(Math.random() * 3);
+                    let armAngle = angle + arm * (Math.PI * 2 / 3);
+                    let r = 30 + Math.pow(Math.random(), 0.6) * Math.min(W, H) * 0.45;
+                    let spread = r * 0.18;
+
+                    stars.push({
+                        tx: W / 2 + Math.cos(armAngle) * r + (Math.random() - 0.5) * spread,
+                        ty: H / 2 + Math.sin(armAngle) * r * 0.5 + (Math.random() - 0.5) * spread * 0.5,
+                        x: W / 2, y: H / 2, // start from center
+                        vx: 0, vy: 0,
+                        r: 0.5 + Math.random() * 1.8,
+                        speed: 0.8 + Math.random() * 2.5,
+                        hue: Math.random() > 0.6 ? 190 : (Math.random() > 0.5 ? 220 : 280),
+                        brightness: 0.4 + Math.random() * 0.6,
+                        phase: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            window.addEventListener('resize', buildScene);
+            buildScene();
+
+            let startTime = performance.now();
+
+            function drawFrame(now) {
+                if (!document.getElementById('thank-you-canvas')) return;
+                const canEl = document.getElementById('thank-you-canvas');
+                if (window.getComputedStyle(canEl).display === 'none') {
+                    requestAnimationFrame(drawFrame);
+                    return;
+                }
+
+                // Trailing fade for motion blur effect
+                ctx.fillStyle = 'rgba(4, 4, 20, 0.18)';
+                ctx.fillRect(0, 0, W, H);
+
+                let elapsed = (now - startTime) / 1000;
+
+                // Phase 1 (0-3.5s): equations drift toward center
+                if (elapsed < 3.5) {
+                    eqDrifters.forEach(p => {
+                        let dx = W / 2 - p.x;
+                        let dy = H / 2 - p.y;
+                        p.x += dx * p.speed;
+                        p.y += dy * p.speed;
+
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        let alpha = Math.min(0.7, dist / 200) * (1 - elapsed / 3.5);
+
+                        ctx.globalAlpha = alpha;
+                        ctx.font = `bold ${p.size}px 'Times New Roman'`;
+                        ctx.fillStyle = '#00e5ff';
+                        ctx.textAlign = 'center';
+                        ctx.shadowBlur = 12;
+                        ctx.shadowColor = '#00e5ff';
+                        ctx.fillText(p.text, p.x, p.y);
+                        ctx.shadowBlur = 0;
+                    });
+
+                    // Bright building core
+                    let coreAlpha = Math.min(1, elapsed / 2);
+                    let coreR = 4 + elapsed * 3;
+                    let grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, coreR * 3);
+                    grad.addColorStop(0, `rgba(255,255,255,${coreAlpha})`);
+                    grad.addColorStop(0.3, `rgba(0,229,255,${coreAlpha * 0.6})`);
+                    grad.addColorStop(1, 'rgba(0,229,255,0)');
+                    ctx.globalAlpha = 1;
+                    ctx.beginPath();
+                    ctx.arc(W / 2, H / 2, coreR * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+
+                } else {
+                    // Phase 2: Big Bang — stars explode outward into galaxy
+                    if (!exploded) { exploded = true; explodeTime = elapsed; }
+
+                    let t = elapsed - explodeTime;
+                    let expandT = Math.min(1, t / 2.5); // 0 to 1 over 2.5s
+
+                    // Flash at bang
+                    if (t < 0.3) {
+                        ctx.globalAlpha = (0.3 - t) / 0.3 * 0.8;
+                        ctx.fillStyle = 'rgba(255,255,255,1)';
+                        ctx.fillRect(0, 0, W, H);
+                    }
+
+                    // Draw galaxy stars
+                    stars.forEach(s => {
+                        s.x = W / 2 + (s.tx - W / 2) * expandT;
+                        s.y = H / 2 + (s.ty - H / 2) * expandT;
+
+                        let twinkle = 0.5 + Math.sin(elapsed * 3 + s.phase) * 0.5;
+                        let alpha = expandT * s.brightness * (0.5 + twinkle * 0.5);
+
+                        ctx.globalAlpha = alpha;
+                        ctx.shadowBlur = 6 + twinkle * 6;
+                        ctx.shadowColor = `hsl(${s.hue}, 100%, 70%)`;
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.r * (0.5 + twinkle * 0.5), 0, Math.PI * 2);
+                        ctx.fillStyle = `hsl(${s.hue}, 100%, ${70 + twinkle * 20}%)`;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    });
+
+                    // Persistent center glow (the source)
+                    let core = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 80);
+                    core.addColorStop(0, 'rgba(255,255,255,0.6)');
+                    core.addColorStop(0.3, 'rgba(0,229,255,0.2)');
+                    core.addColorStop(1, 'rgba(0,229,255,0)');
+                    ctx.globalAlpha = 1;
+                    ctx.beginPath();
+                    ctx.arc(W / 2, H / 2, 80, 0, Math.PI * 2);
+                    ctx.fillStyle = core;
+                    ctx.fill();
+                }
+
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+        }
+
         function updateLogoPosition() {
             const h = Reveal.getIndices().h;
             const logo = document.querySelector('.sci-logo-container');
@@ -3912,8 +4848,8 @@
                 9: "Calculus → Learning", 10: "Probability → Trust", 11: "Physics",
                 12: "Physics → ML", 13: "Why AI Fails?", 14: "Chemistry",
                 15: "Chemistry → AI", 16: "Biology → AI", 17: "The Maturity Stack", 18: "Data Science",
-                19: "Real-world AI", 20: "Quantum", 21: "India's Moment", 22: "Career Advice", 23: "What I'd Do Again?",
-                24: "Undergrad vs. Masters", 25: "The Future Belongs to", 26: "Final Truth", 27: "", 28: "", 29: "", 30: ""
+                19: "Real-world AI", 20: "Quantum", 21: "India's Moment", 22: "Career Advantage",
+                23: "The Future Belongs to", 24: "AI will replace everyone", 25: "", 26: "Final Thought", 27: ""
             };
 
             if (h === 0) {
@@ -4116,6 +5052,51 @@
             } else {
                 const imCanvas = document.getElementById('india-map-canvas');
                 if (imCanvas) imCanvas.style.display = 'none';
+            }
+
+            if (h === 22) { // Career Advantage
+                initCareerAdvantage();
+                const caCanvas = document.getElementById('career-advantage-canvas');
+                if (caCanvas) caCanvas.style.display = 'block';
+            } else {
+                const caCanvas = document.getElementById('career-advantage-canvas');
+                if (caCanvas) caCanvas.style.display = 'none';
+            }
+
+            if (h === 23) { // The Future Belongs To
+                initFutureBelongs();
+                const fbCanvas = document.getElementById('future-belongs-canvas');
+                if (fbCanvas) fbCanvas.style.display = 'block';
+            } else {
+                const fbCanvas = document.getElementById('future-belongs-canvas');
+                if (fbCanvas) fbCanvas.style.display = 'none';
+            }
+
+            if (h === 24) { // AI will replace — Scientist Rises
+                initScientistRises();
+                const srCanvas = document.getElementById('scientist-rises-canvas');
+                if (srCanvas) srCanvas.style.display = 'block';
+            } else {
+                const srCanvas = document.getElementById('scientist-rises-canvas');
+                if (srCanvas) srCanvas.style.display = 'none';
+            }
+
+            if (h === 26) { // Final Thought — Maxwell to Skyline
+                initFinalThought();
+                const ftCanvas = document.getElementById('final-thought-canvas');
+                if (ftCanvas) ftCanvas.style.display = 'block';
+            } else {
+                const ftCanvas = document.getElementById('final-thought-canvas');
+                if (ftCanvas) ftCanvas.style.display = 'none';
+            }
+
+            if (h === 27) { // Thank You — Big Bang of Ideas
+                initThankYou();
+                const tyCanvas = document.getElementById('thank-you-canvas');
+                if (tyCanvas) tyCanvas.style.display = 'block';
+            } else {
+                const tyCanvas = document.getElementById('thank-you-canvas');
+                if (tyCanvas) tyCanvas.style.display = 'none';
             }
 
             if (!window.mmInterval) {

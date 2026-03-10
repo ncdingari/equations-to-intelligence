@@ -396,32 +396,44 @@ Note:
 
 ---
 
+<canvas class="career-advantage-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">The best careers are built on <span class="accent">problem framing,</span> not tool chasing</div>
+</div>  
 
+---
+
+<canvas class="future-belongs-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">Those who can reason from <span class="accent">fundamentals</span> will shape what comes next.</div>
+</div>  
+
+---
+
+<canvas class="AI-will-replace-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">AI will automate execution.<br><span class="accent">Scientists will drive discovery.</span> </div>
+</div>  
 
 ---
 
 
 ---
 
+<canvas class="final-thought-container"></canvas>
+<div class="impact-container">
+  <div class="impact-text">Think beyond the code.<br><span class="accent">Build what others cannot yet imagine.</span> </div>
+</div>  
 
 ---
 
-
-
----
-
-
----
-
-
----
-
-
----
-
-<!---> Thank You -->
-<!-- .slide: data-background-color="#050510" -->
-
-# Thank <span class="accent">You</span>.
-
-
+<canvas class="thank-you-container"></canvas>
+<div class="thankyou-slide-content">
+  <div class="thankyou-main">Thank <span class="accent">You.</span></div>
+  <div class="thankyou-sub">The equation never changes.<br><span class="accent">Curiosity × Rigor = Impact.</span></div>
+  <div class="thankyou-credit">
+    <div class="credit-logo-name"><span class="credit-name">SciEncephalon</span> <span class="credit-ai">AI</span></div>
+    <div class="credit-divider"></div>
+    <div class="credit-tagline">We bring clarity to your ambiguity</div>
+  </div>
+</div>
