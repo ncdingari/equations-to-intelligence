@@ -2027,6 +2027,7 @@
                 const noiseAmp = 0.0018 * anneal;
                 const step = 0.0013;
                 const damping = 0.965 + (1 - anneal) * 0.03;
+                const timeSec = now * 0.001;
 
                 // ambient aurora glow (art pass)
                 const aurora = ctx.createRadialGradient(
@@ -2126,6 +2127,27 @@
                     ctx.fill();
                 }
 
+                // animated iso-lines (very subtle) for premium motion texture
+                const isoLevels = [-1.20, -0.95, -0.72];
+                const isoRes = 9;
+                const isoEps = 0.017;
+                for (let li = 0; li < isoLevels.length; li++) {
+                    const movingLevel = isoLevels[li] + 0.03 * Math.sin(timeSec * 0.6 + li * 1.7);
+                    ctx.beginPath();
+                    for (let py = H * margin; py < H * (1 - margin); py += isoRes) {
+                        for (let px = W * margin; px < W * (1 - margin); px += isoRes) {
+                            const uu = potential(px / W, py / H);
+                            if (Math.abs(uu - movingLevel) < isoEps) {
+                                ctx.moveTo(px + 0.8, py);
+                                ctx.arc(px, py, 0.75, 0, Math.PI * 2);
+                            }
+                        }
+                    }
+                    ctx.strokeStyle = `rgba(170, 244, 255, ${0.022 + li * 0.012})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
                 // boundary box (constraints) with collision pulse
                 boundaryPulse *= 0.92;
                 const pulseAlpha = 0.18 + boundaryPulse * 0.45;
@@ -2156,21 +2178,21 @@
                 const hudY = H * 0.08;
                 const hudW = W * 0.26;
                 const hudH = H * 0.13;
-                ctx.fillStyle = 'rgba(5, 10, 22, 0.58)';
-                ctx.strokeStyle = 'rgba(0, 229, 255, 0.22)';
+                ctx.fillStyle = 'rgba(5, 10, 22, 0.36)';
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.14)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.roundRect(hudX, hudY, hudW, hudH, 10);
                 ctx.fill();
                 ctx.stroke();
 
-                ctx.fillStyle = 'rgba(255,255,255,0.86)';
-                ctx.font = '600 14px Inter';
+                ctx.fillStyle = 'rgba(255,255,255,0.72)';
+                ctx.font = '600 13px Inter';
                 ctx.textAlign = 'left';
                 ctx.fillText('Optimization Dynamics', hudX + 14, hudY + 22);
 
-                ctx.font = '500 12px Inter';
-                ctx.fillStyle = 'rgba(185, 224, 255, 0.86)';
+                ctx.font = '500 11px Inter';
+                ctx.fillStyle = 'rgba(185, 224, 255, 0.70)';
                 ctx.fillText('Exploration', hudX + 14, hudY + 44);
                 ctx.fillText('Equilibrium', hudX + hudW - 95, hudY + 44);
 
@@ -2178,13 +2200,13 @@
                 const barY = hudY + 50;
                 const barW = hudW - 28;
                 const barH = 8;
-                ctx.fillStyle = 'rgba(255,255,255,0.14)';
+                ctx.fillStyle = 'rgba(255,255,255,0.10)';
                 ctx.fillRect(barX, barY, barW, barH);
-                ctx.fillStyle = `rgba(0, 229, 255, ${0.35 + anneal * 0.4})`;
+                ctx.fillStyle = `rgba(0, 229, 255, ${0.28 + anneal * 0.32})`;
                 ctx.fillRect(barX, barY, barW * anneal, barH);
 
-                ctx.fillStyle = 'rgba(255,255,255,0.80)';
-                ctx.font = '500 11px Inter';
+                ctx.fillStyle = 'rgba(255,255,255,0.66)';
+                ctx.font = '500 10px Inter';
                 ctx.fillText(`temperature ${(anneal * 100).toFixed(0)}%`, hudX + 14, hudY + 74);
                 ctx.fillText(`settled ${(settledRatio * 100).toFixed(0)}%`, hudX + 14, hudY + 92);
 
@@ -2196,11 +2218,11 @@
                     if (occ < 6) continue;
                     const tx = w.wx * W + 10;
                     const ty = w.wy * H - 12;
-                    ctx.fillStyle = 'rgba(5, 10, 22, 0.7)';
+                    ctx.fillStyle = 'rgba(5, 10, 22, 0.42)';
                     ctx.beginPath();
                     ctx.roundRect(tx - 4, ty - 10, 58, 16, 4);
                     ctx.fill();
-                    ctx.fillStyle = 'rgba(160, 255, 230, 0.9)';
+                    ctx.fillStyle = 'rgba(160, 255, 230, 0.74)';
                     ctx.fillText(`B${i + 1}: ${occ}%`, tx, ty + 2);
                 }
 
