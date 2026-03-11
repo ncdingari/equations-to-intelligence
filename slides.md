@@ -7,7 +7,7 @@
 <p style="font-size: 1em; opacity: 0.8; margin-top: 1em;">How Fundamental Sciences Are Building the Future Workforce for AI and Quantum Technologies</p>
 
 Note:
-“Everything you are excited about today, AI, ML, Quantum, started as equations on a blackboard. This talk is about why that still matters more than ever.”
+“Everything exciting about AI and quantum began long before the latest tools. It began with equations, with first principles, and with people trying to understand reality more deeply. My message today is simple: the future of AI will not be built only by people who use tools, but by people who understand the science beneath them.”
 
 ---
 
@@ -77,7 +77,7 @@ Note:
 </div>
 
 Note:
-"My academic lineage traces back to Albert Einstein..."
+“This slide is personal, but it also makes a broader point. Knowledge compounds across generations. Ideas travel through mentors, institutions, and disciplines. What we inherit from great thinkers is not just prestige, but a standard of rigor, curiosity, and courage.”
 
 ---
 
@@ -174,8 +174,8 @@ Note:
 </div>
 </div>
 
-<div class="a-turn a-fade-22" style="align-self: flex-end; margin-right: 140px; margin-top: -30px; margin-bottom: -30px;">
-<div class="a-arrow"><i class="fa-solid fa-arrow-down"></i><span class="a-relation-text" style="left: auto; right: 25px;">Advisory</span></div>
+<div class="a-turn a-fade-22" style="align-self: flex-end; margin-right: 250px; margin-top: -44px; margin-bottom: -38px;">
+<div class="a-arrow"><i class="fa-solid fa-arrow-down"></i><span class="a-relation-text" style="display: inline-block; margin-top: 8px;">Advisory</span></div>
 </div>
 
 <!-- Row 3: Advisory -->
@@ -202,7 +202,7 @@ Note:
 </div>
 
 Note:
-"A journey from academia to data leadership..."
+“My own journey moved from fundamental science into data, AI, and leadership across industry and academia. That path taught me that physics, mathematics, and scientific thinking are not separate from modern AI. They are the foundation that makes advanced work possible, credible, and scalable.”
 
 ---
 
@@ -220,7 +220,7 @@ Note:
 </div>
 
 Note:
-“The world is lying to students. It says tools matter most. Tools don’t survive decades. Thinking does.”
+“One of the most damaging ideas students hear today is that mastering tools is enough. Tools may help you get started, but they do not create lasting advantage. Civilizations, companies, and breakthrough careers are built by people who know how to think, not just by people who know how to click.”
 
 ---
 
@@ -234,7 +234,7 @@ Note:
 </div>
 
 Note:
-“Frameworks changed every five years. These didn’t change in 200 years. That’s your unfair advantage.”
+“Frameworks come and go. Programming languages rise and fall. But first principles endure. The students and researchers who build from enduring ideas develop an advantage that compounds over decades, not just semesters.”
 
 ---
 
@@ -245,7 +245,7 @@ Note:
 </div>
 
 Note:
-“That struggle you complain about is exactly what global industry is desperate for.”
+“If you were trained in hard subjects, trained to derive, trained to struggle with abstraction, that is not a weakness. That is preparation. Industry increasingly rewards people who can stay with hard problems longer than everyone else.”
 
 ---
 
@@ -258,7 +258,7 @@ Note:
 </div>
 
 Note:
-“AI didn’t create a shortage of coders. It created a shortage of people who understand systems.”
+“The world does not have a shortage of people who can code. It has a shortage of people who can reason across systems. In the AI era, scarcity is shifting away from technical syntax and toward conceptual depth.”
 
 ---
 
@@ -268,7 +268,7 @@ Note:
 </div>
 
 Note:
-“Every ML model is just math trying to approximate reality.”
+“Mathematics is the language we use to represent structure, pattern, and uncertainty in the real world. Every serious AI system is, at its core, an attempt to translate reality into a form a machine can learn from. The stronger your mathematical intuition, the stronger your AI intuition becomes.”
 
 ---
 
@@ -278,7 +278,7 @@ Note:
 </div>
 
 Note:
-“When you learned eigenvectors, you were already preparing for AI, you just didn’t know it.”
+“When students learn vectors and matrices, it often feels abstract. But in AI, those abstractions become embeddings, transformations, and learned representations. What once looked theoretical now sits at the heart of modern machine intelligence.”
 
 ---
 
@@ -288,7 +288,7 @@ Note:
 </div>
 
 Note:
-“Backpropagation is not magic. It’s calculus doing hard labor.”
+“Learning is optimization. Behind every impressive model is a system adjusting itself through gradients, error, and correction. Calculus is not distant from AI. It is one of the engines that makes learning possible.”
 
 ---
 
@@ -298,7 +298,7 @@ Note:
 </div>
 
 Note:
-“AI without uncertainty is just arrogance at scale.”
+“In real life, prediction without uncertainty is not intelligence. It is overconfidence. Probability gives us humility, calibration, and trust. In an AI-driven world, the people who understand uncertainty will make better decisions than the people who only understand outputs.”
 
 ---
 
@@ -308,7 +308,7 @@ Note:
 </div>
 
 Note:
-“Physics teaches us that every system operates within constraints. AI is no different. Models, data, compute, and incentives all shape outcomes. When those constraints are poorly understood or ignored, systems become fragile, unreliable, and difficult to scale.”
+“Physics teaches a discipline of thinking in terms of systems, tradeoffs, and constraints. AI systems do not fail only because of bad models. They fail when we ignore boundaries, incentives, energy, scale, and complexity. Physics trains us to respect the structure of reality.”
 
 ---
 
@@ -324,7 +324,7 @@ Note:
 </div>
 
 Note:
-“Physics never disappeared. It rebranded as machine learning.”
+“Many ideas we celebrate in AI today are deeply connected to concepts long familiar to physics. Entropy, energy, stability, optimization, all of these ideas reappear in machine learning under new labels. Physics did not disappear. It quietly became part of the AI toolkit.”
 
 ---
 
@@ -334,7 +334,7 @@ Note:
 </div>
 
 Note:
-“Stop thinking about files and folders. Start thinking about energy and information.”
+“When AI initiatives fail in the real world, the reason is often not a lack of data or compute alone. It is poor systems thinking. Weak pipelines, unclear objectives, bad incentives, and fragile processes break more AI programs than algorithms do.”
 
 ---
 
@@ -343,12 +343,18 @@ Note:
   <div class="impact-text">Interactions <span class="accent">matter.</span></div>
 </div>
 
+Note:
+“Chemistry teaches us that interactions matter. Outcomes are rarely driven by one variable in isolation. In AI, that same mindset matters when we think about features, dependencies, and relationships across a system.”
+
 ---
 
 <canvas class="drug-heatmap-container"></canvas>
 <div class="impact-container">
   <div class="impact-text">Chemistry × AI = <span class="accent">Impact</span></div>
 </div>
+
+Note:
+“One of the most exciting frontiers ahead is where chemistry and AI meet. Drug discovery, materials science, molecular design, and biological understanding will all accelerate through better computational intelligence. This is one place where deep science can create enormous human and economic value.”
 
 ---
 
@@ -358,12 +364,18 @@ Note:
   <div class="impact-text" style="font-size: 0.6em">Synapses → <span class="accent">Weights</span></div>
 </div>
 
+Note:
+“Biology also shaped the way we think about intelligence. Neural networks borrow inspiration from the brain, but the bigger lesson is this: nature has always been a great teacher of complex systems. The more we understand living systems, the better we become at building adaptive ones.”
+
 ---
 
 <canvas class="the-maturity-stack-container"></canvas>
 <div class="impact-container">
   <div class="impact-text">Foundations → <span class="accent">Frontiers</span></div>
 </div>
+
+Note:
+“There is a natural stack to intellectual growth. Foundations come first, then methods, then applications, then frontiers. People often want to jump directly to the frontier. But durable careers are built by mastering the layers beneath it.”
 
 ---
 
@@ -373,12 +385,18 @@ Note:
     <div class="impact-text"> Not Dashboards <span class="accent">Decisions</span></div>
 </div>
 
+Note:
+“Data science is often reduced to dashboards and reporting, but that is far too narrow. At its best, data science is structured decision-making under uncertainty. It is where mathematics, computing, and business judgment meet.”
+
 ---
 
 <canvas class="AI-meets-reality-container"></canvas>
 <div class="impact-container">
   <div class="impact-text">AI meets <span class="accent">reality</span></div>
 </div>
+
+Note:
+“The moment AI leaves the lab, it enters the complexity of the real world. Healthcare, finance, climate, manufacturing, and public systems do not reward narrow thinking. They reward people who can connect disciplines and solve messy, consequential problems.”
 
 ---
 
@@ -387,12 +405,18 @@ Note:
   <div class="impact-text">Physics <span class="accent">returns.</span></div>
 </div>
 
+Note:
+“Quantum is a reminder that the future often circles back to fundamentals. This field will reward depth, patience, and conceptual clarity. In quantum, as in AI, the winners will not be the fastest trend followers, but the deepest thinkers.”
+
 ---
 
 <canvas class="india-map-container"></canvas>
 <div class="impact-container">
   <div class="impact-text">From services to <span class="accent">sovereignty.</span></div>
 </div>
+
+Note:
+“This is an important moment for India and for every nation thinking about its role in the future of technology. The opportunity is not just to provide services, but to shape intellectual sovereignty, scientific leadership, and original innovation. The next wave belongs to countries that produce thinkers, not only labor.”
 
 ---
 
@@ -401,12 +425,18 @@ Note:
   <div class="impact-text">The best careers are built on <span class="accent">problem framing,</span> not tool chasing</div>
 </div>  
 
+Note:
+“Students often ask what skill will matter most in the future. My answer is problem framing. Those who can ask sharper questions, define the problem correctly, and connect theory to action will outperform those who simply chase the newest platform.”
+
 ---
 
 <canvas class="future-belongs-container"></canvas>
 <div class="impact-container">
   <div class="impact-text">Those who can reason from <span class="accent">fundamentals</span> will shape what comes next.</div>
 </div>  
+
+Note:
+“The future belongs to people who can reason from fundamentals. These are the people who stay calm when tools change, who adapt faster when industries shift, and who can create clarity when others only see noise. That kind of thinking becomes more valuable, not less, in times of disruption.”
 
 ---
 
@@ -415,12 +445,18 @@ Note:
   <div class="impact-text">AI will automate execution.<br><span class="accent">Scientists will drive discovery.</span> </div>
 </div>  
 
+Note:
+“AI will automate many forms of execution, and that change is already underway. But that does not reduce the need for scientific thinkers. It increases it. The people who can form hypotheses, test assumptions, and separate signal from noise will become even more important.”
+
 ---
 
 <canvas class="final-thought-container"></canvas>
 <div class="impact-container">
   <div class="impact-text">Think beyond the code.<br><span class="accent">Build what others cannot yet imagine.</span> </div>
 </div>  
+
+Note:
+“So the real goal is not just to learn how to use the tools of today. It is to develop the depth to build what others cannot yet imagine. The future will reward original thinkers who combine curiosity, rigor, and courage.”
 
 ---
 
@@ -434,3 +470,6 @@ Note:
     <div class="credit-tagline">We bring clarity to your ambiguity</div>
   </div>
 </div>
+
+Note:
+“I will close with one belief that has guided my own journey: the equation never changes. Curiosity multiplied by rigor creates impact. That is true in science, in AI, in quantum, and in leadership.”
