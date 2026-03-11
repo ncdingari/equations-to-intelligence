@@ -304,11 +304,11 @@ Note:
 
 <canvas class="energy-landscape-container"></canvas>
 <div class="impact-container">
-  <div class="impact-text">AI is a <span class="accent">system.</span></div>
+  <div class="impact-text">AI is a <span class="accent">system</span> governed by <span class="accent">constraints.</span></div>
 </div>
 
 Note:
-“Physics teaches you constraints. AI systems fail when constraints are ignored.”
+“Physics teaches us that every system operates within constraints. AI is no different. Models, data, compute, and incentives all shape outcomes. When those constraints are poorly understood or ignored, systems become fragile, unreliable, and difficult to scale.”
 
 ---
 
@@ -414,9 +414,6 @@ Note:
 <div class="impact-container">
   <div class="impact-text">AI will automate execution.<br><span class="accent">Scientists will drive discovery.</span> </div>
 </div>  
-
----
-
 
 ---
 

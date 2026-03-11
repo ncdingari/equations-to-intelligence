@@ -1434,10 +1434,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.js"></script>
 
     <script>
-        // Force clear cache for markdown on every reload
+        // Keep markdown path stable for reliable caching/CDN behavior (important on GitHub Pages)
         const markdownSection = document.querySelector('[data-markdown]');
-        if (markdownSection && markdownSection.getAttribute('data-markdown') === 'slides.md') {
-            markdownSection.setAttribute('data-markdown', `slides.md?v=${Date.now()}`);
+        if (markdownSection && markdownSection.getAttribute('data-markdown') !== 'slides.md') {
+            markdownSection.setAttribute('data-markdown', 'slides.md');
         }
 
         function shouldAnimate(canvas) {
@@ -1832,13 +1832,16 @@
         }
 
 
-        // Energy Landscape + Particle Physics (Slide 10, h=9)
+        // Energy Landscape + Particle Physics (Slide 12, h=11)
         function initEnergyLandscape() {
             if (window._energyReady) return;
             window._energyReady = true;
 
             const canvas = document.createElement('canvas');
             canvas.id = 'energy-landscape-canvas';
+            // Styles are handled in CSS class #energy-landscape-canvas
+            canvas.style.opacity = '0';
+            canvas.style.transition = 'opacity 1s ease-in-out';
             document.body.appendChild(canvas);
 
             const ctx = canvas.getContext('2d');
@@ -1847,17 +1850,18 @@
             function resize() {
                 W = canvas.width = window.innerWidth;
                 H = canvas.height = window.innerHeight;
+                updateBackground(); // Re-render static layers on resize
             }
             resize();
             window.addEventListener('resize', resize);
 
             // Multi-well potential: U(x,y) — sum of Gaussian wells
             const wells = [
-                { wx: 0.25, wy: 0.55, depth: 1.2, r: 0.12 },
-                { wx: 0.50, wy: 0.45, depth: 1.0, r: 0.10 },
-                { wx: 0.75, wy: 0.55, depth: 1.4, r: 0.13 },
-                { wx: 0.38, wy: 0.70, depth: 0.8, r: 0.09 },
-                { wx: 0.62, wy: 0.35, depth: 0.9, r: 0.10 },
+                { wx: 0.25, wy: 0.55, depth: 1.5, r: 0.15 },
+                { wx: 0.50, wy: 0.45, depth: 1.2, r: 0.12 },
+                { wx: 0.75, wy: 0.55, depth: 1.8, r: 0.18 },
+                { wx: 0.38, wy: 0.75, depth: 0.6, r: 0.10 },
+                { wx: 0.62, wy: 0.25, depth: 0.9, r: 0.11 },
             ];
 
             function potential(nx, ny) {
@@ -1877,14 +1881,66 @@
                 };
             }
 
-            // Initialise particles spread across slide
-            const N = 60;
+            // Boundary constraints (margins) — reflecting the importance of boundaries
+            const margin = 0.12;
+
+            const N = 80;
             const particles = Array.from({ length: N }, () => ({
-                x: 0.1 + Math.random() * 0.8,
-                y: 0.1 + Math.random() * 0.8,
-                vx: (Math.random() - 0.5) * 0.003,
-                vy: (Math.random() - 0.5) * 0.003,
+                x: margin + Math.random() * (1 - 2 * margin),
+                y: margin + Math.random() * (1 - 2 * margin),
+                vx: (Math.random() - 0.5) * 0.005,
+                vy: (Math.random() - 0.5) * 0.005,
+                hue: 180 + Math.random() * 60
             }));
+
+            const bgCanvas = document.createElement('canvas');
+            const bgCtx = bgCanvas.getContext('2d');
+            
+            function updateBackground() {
+                bgCanvas.width = W;
+                bgCanvas.height = H;
+                bgCtx.clearRect(0, 0, W, H);
+                
+                // Draw boundary box (Visualising constraints)
+                bgCtx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
+                bgCtx.lineWidth = 2;
+                bgCtx.setLineDash([8, 12]);
+                bgCtx.strokeRect(W * margin, H * margin, W * (1 - 2 * margin), H * (1 - 2 * margin));
+                bgCtx.setLineDash([]);
+
+                // Topographic contours
+                const steps = 6;
+                for (let s = steps; s >= 1; s--) {
+                    const alpha = 0.03 + 0.015 * s;
+                    bgCtx.beginPath();
+                    const res = 12; 
+                    for (let px = 0; px < W; px += res) {
+                        for (let py = 0; py < H; py += res) {
+                            const u = potential(px / W, py / H);
+                            const threshold = -0.12 * s;
+                            if (u < threshold) {
+                                bgCtx.rect(px, py, res, res);
+                            }
+                        }
+                    }
+                    bgCtx.fillStyle = `rgba(0, 229, 255, ${alpha})`;
+                    bgCtx.fill();
+                }
+
+                // Well markers (Equilibrium points)
+                for (const w of wells) {
+                    const cx = w.wx * W, cy = w.wy * H;
+                    const rx = w.r * W * 0.45;
+                    const grad = bgCtx.createRadialGradient(cx, cy, 0, cx, cy, rx);
+                    grad.addColorStop(0, 'rgba(0, 229, 255, 0.25)');
+                    grad.addColorStop(1, 'rgba(0, 229, 255, 0)');
+                    bgCtx.beginPath();
+                    bgCtx.arc(cx, cy, rx, 0, Math.PI * 2);
+                    bgCtx.fillStyle = grad;
+                    bgCtx.fill();
+                }
+            }
+            updateBackground();
 
             let t = 0;
             function drawEnergy() {
@@ -1894,69 +1950,35 @@
                 }
 
                 ctx.clearRect(0, 0, W, H);
+                ctx.drawImage(bgCanvas, 0, 0);
 
-                // Draw potential landscape as contour fill bands
-                const steps = 5;
-                for (let s = steps; s >= 1; s--) {
-                    const alpha = 0.04 + 0.025 * s;
-                    ctx.beginPath();
-                    const res = 4;
-                    for (let px = 0; px < W; px += res) {
-                        for (let py = 0; py < H; py += res) {
-                            const u = potential(px / W, py / H);
-                            const threshold = -0.15 * s;
-                            if (u < threshold) {
-                                ctx.rect(px, py, res, res);
-                            }
-                        }
-                    }
-                    ctx.fillStyle = `rgba(0, 229, 255, ${alpha})`;
-                    ctx.fill();
-                }
-
-                // Draw well outlines as glowing rings
-                for (const w of wells) {
-                    const cx = w.wx * W, cy = w.wy * H;
-                    const rx = w.r * W;
-                    const pulse = 1 + 0.08 * Math.sin(t * 1.5 + w.wx * 10);
-                    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx * pulse);
-                    grad.addColorStop(0, 'rgba(0, 229, 255, 0.18)');
-                    grad.addColorStop(0.5, 'rgba(0, 180, 200, 0.08)');
-                    grad.addColorStop(1, 'rgba(0, 229, 255, 0)');
-                    ctx.beginPath();
-                    ctx.arc(cx, cy, rx * pulse, 0, Math.PI * 2);
-                    ctx.fillStyle = grad;
-                    ctx.fill();
-                }
-
-                // Integrate particles
-                const dt = 0.5, damping = 0.985;
+                const dt = 0.6, damping = 0.982, gravity = 0.0007;
+                
+                // Batch Draw Particles
+                ctx.beginPath();
                 for (const p of particles) {
                     const { gx, gy } = gradU(p.x, p.y);
-                    p.vx = (p.vx - gx * dt * 0.0006) * damping;
-                    p.vy = (p.vy - gy * dt * 0.0006) * damping;
+                    
+                    p.vx = (p.vx - gx * dt * gravity) * damping;
+                    p.vy = (p.vy - gy * dt * gravity) * damping;
+                    
                     p.x += p.vx;
                     p.y += p.vy;
-                    // Wrap at edges
-                    if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
-                    if (p.y < 0) p.y = 1; if (p.y > 1) p.y = 0;
 
-                    // Color: hot (orange) when fast, cool (cyan) when settled
+                    // Bounce off boundaries (showing system limits)
+                    if (p.x < margin) { p.x = margin; p.vx *= -0.6; }
+                    if (p.x > 1 - margin) { p.x = 1 - margin; p.vx *= -0.6; }
+                    if (p.y < margin) { p.y = margin; p.vy *= -0.6; }
+                    if (p.y > 1 - margin) { p.y = 1 - margin; p.vy *= -0.6; }
+
                     const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-                    const heat = Math.min(1, speed / 0.003);
-                    const r = Math.round(255 * heat);
-                    const g = Math.round(100 + 129 * (1 - heat));
-                    const b = Math.round(255 * (1 - heat * 0.5));
-                    const radius = 3 + 2 * heat;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x * W, p.y * H, radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgb(${r},${g},${b})`;
-                    ctx.shadowBlur = 8 + 10 * heat;
-                    ctx.shadowColor = `rgb(${r},${g},${b})`;
-                    ctx.fill();
+                    const heat = Math.min(1, speed / 0.005);
+                    
+                    ctx.fillStyle = `hsla(${180 + heat * 120}, 80%, 70%, ${0.4 + heat * 0.4})`;
+                    ctx.moveTo(p.x * W + 3.5, p.y * H);
+                    ctx.arc(p.x * W, p.y * H, 2.5 + heat * 3, 0, Math.PI * 2);
                 }
-                ctx.shadowBlur = 0;
+                ctx.fill();
 
                 t += 0.016;
                 requestAnimationFrame(drawEnergy);
@@ -2387,34 +2409,39 @@
                     }
                     ctx.stroke();
 
-                    // Particles
+                    // Generate particles
                     if (e.from.state === 'running' || e.from.state === 'success') {
                         if (Math.random() < 0.05) {
                             e.particles.push({ p: 0, speed: 0.01 + Math.random() * 0.015 });
                         }
                     }
-                    if (e.from.state === 'failed') {
-                        e.particles = [];
-                    }
+                });
+
+                // Batch draw particles
+                ctx.beginPath();
+                ctx.fillStyle = '#00e5ff';
+                edges.forEach(e => {
+                    const cp1x = (e.from.x + e.to.x) / 2;
+                    const cp1y = e.from.y;
+                    const cp2x = (e.from.x + e.to.x) / 2;
+                    const cp2y = e.to.y;
 
                     e.particles.forEach(part => {
                         part.p += part.speed;
                         const t = part.p;
                         if (t > 1) return;
                         const u = 1 - t;
+                        // Cubic Bezier formula
                         const px = u * u * u * (e.from.x + 20) + 3 * u * u * t * cp1x + 3 * u * t * t * cp2x + t * t * t * (e.to.x - 20);
                         const py = u * u * u * e.from.y + 3 * u * u * t * cp1y + 3 * u * t * t * cp2y + t * t * t * e.to.y;
 
-                        ctx.beginPath();
+                        ctx.moveTo(px + 2, py);
                         ctx.arc(px, py, 2, 0, Math.PI * 2);
-                        ctx.fillStyle = '#00e5ff';
-                        ctx.shadowBlur = 4;
-                        ctx.shadowColor = '#00e5ff';
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
                     });
                     e.particles = e.particles.filter(part => part.p < 1);
                 });
+                ctx.fill();
+
 
                 // Draw nodes
                 nodes.forEach(n => {
@@ -3381,15 +3408,15 @@
             resize();
             window.addEventListener('resize', resize);
 
-            const N = 400;
+            const N = 250; // Optimized from 400
             const particles = [];
             for (let i = 0; i < N; i++) {
                 particles.push({
                     id: i,
-                    rx: Math.random() * 2 - 1, // random normalized x
-                    ry: Math.random() * 2 - 1, // random normalized y
-                    x: 0,
-                    y: 0,
+                    rx: Math.random() * 2 - 1,
+                    ry: Math.random() * 2 - 1,
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
                     vx: 0,
                     vy: 0
                 });
@@ -3404,50 +3431,56 @@
                 }
 
                 ctx.clearRect(0, 0, W, H);
-                ctx.globalAlpha = 0.25; // Reduce overall opacity for background visual
+                ctx.globalAlpha = 1.0; 
 
                 let elapsed = (now - startTime) / 1000;
-                let cycle = elapsed % 12; // 12 second cycle
+                let cycle = elapsed % 12;
 
-                // 0-4s: Noise
-                // 4-6s: Transition to Signal
-                // 6-10s: Signal
-                // 10-12s: Transition to Noise
                 let clarity = 0;
                 if (cycle > 4 && cycle <= 6) clarity = (cycle - 4) / 2;
                 else if (cycle > 6 && cycle <= 10) clarity = 1;
                 else if (cycle > 10 && cycle <= 12) clarity = 1 - (cycle - 10) / 2;
 
-                // Ease In Out formula
                 clarity = clarity < 0.5 ? 2 * clarity * clarity : 1 - Math.pow(-2 * clarity + 2, 2) / 2;
 
-                ctx.fillStyle = `rgba(0, 229, 255, ${0.1 + clarity * 0.4})`;
+                // Draw Text
+                ctx.globalAlpha = 0.2 + clarity * 0.4;
+                ctx.fillStyle = `rgb(0, 229, 255)`;
                 ctx.font = 'bold 24px Inter';
                 ctx.textAlign = 'center';
                 ctx.fillText(clarity > 0.5 ? "SIGNAL" : "NOISE", W / 2, H * 0.3);
 
-                ctx.beginPath();
-                // Draw connecting line for signal
+                // Draw Wave Line
                 if (clarity > 0.8) {
+                    ctx.beginPath();
                     ctx.moveTo(0, H / 2);
-                    for (let x = 0; x < W; x += 10) {
+                    for (let x = 0; x < W; x += 20) {
                         let y = H / 2 + Math.sin(x * 0.01 + elapsed * 2) * (H * 0.2);
                         ctx.lineTo(x, y);
                     }
-                    ctx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(0, 229, 255, 0.15)';
+                    ctx.lineWidth = 1;
                     ctx.stroke();
                 }
 
+                // Update and Batch Draw Particles
+                let r = 255 * (1 - clarity);
+                let g = 229 * clarity;
+                let b = 255;
+                ctx.fillStyle = `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`;
+                ctx.globalAlpha = 0.4 + (clarity * 0.4);
+                
+                let pRadius = clarity > 0.5 ? 2 : 3.5;
+                ctx.beginPath();
                 for (let i = 0; i < N; i++) {
                     let p = particles[i];
 
                     // Noise Target
-                    let noiseX = W / 2 + p.rx * (W * 0.8) + Math.sin(elapsed * 2 + p.id) * 50;
-                    let noiseY = H / 2 + p.ry * (H * 0.8) + Math.cos(elapsed * 3 + p.id * 2) * 50;
+                    let noiseX = W / 2 + p.rx * (W * 0.45) + Math.sin(elapsed * 2 + p.id * 0.5) * 30;
+                    let noiseY = H / 2 + p.ry * (H * 0.45) + Math.cos(elapsed * 3 + p.id * 0.3) * 30;
 
-                    // Signal Target (Sine Wave)
-                    let t = p.id / N; // 0 to 1
+                    // Signal Target
+                    let t = i / N;
                     let signalX = W * 0.1 + t * (W * 0.8);
                     let signalY = H / 2 + Math.sin(signalX * 0.01 + elapsed * 2) * (H * 0.2);
 
@@ -3457,37 +3490,21 @@
                     let dx = targetX - p.x;
                     let dy = targetY - p.y;
 
-                    // Initialization jump
-                    if (p.x === 0 && p.y === 0) {
-                        p.x = targetX;
-                        p.y = targetY;
-                        dx = dy = 0;
-                    }
-
-                    p.vx = (p.vx + dx * 0.02) * 0.8;
-                    p.vy = (p.vy + dy * 0.02) * 0.8;
+                    p.vx = (p.vx + dx * 0.05) * 0.85;
+                    p.vy = (p.vy + dy * 0.05) * 0.85;
                     p.x += p.vx;
                     p.y += p.vy;
 
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, clarity > 0.5 ? 2.5 : 4, 0, Math.PI * 2);
-
-                    // Colors shift from chaotic magenta to ordered cyan
-                    let r = 255 * (1 - clarity);
-                    let g = 229 * clarity;
-                    let b = 255;
-                    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-
-                    ctx.shadowBlur = 5;
-                    ctx.shadowColor = ctx.fillStyle;
-                    ctx.fill();
+                    ctx.moveTo(p.x + pRadius, p.y);
+                    ctx.arc(p.x, p.y, pRadius, 0, Math.PI * 2);
                 }
-                ctx.shadowBlur = 0;
+                ctx.fill();
 
-                requestAnimationFrame(drawFrame);
+
                 requestAnimationFrame(drawFrame);
             }
             requestAnimationFrame(drawFrame);
+
         }
 
         // AI Meets Reality / Business Verticals Network (Slide 19, h=18)
@@ -4852,7 +4869,7 @@
                 12: "Physics → ML", 13: "Why AI Fails?", 14: "Chemistry",
                 15: "Chemistry → AI", 16: "Biology → AI", 17: "The Maturity Stack", 18: "Data Science",
                 19: "Real-world AI", 20: "Quantum", 21: "India's Moment", 22: "Career Advantage",
-                23: "The Future Belongs to", 24: "AI will replace everyone", 25: "", 26: "Final Thought", 27: ""
+                23: "The Future Belongs to", 24: "AI will automate execution", 25: "Final Thought", 26: ""
             };
 
             if (h === 0) {
@@ -4878,7 +4895,7 @@
                 const crowdContainer = document.querySelector('.s5-bg-crowd');
                 if (crowdContainer && crowdContainer.children.length === 0) {
                     let iconsHtml = '';
-                    for (let i = 0; i < 1000; i++) iconsHtml += '<i class="fa-solid fa-code"></i>';
+                    for (let i = 0; i < 650; i++) iconsHtml += '<i class="fa-solid fa-code"></i>';
                     crowdContainer.innerHTML = iconsHtml;
                 }
             }
@@ -5084,7 +5101,7 @@
                 if (srCanvas) srCanvas.style.opacity = '0';
             }
 
-            if (h === 26) { // Final Thought — Maxwell to Skyline
+            if (h === 25) { // Final Thought — Maxwell to Skyline
                 initFinalThought();
                 const ftCanvas = document.getElementById('final-thought-canvas');
                 if (ftCanvas) ftCanvas.style.opacity = '1';
@@ -5093,7 +5110,7 @@
                 if (ftCanvas) ftCanvas.style.opacity = '0';
             }
 
-            if (h === 27) { // Thank You — Big Bang of Ideas
+            if (h === 26) { // Thank You — Big Bang of Ideas
                 initThankYou();
                 const tyCanvas = document.getElementById('thank-you-canvas');
                 if (tyCanvas) tyCanvas.style.opacity = '1';
