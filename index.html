@@ -1929,19 +1929,64 @@
                     bgCtx.stroke();
                 }
 
-                // contour-like potential bands
-                const res = 14;
+                // smooth scalar field render (replaces blocky/pixelated contour bands)
+                const fieldCanvas = document.createElement('canvas');
+                const fieldCtx = fieldCanvas.getContext('2d');
+                const fieldScale = 0.55;
+                const fw = Math.max(320, Math.floor(W * fieldScale));
+                const fh = Math.max(180, Math.floor(H * fieldScale));
+                fieldCanvas.width = fw;
+                fieldCanvas.height = fh;
+
+                const img = fieldCtx.createImageData(fw, fh);
+                const data = img.data;
+
+                let i = 0;
+                for (let y = 0; y < fh; y++) {
+                    const ny = y / (fh - 1);
+                    for (let x = 0; x < fw; x++) {
+                        const nx = x / (fw - 1);
+                        const u = potential(nx, ny);
+
+                        // map potential to glow intensity; tuned for current well depths
+                        const t = Math.max(0, Math.min(1, (-u - 0.03) / 1.75));
+                        const glow = Math.pow(t, 1.15);
+
+                        data[i++] = Math.round(18 + glow * 22);    // R
+                        data[i++] = Math.round(165 + glow * 72);   // G
+                        data[i++] = Math.round(205 + glow * 40);   // B
+                        data[i++] = Math.round(glow * 165);        // A
+                    }
+                }
+                fieldCtx.putImageData(img, 0, 0);
+
+                bgCtx.imageSmoothingEnabled = true;
+                bgCtx.save();
+                bgCtx.globalCompositeOperation = 'lighter';
+                bgCtx.filter = 'blur(7px)';
+                bgCtx.drawImage(fieldCanvas, 0, 0, W, H);
+                bgCtx.filter = 'none';
+                bgCtx.restore();
+
+                // thin smooth contour lines for a higher-fidelity topographic feel
                 const levels = 7;
-                for (let l = levels; l >= 1; l--) {
+                const contourRes = 5;
+                for (let l = 1; l <= levels; l++) {
+                    const threshold = -0.14 * l;
+                    const eps = 0.018;
                     bgCtx.beginPath();
-                    for (let px = 0; px < W; px += res) {
-                        for (let py = 0; py < H; py += res) {
+                    for (let py = 0; py < H; py += contourRes) {
+                        for (let px = 0; px < W; px += contourRes) {
                             const uu = potential(px / W, py / H);
-                            if (uu < -0.15 * l) bgCtx.rect(px, py, res, res);
+                            if (Math.abs(uu - threshold) < eps) {
+                                bgCtx.moveTo(px + 1, py);
+                                bgCtx.arc(px, py, 0.8, 0, Math.PI * 2);
+                            }
                         }
                     }
-                    bgCtx.fillStyle = `rgba(0, 229, 255, ${0.02 + l * 0.012})`;
-                    bgCtx.fill();
+                    bgCtx.strokeStyle = `rgba(165, 247, 255, ${0.03 + l * 0.013})`;
+                    bgCtx.lineWidth = 1;
+                    bgCtx.stroke();
                 }
 
                 // basin halos (stable states)
