@@ -100,13 +100,13 @@ Note:
 </div>
 <div class="a-arrow a-fade-2"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-3">
-<img class="a-avatar bg-white-logo" src="images/logo_uoh.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_uoh.png" style="padding: 0; object-fit: contain;">
 <div class="a-name">University of Hyderabad</div>
 <div class="a-org">M.Sc. Quantum Physics</div>
 </div>
 <div class="a-arrow a-fade-4"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-5">
-<img class="a-avatar bg-white-logo" src="images/logo_uri.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_uri.png">
 <div class="a-name">University of Rhode Island</div>
 <div class="a-org">Ph.D. Physics</div>
 </div>
@@ -125,7 +125,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-12"><i class="fa-solid fa-arrow-left"></i></div>
 <div class="a-node a-fade-11">
-<img class="a-avatar bg-white-logo" src="images/logo_dell.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_dell.png">
 <div class="a-name">Dell EMC</div>
 <div class="a-org">Analytics Lead</div>
 </div>
@@ -137,7 +137,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-8"><i class="fa-solid fa-arrow-left"></i></div>
 <div class="a-node a-fade-7">
-<img class="a-avatar bg-white-logo" src="images/logo_harvard.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_harvard.png">
 <div class="a-name">Harvard</div>
 <div class="a-org">PostDoc</div>
 </div>
@@ -150,13 +150,13 @@ Note:
 <!-- Row 2: Leadership -->
 <div class="a-row">
 <div class="a-node a-fade-15">
-<img class="a-avatar bg-white-logo" src="images/logo_dnb.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_dnb_official.png">
 <div class="a-name">Dun & Bradstreet</div>
 <div class="a-org">Sr Director</div>
 </div>
 <div class="a-arrow a-fade-16"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-17">
-<img class="a-avatar bg-white-logo" src="images/logo_db.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_db.png">
 <div class="a-name">Deutsche Bank</div>
 <div class="a-org">Head of Data Science</div>
 </div>
@@ -196,6 +196,12 @@ Note:
 <img class="a-avatar bg-white-logo" src="images/logo_wpi.png">
 <div class="a-name">WPI</div>
 <div class="a-org">Adjunct Professor</div>
+</div>
+<div class="a-arrow a-fade-24"><i class="fa-solid fa-plus"></i></div>
+<div class="a-node a-fade-23">
+<img class="a-avatar bg-white-logo" src="images/logo_aiready.png">
+<div class="a-name">AI Ready Veteran</div>
+<div class="a-org">Advisory Board</div>
 </div>
 </div>
 </div>
