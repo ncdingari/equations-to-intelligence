@@ -2028,6 +2028,10 @@
                 const step = 0.0013;
                 const damping = 0.965 + (1 - anneal) * 0.03;
                 const timeSec = now * 0.001;
+                const centerX = 0.5;
+                const centerY = 0.52;
+                const textFadeRadiusX = 0.28;
+                const textFadeRadiusY = 0.14;
 
                 // ambient aurora glow (art pass)
                 const aurora = ctx.createRadialGradient(
@@ -2134,18 +2138,30 @@
                 for (let li = 0; li < isoLevels.length; li++) {
                     const movingLevel = isoLevels[li] + 0.03 * Math.sin(timeSec * 0.6 + li * 1.7);
                     ctx.beginPath();
+                    let keptPoints = 0;
                     for (let py = H * margin; py < H * (1 - margin); py += isoRes) {
                         for (let px = W * margin; px < W * (1 - margin); px += isoRes) {
                             const uu = potential(px / W, py / H);
                             if (Math.abs(uu - movingLevel) < isoEps) {
-                                ctx.moveTo(px + 0.8, py);
-                                ctx.arc(px, py, 0.75, 0, Math.PI * 2);
+                                // fade iso-lines near headline center area for readability
+                                const nx = px / W;
+                                const ny = py / H;
+                                const dx = (nx - centerX) / textFadeRadiusX;
+                                const dy = (ny - centerY) / textFadeRadiusY;
+                                const d2 = dx * dx + dy * dy;
+                                if (d2 > 1.0) {
+                                    ctx.moveTo(px + 0.8, py);
+                                    ctx.arc(px, py, 0.75, 0, Math.PI * 2);
+                                    keptPoints++;
+                                }
                             }
                         }
                     }
-                    ctx.strokeStyle = `rgba(170, 244, 255, ${0.022 + li * 0.012})`;
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
+                    if (keptPoints > 0) {
+                        ctx.strokeStyle = `rgba(170, 244, 255, ${0.022 + li * 0.012})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
                 }
 
                 // boundary box (constraints) with collision pulse

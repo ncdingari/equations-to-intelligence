@@ -181,19 +181,19 @@ Note:
 <!-- Row 3: Advisory -->
 <div class="a-row" style="transform: translateX(190px); margin-top: 12px;">
 <div class="a-node a-fade-27">
-<img class="a-avatar bg-white-logo" src="images/logo_fullsail.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_fullsail_official.png">
 <div class="a-name">Full Sail Univ</div>
 <div class="a-org">Board Member</div>
 </div>
 <div class="a-arrow a-fade-26"><i class="fa-solid fa-plus"></i></div>
 <div class="a-node a-fade-25">
-<img class="a-avatar bg-white-logo" src="images/logo_datacamp.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_datacamp.png">
 <div class="a-name">DataCamp</div>
 <div class="a-org">Advisory Board</div>
 </div>
 <div class="a-arrow a-fade-24"><i class="fa-solid fa-plus"></i></div>
 <div class="a-node a-fade-23">
-<img class="a-avatar bg-white-logo" src="images/logo_wpi.svg">
+<img class="a-avatar bg-white-logo" src="images/logo_wpi.png">
 <div class="a-name">WPI</div>
 <div class="a-org">Adjunct Professor</div>
 </div>
