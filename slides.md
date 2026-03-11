@@ -179,7 +179,7 @@ Note:
 </div>
 
 <!-- Row 3: Advisory -->
-<div class="a-row" style="transform: translateX(190px); margin-top: -10px;">
+<div class="a-row" style="transform: translateX(190px); margin-top: 12px;">
 <div class="a-node a-fade-27">
 <img class="a-avatar bg-white-logo" src="images/logo_fullsail.svg">
 <div class="a-name">Full Sail Univ</div>
