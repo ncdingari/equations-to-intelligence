@@ -100,13 +100,13 @@ Note:
 </div>
 <div class="a-arrow a-fade-2"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-3">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://uohyd.ac.in&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_uoh.svg">
 <div class="a-name">University of Hyderabad</div>
 <div class="a-org">M.Sc. Quantum Physics</div>
 </div>
 <div class="a-arrow a-fade-4"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-5">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://uri.edu&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_uri.svg">
 <div class="a-name">University of Rhode Island</div>
 <div class="a-org">Ph.D. Physics</div>
 </div>
@@ -125,7 +125,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-12"><i class="fa-solid fa-arrow-left"></i></div>
 <div class="a-node a-fade-11">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://dell.com&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_dell.svg">
 <div class="a-name">Dell EMC</div>
 <div class="a-org">Analytics Lead</div>
 </div>
@@ -137,7 +137,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-8"><i class="fa-solid fa-arrow-left"></i></div>
 <div class="a-node a-fade-7">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://harvard.edu&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_harvard.svg">
 <div class="a-name">Harvard</div>
 <div class="a-org">PostDoc</div>
 </div>
@@ -150,13 +150,13 @@ Note:
 <!-- Row 2: Leadership -->
 <div class="a-row">
 <div class="a-node a-fade-15">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://dnb.com&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_dnb.svg">
 <div class="a-name">Dun & Bradstreet</div>
 <div class="a-org">Sr Director</div>
 </div>
 <div class="a-arrow a-fade-16"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node a-fade-17">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://db.com&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_db.svg">
 <div class="a-name">Deutsche Bank</div>
 <div class="a-org">Head of Data Science</div>
 </div>
@@ -181,19 +181,19 @@ Note:
 <!-- Row 3: Advisory -->
 <div class="a-row" style="transform: translateX(190px); margin-top: -10px;">
 <div class="a-node a-fade-27">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://fullsail.edu&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_fullsail.svg">
 <div class="a-name">Full Sail Univ</div>
 <div class="a-org">Board Member</div>
 </div>
 <div class="a-arrow a-fade-26"><i class="fa-solid fa-plus"></i></div>
 <div class="a-node a-fade-25">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://datacamp.com&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_datacamp.svg">
 <div class="a-name">DataCamp</div>
 <div class="a-org">Advisory Board</div>
 </div>
 <div class="a-arrow a-fade-24"><i class="fa-solid fa-plus"></i></div>
 <div class="a-node a-fade-23">
-<img class="a-avatar bg-white-logo" src="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://wpi.edu&size=128">
+<img class="a-avatar bg-white-logo" src="images/logo_wpi.svg">
 <div class="a-name">WPI</div>
 <div class="a-org">Adjunct Professor</div>
 </div>

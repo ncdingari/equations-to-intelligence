@@ -1832,45 +1832,55 @@
         }
 
 
-        // Energy Landscape + Particle Physics (Slide 12, h=11)
+        // Energy Landscape + Particle Physics (Slide 11, h=11)
         function initEnergyLandscape() {
             if (window._energyReady) return;
             window._energyReady = true;
 
             const canvas = document.createElement('canvas');
             canvas.id = 'energy-landscape-canvas';
-            // Styles are handled in CSS class #energy-landscape-canvas
             canvas.style.opacity = '0';
             canvas.style.transition = 'opacity 1s ease-in-out';
             document.body.appendChild(canvas);
 
             const ctx = canvas.getContext('2d');
+            const bgCanvas = document.createElement('canvas');
+            const bgCtx = bgCanvas.getContext('2d');
             let W, H;
 
-            function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-                updateBackground(); // Re-render static layers on resize
-            }
-            resize();
-            window.addEventListener('resize', resize);
-
-            // Multi-well potential: U(x,y) — sum of Gaussian wells
+            const margin = 0.10;
             const wells = [
-                { wx: 0.25, wy: 0.55, depth: 1.5, r: 0.15 },
-                { wx: 0.50, wy: 0.45, depth: 1.2, r: 0.12 },
-                { wx: 0.75, wy: 0.55, depth: 1.8, r: 0.18 },
-                { wx: 0.38, wy: 0.75, depth: 0.6, r: 0.10 },
-                { wx: 0.62, wy: 0.25, depth: 0.9, r: 0.11 },
+                { wx: 0.25, wy: 0.58, depth: 1.55, r: 0.15 },
+                { wx: 0.48, wy: 0.42, depth: 1.10, r: 0.12 },
+                { wx: 0.75, wy: 0.56, depth: 1.75, r: 0.17 },
+                { wx: 0.60, wy: 0.28, depth: 0.80, r: 0.10 }
             ];
 
+            const N = 95;
+            const particles = Array.from({ length: N }, () => ({
+                x: margin + Math.random() * (1 - 2 * margin),
+                y: margin + Math.random() * (1 - 2 * margin),
+                vx: (Math.random() - 0.5) * 0.01,
+                vy: (Math.random() - 0.5) * 0.01,
+                settled: 0,
+                trail: []
+            }));
+
+            let boundaryPulse = 0;
+            let frame = 0;
+
             function potential(nx, ny) {
-                let U = 0;
+                let u = 0;
                 for (const w of wells) {
-                    const dx = nx - w.wx, dy = ny - w.wy;
-                    U -= w.depth * Math.exp(-(dx * dx + dy * dy) / (2 * w.r * w.r));
+                    const dx = nx - w.wx;
+                    const dy = ny - w.wy;
+                    u -= w.depth * Math.exp(-(dx * dx + dy * dy) / (2 * w.r * w.r));
                 }
-                return U;
+                // soft central ridge so multiple local minima are visible
+                const rx = nx - 0.50;
+                const ry = ny - 0.50;
+                u += 0.18 * Math.exp(-(rx * rx + ry * ry) / (2 * 0.22 * 0.22));
+                return u;
             }
 
             function gradU(nx, ny) {
@@ -1881,69 +1891,83 @@
                 };
             }
 
-            // Boundary constraints (margins) — reflecting the importance of boundaries
-            const margin = 0.12;
+            function resetParticle(p) {
+                p.x = margin + Math.random() * (1 - 2 * margin);
+                p.y = margin + Math.random() * (1 - 2 * margin);
+                p.vx = (Math.random() - 0.5) * 0.01;
+                p.vy = (Math.random() - 0.5) * 0.01;
+                p.settled = 0;
+                p.trail = [];
+            }
 
-            const N = 80;
-            const particles = Array.from({ length: N }, () => ({
-                x: margin + Math.random() * (1 - 2 * margin),
-                y: margin + Math.random() * (1 - 2 * margin),
-                vx: (Math.random() - 0.5) * 0.005,
-                vy: (Math.random() - 0.5) * 0.005,
-                hue: 180 + Math.random() * 60
-            }));
-
-            const bgCanvas = document.createElement('canvas');
-            const bgCtx = bgCanvas.getContext('2d');
-            
             function updateBackground() {
                 bgCanvas.width = W;
                 bgCanvas.height = H;
                 bgCtx.clearRect(0, 0, W, H);
-                
-                // Draw boundary box (Visualising constraints)
-                bgCtx.strokeStyle = 'rgba(0, 229, 255, 0.2)';
-                bgCtx.lineWidth = 2;
-                bgCtx.setLineDash([8, 12]);
-                bgCtx.strokeRect(W * margin, H * margin, W * (1 - 2 * margin), H * (1 - 2 * margin));
-                bgCtx.setLineDash([]);
 
-                // Topographic contours
-                const steps = 6;
-                for (let s = steps; s >= 1; s--) {
-                    const alpha = 0.03 + 0.015 * s;
+                // cinematic backdrop gradient
+                const bgGrad = bgCtx.createLinearGradient(0, 0, 0, H);
+                bgGrad.addColorStop(0, 'rgba(6, 10, 26, 0.96)');
+                bgGrad.addColorStop(0.55, 'rgba(8, 18, 32, 0.92)');
+                bgGrad.addColorStop(1, 'rgba(2, 8, 18, 0.96)');
+                bgCtx.fillStyle = bgGrad;
+                bgCtx.fillRect(0, 0, W, H);
+
+                // subtle blueprint grid for depth
+                bgCtx.strokeStyle = 'rgba(255,255,255,0.03)';
+                bgCtx.lineWidth = 1;
+                for (let gx = 0; gx <= W; gx += 64) {
                     bgCtx.beginPath();
-                    const res = 12; 
+                    bgCtx.moveTo(gx, 0);
+                    bgCtx.lineTo(gx, H);
+                    bgCtx.stroke();
+                }
+                for (let gy = 0; gy <= H; gy += 64) {
+                    bgCtx.beginPath();
+                    bgCtx.moveTo(0, gy);
+                    bgCtx.lineTo(W, gy);
+                    bgCtx.stroke();
+                }
+
+                // contour-like potential bands
+                const res = 14;
+                const levels = 7;
+                for (let l = levels; l >= 1; l--) {
+                    bgCtx.beginPath();
                     for (let px = 0; px < W; px += res) {
                         for (let py = 0; py < H; py += res) {
-                            const u = potential(px / W, py / H);
-                            const threshold = -0.12 * s;
-                            if (u < threshold) {
-                                bgCtx.rect(px, py, res, res);
-                            }
+                            const uu = potential(px / W, py / H);
+                            if (uu < -0.15 * l) bgCtx.rect(px, py, res, res);
                         }
                     }
-                    bgCtx.fillStyle = `rgba(0, 229, 255, ${alpha})`;
+                    bgCtx.fillStyle = `rgba(0, 229, 255, ${0.02 + l * 0.012})`;
                     bgCtx.fill();
                 }
 
-                // Well markers (Equilibrium points)
+                // basin halos (stable states)
                 for (const w of wells) {
-                    const cx = w.wx * W, cy = w.wy * H;
-                    const rx = w.r * W * 0.45;
-                    const grad = bgCtx.createRadialGradient(cx, cy, 0, cx, cy, rx);
-                    grad.addColorStop(0, 'rgba(0, 229, 255, 0.25)');
-                    grad.addColorStop(1, 'rgba(0, 229, 255, 0)');
+                    const cx = w.wx * W;
+                    const cy = w.wy * H;
+                    const rr = w.r * W * 0.5;
+                    const g = bgCtx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+                    g.addColorStop(0, 'rgba(0, 229, 255, 0.24)');
+                    g.addColorStop(1, 'rgba(0, 229, 255, 0)');
                     bgCtx.beginPath();
-                    bgCtx.arc(cx, cy, rx, 0, Math.PI * 2);
-                    bgCtx.fillStyle = grad;
+                    bgCtx.arc(cx, cy, rr, 0, Math.PI * 2);
+                    bgCtx.fillStyle = g;
                     bgCtx.fill();
                 }
             }
-            updateBackground();
 
-            let t = 0;
-            function drawEnergy() {
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+                updateBackground();
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function drawEnergy(now) {
                 if (!shouldAnimate(canvas)) {
                     requestAnimationFrame(drawEnergy);
                     return;
@@ -1952,39 +1976,208 @@
                 ctx.clearRect(0, 0, W, H);
                 ctx.drawImage(bgCanvas, 0, 0);
 
-                const dt = 0.6, damping = 0.982, gravity = 0.0007;
-                
-                // Batch Draw Particles
-                ctx.beginPath();
+                // exploration -> cooling cycle to communicate optimization process
+                const cycle = (now * 0.001) % 12;
+                const anneal = cycle < 7 ? 1 - cycle / 7 : 0.15; // "temperature"
+                const noiseAmp = 0.0018 * anneal;
+                const step = 0.0013;
+                const damping = 0.965 + (1 - anneal) * 0.03;
+
+                // ambient aurora glow (art pass)
+                const aurora = ctx.createRadialGradient(
+                    W * (0.45 + Math.sin(now * 0.00015) * 0.08),
+                    H * (0.35 + Math.cos(now * 0.00018) * 0.06),
+                    W * 0.04,
+                    W * 0.5,
+                    H * 0.5,
+                    W * 0.65
+                );
+                aurora.addColorStop(0, `rgba(0, 229, 255, ${0.09 + anneal * 0.08})`);
+                aurora.addColorStop(0.55, 'rgba(78, 178, 255, 0.05)');
+                aurora.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = aurora;
+                ctx.fillRect(0, 0, W, H);
+
+                let settledCount = 0;
+                const basinCounts = new Array(wells.length).fill(0);
+
                 for (const p of particles) {
                     const { gx, gy } = gradU(p.x, p.y);
-                    
-                    p.vx = (p.vx - gx * dt * gravity) * damping;
-                    p.vy = (p.vy - gy * dt * gravity) * damping;
-                    
+
+                    // gradient descent + temperature noise
+                    p.vx = (p.vx - gx * step + (Math.random() - 0.5) * noiseAmp) * damping;
+                    p.vy = (p.vy - gy * step + (Math.random() - 0.5) * noiseAmp) * damping;
+
                     p.x += p.vx;
                     p.y += p.vy;
 
-                    // Bounce off boundaries (showing system limits)
-                    if (p.x < margin) { p.x = margin; p.vx *= -0.6; }
-                    if (p.x > 1 - margin) { p.x = 1 - margin; p.vx *= -0.6; }
-                    if (p.y < margin) { p.y = margin; p.vy *= -0.6; }
-                    if (p.y > 1 - margin) { p.y = 1 - margin; p.vy *= -0.6; }
+                    // hard boundaries + pulse when constraints are hit
+                    let hitBoundary = false;
+                    if (p.x < margin) { p.x = margin; p.vx *= -0.45; hitBoundary = true; }
+                    if (p.x > 1 - margin) { p.x = 1 - margin; p.vx *= -0.45; hitBoundary = true; }
+                    if (p.y < margin) { p.y = margin; p.vy *= -0.45; hitBoundary = true; }
+                    if (p.y > 1 - margin) { p.y = 1 - margin; p.vy *= -0.45; hitBoundary = true; }
+                    if (hitBoundary) boundaryPulse = 1;
 
-                    const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-                    const heat = Math.min(1, speed / 0.005);
-                    
-                    ctx.fillStyle = `hsla(${180 + heat * 120}, 80%, 70%, ${0.4 + heat * 0.4})`;
-                    ctx.moveTo(p.x * W + 3.5, p.y * H);
-                    ctx.arc(p.x * W, p.y * H, 2.5 + heat * 3, 0, Math.PI * 2);
+                    const speed = Math.hypot(p.vx, p.vy);
+                    if (speed < 0.0009) {
+                        p.settled++;
+                    } else {
+                        p.settled = Math.max(0, p.settled - 2);
+                    }
+                    if (p.settled > 36) settledCount++;
+
+                    // assign to nearest basin for occupancy glow
+                    let nearest = 0;
+                    let bestD2 = Infinity;
+                    for (let i = 0; i < wells.length; i++) {
+                        const dx = p.x - wells[i].wx;
+                        const dy = p.y - wells[i].wy;
+                        const d2 = dx * dx + dy * dy;
+                        if (d2 < bestD2) {
+                            bestD2 = d2;
+                            nearest = i;
+                        }
+                    }
+                    if (bestD2 < 0.04) basinCounts[nearest]++;
+
+                    // tiny trail near equilibrium to make settling visible
+                    p.trail.push({ x: p.x, y: p.y });
+                    if (p.trail.length > 6) p.trail.shift();
+                    if (p.trail.length > 1) {
+                        ctx.beginPath();
+                        for (let i = 0; i < p.trail.length; i++) {
+                            const tp = p.trail[i];
+                            const tx = tp.x * W;
+                            const ty = tp.y * H;
+                            if (i === 0) ctx.moveTo(tx, ty); else ctx.lineTo(tx, ty);
+                        }
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+
+                    const heat = Math.min(1, speed / 0.006);
+                    ctx.beginPath();
+                    ctx.arc(p.x * W, p.y * H, 2.1 + heat * 1.9, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${175 + heat * 130}, 90%, ${68 - heat * 18}%, ${0.35 + heat * 0.45})`;
+                    ctx.fill();
                 }
-                ctx.fill();
 
-                t += 0.016;
+                // dynamic basin glow proportional to occupancy (equilibrium visualization)
+                for (let i = 0; i < wells.length; i++) {
+                    const w = wells[i];
+                    const occ = basinCounts[i] / Math.max(1, N * 0.4);
+                    if (occ <= 0.03) continue;
+                    const cx = w.wx * W;
+                    const cy = w.wy * H;
+                    const r = w.r * W * (0.32 + occ * 0.18);
+                    const gg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+                    gg.addColorStop(0, `rgba(16, 255, 210, ${0.10 + occ * 0.22})`);
+                    gg.addColorStop(1, 'rgba(16, 255, 210, 0)');
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.fillStyle = gg;
+                    ctx.fill();
+                }
+
+                // boundary box (constraints) with collision pulse
+                boundaryPulse *= 0.92;
+                const pulseAlpha = 0.18 + boundaryPulse * 0.45;
+                ctx.strokeStyle = `rgba(0, 229, 255, ${pulseAlpha})`;
+                ctx.lineWidth = 2;
+                ctx.setLineDash([10, 10]);
+                ctx.strokeRect(W * margin, H * margin, W * (1 - 2 * margin), H * (1 - 2 * margin));
+                ctx.setLineDash([]);
+
+                // boundary corners for stronger visual constraints
+                const bx = W * margin;
+                const by = H * margin;
+                const bw = W * (1 - 2 * margin);
+                const bh = H * (1 - 2 * margin);
+                const c = 18;
+                ctx.strokeStyle = `rgba(255, 255, 255, ${0.18 + boundaryPulse * 0.35})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(bx, by + c); ctx.lineTo(bx, by); ctx.lineTo(bx + c, by);
+                ctx.moveTo(bx + bw - c, by); ctx.lineTo(bx + bw, by); ctx.lineTo(bx + bw, by + c);
+                ctx.moveTo(bx, by + bh - c); ctx.lineTo(bx, by + bh); ctx.lineTo(bx + c, by + bh);
+                ctx.moveTo(bx + bw - c, by + bh); ctx.lineTo(bx + bw, by + bh); ctx.lineTo(bx + bw, by + bh - c);
+                ctx.stroke();
+
+                // mini-HUD for narrative clarity
+                const settledRatio = settledCount / N;
+                const hudX = W * 0.66;
+                const hudY = H * 0.08;
+                const hudW = W * 0.26;
+                const hudH = H * 0.13;
+                ctx.fillStyle = 'rgba(5, 10, 22, 0.58)';
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.22)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.roundRect(hudX, hudY, hudW, hudH, 10);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = 'rgba(255,255,255,0.86)';
+                ctx.font = '600 14px Inter';
+                ctx.textAlign = 'left';
+                ctx.fillText('Optimization Dynamics', hudX + 14, hudY + 22);
+
+                ctx.font = '500 12px Inter';
+                ctx.fillStyle = 'rgba(185, 224, 255, 0.86)';
+                ctx.fillText('Exploration', hudX + 14, hudY + 44);
+                ctx.fillText('Equilibrium', hudX + hudW - 95, hudY + 44);
+
+                const barX = hudX + 14;
+                const barY = hudY + 50;
+                const barW = hudW - 28;
+                const barH = 8;
+                ctx.fillStyle = 'rgba(255,255,255,0.14)';
+                ctx.fillRect(barX, barY, barW, barH);
+                ctx.fillStyle = `rgba(0, 229, 255, ${0.35 + anneal * 0.4})`;
+                ctx.fillRect(barX, barY, barW * anneal, barH);
+
+                ctx.fillStyle = 'rgba(255,255,255,0.80)';
+                ctx.font = '500 11px Inter';
+                ctx.fillText(`temperature ${(anneal * 100).toFixed(0)}%`, hudX + 14, hudY + 74);
+                ctx.fillText(`settled ${(settledRatio * 100).toFixed(0)}%`, hudX + 14, hudY + 92);
+
+                // basin occupancy tags
+                ctx.font = '500 10px Inter';
+                for (let i = 0; i < wells.length; i++) {
+                    const w = wells[i];
+                    const occ = Math.round((basinCounts[i] / N) * 100);
+                    if (occ < 6) continue;
+                    const tx = w.wx * W + 10;
+                    const ty = w.wy * H - 12;
+                    ctx.fillStyle = 'rgba(5, 10, 22, 0.7)';
+                    ctx.beginPath();
+                    ctx.roundRect(tx - 4, ty - 10, 58, 16, 4);
+                    ctx.fill();
+                    ctx.fillStyle = 'rgba(160, 255, 230, 0.9)';
+                    ctx.fillText(`B${i + 1}: ${occ}%`, tx, ty + 2);
+                }
+
+                // subtle vignette
+                const vg = ctx.createRadialGradient(W * 0.5, H * 0.5, W * 0.18, W * 0.5, H * 0.5, W * 0.75);
+                vg.addColorStop(0, 'rgba(0,0,0,0)');
+                vg.addColorStop(1, 'rgba(0,0,0,0.35)');
+                ctx.fillStyle = vg;
+                ctx.fillRect(0, 0, W, H);
+
+                // slow refresh of a few particles to preserve visible optimization over long pauses
+                frame++;
+                if (frame % 240 === 0 && settledCount > N * 0.80) {
+                    for (let i = 0; i < 8; i++) {
+                        resetParticle(particles[Math.floor(Math.random() * particles.length)]);
+                    }
+                }
+
                 requestAnimationFrame(drawEnergy);
             }
 
-            drawEnergy();
+            requestAnimationFrame(drawEnergy);
         }
 
         // Entropy -> Decision Tree Animation (Slide 11, h=10)
