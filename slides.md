@@ -162,7 +162,7 @@ Note:
 </div>
 <div class="a-arrow a-fade-18"><i class="fa-solid fa-arrow-right"></i></div>
 <div class="a-node highlight a-fade-19">
-<img class="a-avatar bg-white-logo" src="images/powerlytics.png?v=1">
+<img class="a-avatar bg-white-logo" src="images/powerlytics.png">
 <div class="a-name">Powerlytics</div>
 <div class="a-org">Chief Data & Analytics Officer</div>
 </div>
